@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Users = require("./userModel");
-const restricted = require("../../authOperations/restrictedMiddleware");
+const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
 // @desc     Get all Users
 // @route    GET /api/users

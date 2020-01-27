@@ -7,6 +7,8 @@ const authRouter = require("./authOperations/authRouter");
 const userRouter = require("./crudOperations/userOperations/userRouter");
 // const storeRouter = require("./crudOperations/storeOperations/storeRouter");
 // const cartRouter = require("./crudOperations/cartOperations/cartRouter");
+// const orderRouter = require("./crudOperations/orderOperations/orderRouter");
+// const productRouter = require("./crudOperations/productOperations/productRouter");
 
 const server = express();
 
@@ -26,10 +28,12 @@ server.use("/api/auth", authRouter);
 server.use("/api/users", userRouter);
 // server.use("/api/store", storeRouter);
 // server.use("/api/cart", cartRouter);
+// server.use("/api/order", orderRouter);
+// server.use("/api/product", productRouter);
 
 //testing that the server works
 server.get("/", (req, res) => {
-  res.status(200).json({ status: "The Party Planner server is running!!" });
+  res.status(200).json({ status: "The Merch Dropper server is running!!" });
 });
 
 module.exports = server;
