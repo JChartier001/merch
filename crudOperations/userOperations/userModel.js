@@ -19,25 +19,21 @@ function insert(user) {
 }
 
 function find() {
-  return db("users").select(
-    "id",
-    "username",
-    "first_name",
-    "last_name",
-    "avatar"
-  );
+  return db("users").select();
+  // add needed user data in select
 }
 
 function findBy(username) {
   return db("users")
-    .select("id", "username", "password")
+    .select() // add needed user data in select
+
     .where("username", username);
 }
 
 function findById(id) {
   return db("users")
     .where("id", id)
-    .select("id", "username", "first_name", "last_name", "avatar")
+    .select() // add needed user data in select
     .first();
 }
 

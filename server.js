@@ -4,7 +4,9 @@ const cors = require("cors");
 
 //////    import Router files    //////
 const authRouter = require("./authOperations/authRouter");
-const usersRouter = require("./crudOperations/userOperations/userRouter");
+const userRouter = require("./crudOperations/userOperations/userRouter");
+// const storeRouter = require("./crudOperations/storeOperations/storeRouter");
+// const cartRouter = require("./crudOperations/cartOperations/cartRouter");
 
 const server = express();
 
@@ -21,7 +23,9 @@ server.use(express.json());
 
 //////    Use routers    ///////
 server.use("/api/auth", authRouter);
-server.use("/api/users", usersRouter);
+server.use("/api/users", userRouter);
+// server.use("/api/store", storeRouter);
+// server.use("/api/cart", cartRouter);
 
 //testing that the server works
 server.get("/", (req, res) => {
