@@ -21,7 +21,7 @@ const app = server.listen(
 );
 
 //handle unhandled promise rejections
-process.on("unhandledRejection", err => {
+process.on("unhandledRejection", (err, promise) => {
   console.log(`Error: ${err.message}`.red.bold);
   //close server and exit process
   app.close(() => process.exit(1));

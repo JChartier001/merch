@@ -31,24 +31,6 @@ router.get("/:id", restricted, async (req, res) => {
   }
 });
 
-// @desc     Get a users parties
-// @route    GET /api/users/parties/:id
-// @access   Private
-router.get("/parties/:id", restricted, async (req, res) => {
-  try {
-    const parties = await Users.getUsersParties(req.params.id);
-    // const images = await Users.getPartyImages(req.params.id);
-    // const items = await Users.getPartyItems(req.params.id);
-    //this doesnt work, its using the user id passed in, needs to only use the user party's id only
-    res.status(200).json(parties); // {images, items }  pass these in when i fix it
-  } catch (error) {
-    res.status(500).json({
-      error,
-      message: "Unable to find this user id, its not you.. its me"
-    });
-  }
-});
-
 // @desc     Edit a  User
 // @route    PUT /api/users:id
 // @access   Private
