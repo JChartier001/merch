@@ -9,6 +9,7 @@ const userRouter = require("./crudOperations/userOperations/userRouter");
 // const cartRouter = require("./crudOperations/cartOperations/cartRouter");
 // const orderRouter = require("./crudOperations/orderOperations/orderRouter");
 // const productRouter = require("./crudOperations/productOperations/productRouter");
+// const orderDetailsRouter = require("./crudOperations/orderDetailsOperations/orderDetailsRouter");
 
 const server = express();
 
@@ -30,6 +31,7 @@ server.use("/api/users", userRouter);
 // server.use("/api/cart", cartRouter);
 // server.use("/api/order", orderRouter);
 // server.use("/api/product", productRouter);
+// server.use("/api/orderDetails", orderDetailsRouter);
 
 //testing that the server works
 server.get("/", (req, res) => {
