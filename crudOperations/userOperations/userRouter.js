@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Users = require("./userModel");
+const Stores = require("../storeOperations/storeModel");
 const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
 // @desc     Get all Users
@@ -65,6 +66,22 @@ router.delete("/:id", restricted, async (req, res) => {
     res
       .status(500)
       .json({ message: "Error while deleting User, its not you.. its me" });
+  }
+});
+
+// @desc     Get a users stores
+// @route    GET /api/users/stores/:id
+// @access   Private
+router.get("/stores/:id", restricted, async (req, res) => {
+  try {
+    const stores = await Users.getUsersStores(req.params.id);
+
+    res.status(200).json(stores);
+  } catch (error) {
+    res.status(500).json({
+      error,
+      message: "Unable to find this user id, its not you.. its me"
+    });
   }
 });
 

@@ -4,8 +4,8 @@ const jwt = require("jsonwebtoken");
 
 const Users = require("../crudOperations/userOperations/userRouter");
 
-const validateRegisterInfo = require("../crudOperations/userOperations/userMiddleware/verifyRegisterInfo");
-const validateLoginInfo = require("../crudOperations/userOperations/userMiddleware/verifyLoginInfo");
+const validateRegisterInfo = require("./authMiddleware/verifyRegisterInfo");
+const validateLoginInfo = require("./authMiddleware/verifyLoginInfo");
 
 router.post("/register", validateRegisterInfo, (req, res) => {
   let user = req.body;
@@ -33,7 +33,7 @@ router.post("/login", validateLoginInfo, (req, res) => {
       if (user && bcrypt.compareSync(password, user.password)) {
         const token = generateToken(user);
         res.status(200).json({
-          message: `Welcome ${user.username}!`,
+          message: `Welcome ${user.user_name}!`,
           token
         });
       } else {
@@ -50,8 +50,8 @@ router.post("/login", validateLoginInfo, (req, res) => {
 
 function generateToken(user) {
   const payload = {
-    subject: user.id,
-    username: user.username
+    subject: user.userID,
+    username: user.user_name
   };
 
   const options = {
