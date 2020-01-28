@@ -41,7 +41,7 @@ router.put("/:id", restricted, async (req, res) => {
     if (user) {
       res.status(200).json({ user, message: "Info updated!" });
     } else {
-      res.status(404).json({ message: "User could not be found!" });
+      res.status(404).json({ message: "That user could not be found!" });
     }
   } catch (error) {
     res.status(500).json({
@@ -58,14 +58,17 @@ router.delete("/:id", restricted, async (req, res) => {
   try {
     const count = await Users.remove(req.params.id);
     if (count > 0) {
-      res.status(200).json({ message: "User Deleted!" });
+      res.status(200).json({ message: "this User has been deleted!" });
     } else {
       res.status(404).json({ message: "User unable to be deleted!" });
     }
   } catch (error) {
     res
       .status(500)
-      .json({ message: "Error while deleting User, its not you.. its me" });
+      .json({
+        error,
+        message: "Error while deleting User, its not you.. its me"
+      });
   }
 });
 

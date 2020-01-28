@@ -23,7 +23,7 @@ function find() {
   return db("users").select(
     "first_name",
     "last_name",
-    "user_name",
+    "username",
     "seller",
     "address1",
     "address2",
@@ -49,8 +49,8 @@ function find() {
 
 function findBy(username) {
   return db("users")
-    .select("userID", "user_name", "password")
-    .where("user_name", username);
+    .select("userID", "username", "password")
+    .where("username", username);
 }
 
 function findById(id) {
@@ -59,7 +59,7 @@ function findById(id) {
     .select(
       "first_name",
       "last_name",
-      "user_name",
+      "username",
       "seller",
       "address1",
       "address2",
@@ -86,7 +86,7 @@ function findById(id) {
 
 function update(id, changes) {
   return db("users")
-    .where("id", id)
+    .where("userID", id)
     .update(changes)
     .then(count => {
       if (count > 0) {
@@ -99,13 +99,28 @@ function update(id, changes) {
 
 function remove(id) {
   return db("users")
-    .where("id", id)
+    .where("userID", id)
     .del();
 }
 
 function getUsersStores(id) {
   return db("users_store")
-    .select() //add in what info we will need
+    .select(
+      "userID",
+      "storeID",
+      "admin",
+      "users.username",
+      "users.email",
+      "users.support_pin",
+      "stores.active",
+      "stores.store_name",
+      "stores.hero_imageURL",
+      "stores.logo_url",
+      "stores.date_created",
+      "stores.date_updated"
+    )
     .join("stores", "storeID", "=", "stores.storeID")
+    .join("users", "userID", "=", "users.userID")
+
     .where("userID", "=", id);
 }
