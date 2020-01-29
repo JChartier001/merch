@@ -23,8 +23,8 @@ exports.up = function(knex) {
         users.string('shipping_city', 255).notNullable();
         users.string('shipping_zip_code', 255).notNullable();
         users.string('shipping_country', 255).notNullable();
-        users.date('date_created', 255).notNullable();
-        users.date('date_updated', 255).notNullable();
+        users.date('date_created', 255).defaultTo(knex.raw('now()')).notNullable();
+        users.date('date_updated', 255).defaultTo(knex.raw('now()')).notNullable();
         users.string('support_pin', 10);
     })
 };
