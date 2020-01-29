@@ -32,12 +32,27 @@ router.get("/:id", restricted, async (req, res) => {
   }
 });
 
-// @desc     Edit a  User
-// @route    PUT /api/users:id
+// @desc     Get a user by username
+// @route    GET /api/users/:username
 // @access   Private
-router.put("/:id", restricted, async (req, res) => {
+router.get("/:username", restricted, async (req, res) => {
   try {
-    const user = await Users.update(req.params.id, req.body);
+    const user = await Users.findByUsername(req.params.username);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({
+      error,
+      message: "Unable to find this user, its not you.. its me"
+    });
+  }
+});
+
+// @desc     Edit a User
+// @route    PUT /api/users/username
+// @access   Private
+router.put("/:username", restricted, async (req, res) => {
+  try {
+    const user = await Users.update(req.params.username, req.body);
     if (user) {
       res.status(200).json({ user, message: "Info updated!" });
     } else {
@@ -52,38 +67,36 @@ router.put("/:id", restricted, async (req, res) => {
 });
 
 // @desc     Delete a User
-// @route    DELETE /api/users:id
+// @route    DELETE /api/users/:username
 // @access   Private
-router.delete("/:id", restricted, async (req, res) => {
+router.delete("/:username", restricted, async (req, res) => {
   try {
-    const count = await Users.remove(req.params.id);
+    const count = await Users.remove(req.params.username);
     if (count > 0) {
       res.status(200).json({ message: "this User has been deleted!" });
     } else {
       res.status(404).json({ message: "User unable to be deleted!" });
     }
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        error,
-        message: "Error while deleting User, its not you.. its me"
-      });
+    res.status(500).json({
+      error,
+      message: "Error while deleting User, its not you.. its me"
+    });
   }
 });
 
 // @desc     Get a users stores
-// @route    GET /api/users/stores/:id
+// @route    GET /api/users/stores/:username
 // @access   Private
-router.get("/stores/:id", restricted, async (req, res) => {
+router.get("/stores/:username", restricted, async (req, res) => {
   try {
-    const stores = await Users.getUsersStores(req.params.id);
+    const stores = await Users.getUsersStores(req.params.username);
 
     res.status(200).json(stores);
   } catch (error) {
     res.status(500).json({
       error,
-      message: "Unable to find this user id, its not you.. its me"
+      message: "Unable to find this users stores, its not you.. its me"
     });
   }
 });

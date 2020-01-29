@@ -5,10 +5,13 @@ module.exports = {
   find,
   findBy,
   findById,
+  findByUsername,
   update,
   remove,
   getUsersStores
 };
+
+//for Auth router use primarily//
 
 function insert(user) {
   return db("users")
@@ -18,6 +21,14 @@ function insert(user) {
       return findById(id);
     });
 }
+
+function findBy(username) {
+  return db("users")
+    .select("userID", "username", "password")
+    .where("username", username);
+}
+
+//for Auth router use primarily//
 
 function find() {
   return db("users").select(
@@ -45,12 +56,6 @@ function find() {
     "date_updated",
     "support_pin"
   );
-}
-
-function findBy(username) {
-  return db("users")
-    .select("userID", "username", "password")
-    .where("username", username);
 }
 
 function findById(id) {
@@ -84,26 +89,57 @@ function findById(id) {
     .first();
 }
 
-function update(id, changes) {
+function findByUsername(username) {
   return db("users")
-    .where("userID", id)
+    .where("username", username)
+    .select(
+      "first_name",
+      "last_name",
+      "username",
+      "seller",
+      "address1",
+      "address2",
+      "city",
+      "state",
+      "zip_code",
+      "country",
+      "phone",
+      "email",
+      "billing_address",
+      "billing_city",
+      "billing_zip_code",
+      "billing_country",
+      "shipping_address",
+      "shipping_city",
+      "shipping_zip_code",
+      "shipping_country",
+      "date_created",
+      "date_updated",
+      "support_pin"
+    )
+    .first();
+}
+
+function update(username, changes) {
+  return db("users")
+    .where("username", username)
     .update(changes)
     .then(count => {
       if (count > 0) {
-        return findById(id);
+        return findByUsername(username);
       } else {
         return null;
       }
     });
 }
 
-function remove(id) {
+function remove(username) {
   return db("users")
-    .where("userID", id)
+    .where("username", username)
     .del();
 }
 
-function getUsersStores(id) {
+function getUsersStores(username) {
   return db("users_store")
     .select(
       "userID",
@@ -119,8 +155,8 @@ function getUsersStores(id) {
       "stores.date_created",
       "stores.date_updated"
     )
-    .join("stores", "storeID", "=", "stores.storeID")
-    .join("users", "userID", "=", "users.userID")
+    .join("stores", "store_name", "=", "stores.store_name")
+    .join("users", "username", "=", "users.username")
 
-    .where("userID", "=", id);
+    .where("username", "=", username);
 }

@@ -1,71 +1,72 @@
 const router = require("express").Router();
 const Users = require("./userModel");
-const Stores = require("./storeModel");
+const Stores = require("../storeOperations/storeModel");
 const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
-// @desc     Get all Users
-// @route    GET /api/users
+// @desc     Get all stores
+// @route    GET /api/stores
 // @access   Private
 router.get("/", restricted, async (req, res) => {
   try {
-    const users = await Users.find();
-    res.status(200).json(users);
+    const stores = await Stores.find();
+    res.status(200).json(stores);
   } catch (error) {
     res
       .status(500)
-      .json({ error, message: "Unable to get users, its not you.. its me" });
+      .json({ error, message: "Unable to get stores, its not you.. its me" });
   }
 });
 
-// @desc     Get a user by ID
-// @route    GET /api/users/:id
+// @desc     Get a store by ID
+// @route    GET /api/stores/:id
 // @access   Private
 router.get("/:id", restricted, async (req, res) => {
   try {
-    const user = await Users.findById(req.params.id);
-    res.status(200).json(user);
+    const user = await Stores.findById(req.params.id);
+    res.status(200).json(store);
   } catch (error) {
     res.status(500).json({
       error,
-      message: "Unable to find this user id, its not you.. its me"
+      message: "Unable to find this store id, its not you.. its me"
     });
   }
 });
 
-// @desc     Edit a  User
-// @route    PUT /api/users:id
+// @desc     Edit a Store
+// @route    PUT /api/stores/:id
 // @access   Private
 router.put("/:id", restricted, async (req, res) => {
   try {
-    const user = await Users.update(req.params.id, req.body);
-    if (user) {
-      res.status(200).json({ user, message: "Info updated!" });
+    const store = await Stores.update(req.params.id, req.body);
+    if (store) {
+      res.status(200).json({ store, message: "Store info updated!" });
     } else {
-      res.status(404).json({ message: "User could not be found!" });
+      res.status(404).json({ message: "That store could not be found!" });
     }
   } catch (error) {
     res.status(500).json({
       error,
-      message: "Could not edit this user, its not you.. its me"
+      message: "Could not edit this store, its not you.. its me"
     });
   }
 });
 
-// @desc     Delete a User
-// @route    DELETE /api/users:id
+// @desc     Delete a Store
+// @route    DELETE /api/stores/:id
 // @access   Private
 router.delete("/:id", restricted, async (req, res) => {
   try {
-    const count = await Users.remove(req.params.id);
+    const count = await Stores.remove(req.params.id);
     if (count > 0) {
-      res.status(200).json({ message: "User Deleted!" });
+      res.status(200).json({ message: "this Store has been deleted!" });
     } else {
-      res.status(404).json({ message: "User unable to be deleted!" });
+      res.status(404).json({ message: "Store unable to be deleted!" });
     }
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error while deleting User, its not you.. its me" });
+    res.status(500).json({
+      error,
+      message: "Error while deleting Store, its not you.. its me"
+    });
   }
 });
 
@@ -80,7 +81,7 @@ router.get("/stores/:id", restricted, async (req, res) => {
   } catch (error) {
     res.status(500).json({
       error,
-      message: "Unable to find this user id, its not you.. its me"
+      message: "Unable to find this Stores Users, its not you.. its me"
     });
   }
 });
