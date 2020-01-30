@@ -120,7 +120,11 @@ router.delete("/:store_name", restricted, async (req, res) => {
 router.get("/:store_name/users", restricted, async (req, res) => {
   try {
     const users = await Stores.getStoresUsers(req.params.store_name);
-    res.status(200).json(users);
+    if (users) {
+      res.status(200).json(users);
+    } else {
+      res.status(404).json({ message: "Please enter a valid store name" });
+    }
   } catch (error) {
     res.status(500).json({
       error,
@@ -134,9 +138,12 @@ router.get("/:store_name/users", restricted, async (req, res) => {
 // @access   Private
 router.get("/:store_name/products", restricted, async (req, res) => {
   try {
-    const stores = await Stores.getStoresProducts(req.params.store_name);
-
-    res.status(200).json(stores);
+    const products = await Stores.getStoresProducts(req.params.store_name);
+    if (products) {
+      res.status(200).json(products);
+    } else {
+      res.status(404).json({ message: "Please enter a valid store name" });
+    }
   } catch (error) {
     res.status(500).json({
       error,
