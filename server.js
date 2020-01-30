@@ -27,7 +27,7 @@ server.use(express.json());
 //////    Use routers    ///////
 server.use("/api/auth", authRouter);
 server.use("/api/users", userRouter);
-server.use("/api/store", storeRouter);
+server.use("/api/stores", storeRouter);
 // server.use("/api/cart", cartRouter);
 // server.use("/api/order", orderRouter);
 // server.use("/api/product", productRouter);

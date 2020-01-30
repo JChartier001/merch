@@ -3,7 +3,7 @@ const Stores = require("../storeOperations/storeModel");
 const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
 // @desc     Post a Store
-// @route    POST /api/store
+// @route    POST /api/stores
 // @access   Private
 router.post("/", restricted, async (req, res) => {
   try {
@@ -33,7 +33,7 @@ router.post("/", restricted, async (req, res) => {
 });
 
 // @desc     Get all stores
-// @route    GET /api/store
+// @route    GET /api/stores
 // @access   Private
 router.get("/", restricted, async (req, res) => {
   try {
@@ -47,7 +47,7 @@ router.get("/", restricted, async (req, res) => {
 });
 
 // @desc     Get a store by ID
-// @route    GET /api/store/:id
+// @route    GET /api/stores/:id
 // @access   Private
 router.get("/:id", restricted, async (req, res) => {
   try {
@@ -62,7 +62,7 @@ router.get("/:id", restricted, async (req, res) => {
 });
 
 // @desc     Get a store by Name
-// @route    GET /api/store/:store_name
+// @route    GET /api/stores/:store_name
 // @access   Private
 router.get("/:store_name", restricted, async (req, res) => {
   try {
@@ -77,7 +77,7 @@ router.get("/:store_name", restricted, async (req, res) => {
 });
 
 // @desc     Edit a Store
-// @route    PUT /api/store/:store_name
+// @route    PUT /api/stores/:store_name
 // @access   Private
 router.put("/:store_name", restricted, async (req, res) => {
   try {
@@ -96,7 +96,7 @@ router.put("/:store_name", restricted, async (req, res) => {
 });
 
 // @desc     Delete a Store
-// @route    DELETE /api/store/:store_name
+// @route    DELETE /api/stores/:store_name
 // @access   Private
 router.delete("/:store_name", restricted, async (req, res) => {
   try {
@@ -115,7 +115,7 @@ router.delete("/:store_name", restricted, async (req, res) => {
 });
 
 // @desc     Get a Stores Users
-// @route    GET /api/store/:store_name/users
+// @route    GET /api/stores/:store_name/users
 // @access   Private
 router.get("/:store_name/users", restricted, async (req, res) => {
   try {

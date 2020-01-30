@@ -143,20 +143,28 @@ function getStoresProducts(store_name) {
       "product_description",
       "quantity_per_unit",
       "unit_price",
-      "available_size", //there are a lot of sizes to reference, we need to add a size table many to many rel.
-      "size",
-      "available_color", //there are a lot of colors to reference, we need to add a color table many to many rel.
-      "color",
-      "available_discount", //there are a lot of discounts to reference, we need to add a discount table many to many rel.
+      "markup_price",
+      "available_discount",
       "discount",
       "product_available",
       "picture",
       "ranking",
-      "note"
+      "note",
+
+      "colors.color",
+      "colors.active",
+
+      "discounts.discount",
+
+      "sizes.size",
+      "sizes.active"
     )
 
     .join("stores", "store_name", "=", "stores.store_name")
-    .join("category", "categoryID", "=", "category.categoryID")
+    .join("category", "category_name", "=", "category.category_name")
+    .join("colors", "color", "=", "colors.color")
+    .join("discounts", "discount", "=", "discounts.discount")
+    .join("sizes", "size", "=", "sizes.size")
 
     .where("store_name", "=", store_name);
 }
