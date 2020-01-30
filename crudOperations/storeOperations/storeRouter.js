@@ -1,10 +1,9 @@
 const router = require("express").Router();
-const Users = require("./userModel");
 const Stores = require("../storeOperations/storeModel");
 const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
 // @desc     Post a Store
-// @route    POST /api/stores
+// @route    POST /api/store
 // @access   Private
 router.post("/", restricted, async (req, res) => {
   try {
@@ -34,7 +33,7 @@ router.post("/", restricted, async (req, res) => {
 });
 
 // @desc     Get all stores
-// @route    GET /api/stores
+// @route    GET /api/store
 // @access   Private
 router.get("/", restricted, async (req, res) => {
   try {
@@ -48,7 +47,7 @@ router.get("/", restricted, async (req, res) => {
 });
 
 // @desc     Get a store by ID
-// @route    GET /api/stores/:id
+// @route    GET /api/store/:id
 // @access   Private
 router.get("/:id", restricted, async (req, res) => {
   try {
@@ -63,7 +62,7 @@ router.get("/:id", restricted, async (req, res) => {
 });
 
 // @desc     Get a store by Name
-// @route    GET /api/stores/:store_name
+// @route    GET /api/store/:store_name
 // @access   Private
 router.get("/:store_name", restricted, async (req, res) => {
   try {
@@ -78,7 +77,7 @@ router.get("/:store_name", restricted, async (req, res) => {
 });
 
 // @desc     Edit a Store
-// @route    PUT /api/stores/:store_name
+// @route    PUT /api/store/:store_name
 // @access   Private
 router.put("/:store_name", restricted, async (req, res) => {
   try {
@@ -97,7 +96,7 @@ router.put("/:store_name", restricted, async (req, res) => {
 });
 
 // @desc     Delete a Store
-// @route    DELETE /api/stores/:store_name
+// @route    DELETE /api/store/:store_name
 // @access   Private
 router.delete("/:store_name", restricted, async (req, res) => {
   try {
@@ -116,9 +115,9 @@ router.delete("/:store_name", restricted, async (req, res) => {
 });
 
 // @desc     Get a Stores Users
-// @route    GET /api/users/stores/:store_name
+// @route    GET /api/store/:store_name/users
 // @access   Private
-router.get("/stores/:store_name", restricted, async (req, res) => {
+router.get("/:store_name/users", restricted, async (req, res) => {
   try {
     const users = await Stores.getStoresUsers(req.params.store_name);
     res.status(200).json(users);
@@ -130,21 +129,21 @@ router.get("/stores/:store_name", restricted, async (req, res) => {
   }
 });
 
-// // @desc     Get a stores products
-// // @route    GET /api/stores/store_name
-// // @access   Private
-// router.get("/stores/:store_name", restricted, async (req, res) => {
-//   try {
-//     const stores = await Users.getUsersStores(req.params.store_name);
+// @desc     Get a stores products
+// @route    GET /api/store/:store_name/products
+// @access   Private
+router.get("/:store_name/products", restricted, async (req, res) => {
+  try {
+    const stores = await Stores.getStoresProducts(req.params.store_name);
 
-//     res.status(200).json(stores);
-//   } catch (error) {
-//     res.status(500).json({
-//       error,
-//       message: "Unable to find this Stores Users, its not you.. its me"
-//     });
-//   }
-// });
+    res.status(200).json(stores);
+  } catch (error) {
+    res.status(500).json({
+      error,
+      message: "Unable to find this Stores products, its not you.. its me"
+    });
+  }
+});
 
 // Export router
 module.exports = router;
