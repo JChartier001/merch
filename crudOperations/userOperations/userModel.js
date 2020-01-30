@@ -5,53 +5,158 @@ module.exports = {
   find,
   findBy,
   findById,
+  findByUsername,
   update,
-  remove
+  remove,
+  getUsersStores
 };
+
+//for Auth router use primarily//
 
 function insert(user) {
   return db("users")
-    .insert(user, "id")
+    .insert(user, "userID")
     .then(ids => {
       const [id] = ids;
       return findById(id);
     });
 }
 
-function find() {
-  return db("users").select();
-  // add needed user data in select
-}
-
 function findBy(username) {
   return db("users")
-    .select() // add needed user data in select
-
+    .select("userID", "username", "password")
     .where("username", username);
+}
+
+//for Auth router use primarily//
+
+function find() {
+  return db("users").select(
+    "first_name",
+    "last_name",
+    "username",
+    "seller",
+    "address1",
+    "address2",
+    "city",
+    "state",
+    "zip_code",
+    "country",
+    "phone",
+    "email",
+    "billing_address",
+    "billing_city",
+    "billing_zip_code",
+    "billing_country",
+    "shipping_address",
+    "shipping_city",
+    "shipping_zip_code",
+    "shipping_country",
+    "date_created",
+    "date_updated",
+    "support_pin"
+  );
 }
 
 function findById(id) {
   return db("users")
-    .where("id", id)
-    .select() // add needed user data in select
+    .where("userID", id)
+    .select(
+      "first_name",
+      "last_name",
+      "username",
+      "seller",
+      "address1",
+      "address2",
+      "city",
+      "state",
+      "zip_code",
+      "country",
+      "phone",
+      "email",
+      "billing_address",
+      "billing_city",
+      "billing_zip_code",
+      "billing_country",
+      "shipping_address",
+      "shipping_city",
+      "shipping_zip_code",
+      "shipping_country",
+      "date_created",
+      "date_updated",
+      "support_pin"
+    )
     .first();
 }
 
-function update(id, changes) {
+function findByUsername(username) {
   return db("users")
-    .where("id", id)
+    .where("username", username)
+    .select(
+      "first_name",
+      "last_name",
+      "username",
+      "seller",
+      "address1",
+      "address2",
+      "city",
+      "state",
+      "zip_code",
+      "country",
+      "phone",
+      "email",
+      "billing_address",
+      "billing_city",
+      "billing_zip_code",
+      "billing_country",
+      "shipping_address",
+      "shipping_city",
+      "shipping_zip_code",
+      "shipping_country",
+      "date_created",
+      "date_updated",
+      "support_pin"
+    )
+    .first();
+}
+
+function update(username, changes) {
+  return db("users")
+    .where("username", username)
     .update(changes)
     .then(count => {
       if (count > 0) {
-        return findById(id);
+        return findByUsername(username);
       } else {
         return null;
       }
     });
 }
 
-function remove(id) {
+function remove(username) {
   return db("users")
-    .where("id", id)
+    .where("username", username)
     .del();
+}
+
+function getUsersStores(username) {
+  return db("users_store")
+    .select(
+      "userID",
+      "storeID",
+      "admin",
+      "users.username",
+      "users.email",
+      "users.support_pin",
+      "stores.active",
+      "stores.store_name",
+      "stores.hero_imageURL",
+      "stores.logo_url",
+      "stores.date_created",
+      "stores.date_updated"
+    )
+    .join("stores", "store_name", "=", "stores.store_name")
+    .join("users", "username", "=", "users.username")
+
+    .where("username", "=", username);
 }
