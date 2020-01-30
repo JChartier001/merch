@@ -2,7 +2,7 @@
   "name": "merch-dropper-be",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/Wjonke/Merch-Dropper-be.git",
+  "repository": "https://github.com/Lambda-School-Labs/Merch-Dropper-be.git",
   "author": "<merchdropper20@gmail.com>",
   "license": "MIT",
   "private": false,
