@@ -4,8 +4,8 @@ const jwt = require("jsonwebtoken");
 
 const Users = require("../crudOperations/userOperations/userRouter");
 
-const validateRegisterInfo = require("../crudOperations/userOperations/userMiddleware/verifyRegisterInfo");
-const validateLoginInfo = require("../crudOperations/userOperations/userMiddleware/verifyLoginInfo");
+const validateRegisterInfo = require("./authMiddleware/verifyRegisterInfo");
+const validateLoginInfo = require("./authMiddleware/verifyLoginInfo");
 
 router.post("/register", validateRegisterInfo, (req, res) => {
   let user = req.body;
@@ -50,7 +50,7 @@ router.post("/login", validateLoginInfo, (req, res) => {
 
 function generateToken(user) {
   const payload = {
-    subject: user.id,
+    subject: user.userID,
     username: user.username
   };
 

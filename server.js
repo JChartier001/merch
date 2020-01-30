@@ -5,7 +5,7 @@ const cors = require("cors");
 //////    import Router files    //////
 const authRouter = require("./authOperations/authRouter");
 const userRouter = require("./crudOperations/userOperations/userRouter");
-// const storeRouter = require("./crudOperations/storeOperations/storeRouter");
+const storeRouter = require("./crudOperations/storeOperations/storeRouter");
 // const cartRouter = require("./crudOperations/cartOperations/cartRouter");
 // const orderRouter = require("./crudOperations/orderOperations/orderRouter");
 // const productRouter = require("./crudOperations/productOperations/productRouter");
@@ -27,7 +27,7 @@ server.use(express.json());
 //////    Use routers    ///////
 server.use("/api/auth", authRouter);
 server.use("/api/users", userRouter);
-// server.use("/api/store", storeRouter);
+server.use("/api/store", storeRouter);
 // server.use("/api/cart", cartRouter);
 // server.use("/api/order", orderRouter);
 // server.use("/api/product", productRouter);
