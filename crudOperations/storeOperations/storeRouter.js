@@ -3,6 +3,36 @@ const Users = require("./userModel");
 const Stores = require("../storeOperations/storeModel");
 const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
+// @desc     Post a Store
+// @route    POST /api/stores
+// @access   Private
+router.post("/", restricted, async (req, res) => {
+  try {
+    const { active, store_name, hero_imageURL, logo_url, username } = req.body;
+
+    const store = await Stores.insert({
+      active,
+      store_name,
+      hero_imageURL,
+      logo_url
+    });
+
+    if (store) {
+      Stores.insertStoresUsers(store.store_name, username);
+      res
+        .status(201)
+        .json({ store, message: "You have successfully added a Store!" });
+    } else {
+      res.status(400).json({ message: "please include all required content" });
+    }
+  } catch (error) {
+    res.status(500).json({
+      error,
+      message: "Unable to add this store, its not you.. its me"
+    });
+  }
+});
+
 // @desc     Get all stores
 // @route    GET /api/stores
 // @access   Private
@@ -32,12 +62,27 @@ router.get("/:id", restricted, async (req, res) => {
   }
 });
 
-// @desc     Edit a Store
-// @route    PUT /api/stores/:id
+// @desc     Get a store by Name
+// @route    GET /api/stores/:store_name
 // @access   Private
-router.put("/:id", restricted, async (req, res) => {
+router.get("/:store_name", restricted, async (req, res) => {
   try {
-    const store = await Stores.update(req.params.id, req.body);
+    const store = await Stores.findByStoreName(req.params.store_name);
+    res.status(200).json(store);
+  } catch (error) {
+    res.status(500).json({
+      error,
+      message: "Unable to find this store, its not you.. its me"
+    });
+  }
+});
+
+// @desc     Edit a Store
+// @route    PUT /api/stores/:store_name
+// @access   Private
+router.put("/:store_name", restricted, async (req, res) => {
+  try {
+    const store = await Stores.update(req.params.store_name, req.body);
     if (store) {
       res.status(200).json({ store, message: "Store info updated!" });
     } else {
@@ -52,11 +97,11 @@ router.put("/:id", restricted, async (req, res) => {
 });
 
 // @desc     Delete a Store
-// @route    DELETE /api/stores/:id
+// @route    DELETE /api/stores/:store_name
 // @access   Private
-router.delete("/:id", restricted, async (req, res) => {
+router.delete("/:store_name", restricted, async (req, res) => {
   try {
-    const count = await Stores.remove(req.params.id);
+    const count = await Stores.remove(req.params.store_name);
     if (count > 0) {
       res.status(200).json({ message: "this Store has been deleted!" });
     } else {
@@ -70,14 +115,13 @@ router.delete("/:id", restricted, async (req, res) => {
   }
 });
 
-// @desc     Get a users stores
-// @route    GET /api/users/stores/:id
+// @desc     Get a Stores Users
+// @route    GET /api/users/stores/:store_name
 // @access   Private
-router.get("/stores/:id", restricted, async (req, res) => {
+router.get("/stores/:store_name", restricted, async (req, res) => {
   try {
-    const stores = await Users.getUsersStores(req.params.id);
-
-    res.status(200).json(stores);
+    const users = await Stores.getStoresUsers(req.params.store_name);
+    res.status(200).json(users);
   } catch (error) {
     res.status(500).json({
       error,
@@ -85,6 +129,22 @@ router.get("/stores/:id", restricted, async (req, res) => {
     });
   }
 });
+
+// // @desc     Get a stores products
+// // @route    GET /api/stores/store_name
+// // @access   Private
+// router.get("/stores/:store_name", restricted, async (req, res) => {
+//   try {
+//     const stores = await Users.getUsersStores(req.params.store_name);
+
+//     res.status(200).json(stores);
+//   } catch (error) {
+//     res.status(500).json({
+//       error,
+//       message: "Unable to find this Stores Users, its not you.. its me"
+//     });
+//   }
+// });
 
 // Export router
 module.exports = router;
