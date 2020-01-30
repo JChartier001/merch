@@ -53,18 +53,19 @@ exports.up = function(knex) {
         products.string('product_name', 50).notNullable();
         products.string('product_description', 500).notNullable();
         products.integer('quantity_per_unit').defaultTo(1);
-        products.integer('unit_price').notNullable();
+        products.decimal('unit_price', null).notNullable();
+        products.decimal('markup_price', null).notNullable();
         products.string('available_size', 20);
-        products.string('size', 20);
+        products.string('size', 20).notNullable();
         products.string('available_color', 20);
         products.string('color', 20);
-        products.decimal('discount', null);
+        products.decimal('discount', null).notNullable();
         products.boolean('product_available').defaultTo(true);
         products.boolean('discount_available').defaultTo(false);
         products.string('picture', 255).notNullable();
         products.string('note', 500);
         products.integer('store_name').unsigned().notNullable().references('store_name').inTable('stores').onUpdate('CASCADE').onDelete('CASCADE');
-        products.integer('categoryID').unsigned().notNullable().references('categoryID').inTable('category').onUpdate('CASCADE').onDelete('CASCADE');
+        products.integer('category_name').unsigned().notNullable().references('category_name').inTable('category').onUpdate('CASCADE').onDelete('CASCADE');
     })
 
     .createTable("orders", orders => {
