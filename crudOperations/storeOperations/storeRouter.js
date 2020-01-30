@@ -134,7 +134,7 @@ router.get("/:store_name/users", restricted, async (req, res) => {
 });
 
 // @desc     Get a stores products
-// @route    GET /api/store/:store_name/products
+// @route    GET /api/stores/:store_name/products
 // @access   Private
 router.get("/:store_name/products", restricted, async (req, res) => {
   try {

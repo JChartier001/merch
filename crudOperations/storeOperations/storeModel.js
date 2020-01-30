@@ -131,12 +131,10 @@ function getStoresProducts(store_name) {
     .select(
       "stores.store_name",
       "stores.active",
-
       "category.category_name",
       "category.description",
       "category.picture",
       "category.active",
-
       "active",
       "SKU",
       "product_name",
@@ -150,12 +148,9 @@ function getStoresProducts(store_name) {
       "picture",
       "ranking",
       "note",
-
       "colors.color",
       "colors.active",
-
       "discounts.discount",
-
       "sizes.size",
       "sizes.active"
     )

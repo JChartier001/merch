@@ -29,8 +29,8 @@ server.use("/api/auth", authRouter);
 server.use("/api/users", userRouter);
 server.use("/api/stores", storeRouter);
 // server.use("/api/cart", cartRouter);
-// server.use("/api/order", orderRouter);
-// server.use("/api/product", productRouter);
+// server.use("/api/orders", orderRouter);
+// server.use("/api/products", productRouter);
 // server.use("/api/orderDetails", orderDetailsRouter);
 
 //testing that the server works
