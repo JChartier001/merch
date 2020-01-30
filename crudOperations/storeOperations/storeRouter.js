@@ -139,6 +139,7 @@ router.get("/:store_name/users", restricted, async (req, res) => {
 router.get("/:store_name/products", restricted, async (req, res) => {
   try {
     const products = await Stores.getStoresProducts(req.params.store_name);
+
     if (products) {
       res.status(200).json(products);
     } else {
