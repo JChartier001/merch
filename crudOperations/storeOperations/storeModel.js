@@ -8,8 +8,7 @@ module.exports = {
   findByStoreName,
   update,
   remove,
-  getStoresUsers,
-  getStoresProducts
+  getStoresUsers
 };
 
 function insert(store) {
@@ -28,8 +27,12 @@ function insertStoreUsers(store_name, username) {
     .then(res => {
       console.log(res);
     })
-    .catch(err => {
-      console.log(err);
+    .catch(error => {
+      res.status(500).json({
+        error,
+        message:
+          "Unable to add this into user_party Table, its not you.. its me"
+      });
     });
 }
 
@@ -108,6 +111,7 @@ function getStoresUsers(store_name) {
       "users.username",
       "users.first_name",
       "users.last_name",
+      "users.stripe_account",
       "users.address1",
       "users.address2",
       "users.city",
@@ -122,44 +126,6 @@ function getStoresUsers(store_name) {
     )
     .join("stores", "store_name", "=", "stores.store_name")
     .join("users", "username", "=", "users.username")
-
-    .where("store_name", "=", store_name);
-}
-
-function getStoresProducts(store_name) {
-  return db("products")
-    .select(
-      "stores.store_name",
-      "stores.active",
-      "category.category_name",
-      "category.description",
-      "category.picture",
-      "category.active",
-      "active",
-      "SKU",
-      "product_name",
-      "product_description",
-      "quantity_per_unit",
-      "unit_price",
-      "markup_price",
-      "available_discount",
-      "discount",
-      "product_available",
-      "picture",
-      "ranking",
-      "note",
-      "colors.color",
-      "colors.active",
-      "discounts.discount",
-      "sizes.size",
-      "sizes.active"
-    )
-
-    .join("stores", "store_name", "=", "stores.store_name")
-    .join("category", "category_name", "=", "category.category_name")
-    .join("colors", "color", "=", "colors.color")
-    .join("discounts", "discount", "=", "discounts.discount")
-    .join("sizes", "size", "=", "sizes.size")
 
     .where("store_name", "=", store_name);
 }

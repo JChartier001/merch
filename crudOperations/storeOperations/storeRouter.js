@@ -133,25 +133,5 @@ router.get("/:store_name/users", restricted, async (req, res) => {
   }
 });
 
-// @desc     Get a stores products
-// @route    GET /api/stores/:store_name/products
-// @access   Private
-router.get("/:store_name/products", restricted, async (req, res) => {
-  try {
-    const products = await Stores.getStoresProducts(req.params.store_name);
-
-    if (products) {
-      res.status(200).json(products);
-    } else {
-      res.status(404).json({ message: "Please enter a valid store name" });
-    }
-  } catch (error) {
-    res.status(500).json({
-      error,
-      message: "Unable to find this Stores products, its not you.. its me"
-    });
-  }
-});
-
 // Export router
 module.exports = router;
