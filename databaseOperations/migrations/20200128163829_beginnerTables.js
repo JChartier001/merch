@@ -69,7 +69,8 @@ exports.up = function(knex) {
         orders.decimal('tax', null).notNullable();
         orders.decimal('fees', null).notNullable();
         orders.decimal('shipping', null).notNullable();
-        orders.string('orderToken', 255).unique().notNullable();       
+        orders.string('orderToken', 255).unique().notNullable();
+        orders.string('spOrderID', 255).unique().notNullable();       
         orders.string('mode', 255).notNullable();
         orders.string('createdAt', 255).notNullable();
         orders.string('store_name', 255).notNullable().references('store_name').inTable('stores').onUpdate('CASCADE').onDelete('CASCADE');
