@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const Users = require("./userModel");
-const Stores = require("../storeOperations/storeModel");
 const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
 // @desc     Get all Users

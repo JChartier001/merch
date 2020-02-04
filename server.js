@@ -6,10 +6,8 @@ const cors = require("cors");
 const authRouter = require("./authOperations/authRouter");
 const userRouter = require("./crudOperations/userOperations/userRouter");
 const storeRouter = require("./crudOperations/storeOperations/storeRouter");
-// const cartRouter = require("./crudOperations/cartOperations/cartRouter");
 // const orderRouter = require("./crudOperations/orderOperations/orderRouter");
-// const productRouter = require("./crudOperations/productOperations/productRouter");
-// const orderDetailsRouter = require("./crudOperations/orderDetailsOperations/orderDetailsRouter");
+// const quoteRouter = require("./crudOperations/quoteOperations/quoteRouter");
 
 const server = express();
 
@@ -28,10 +26,8 @@ server.use(express.json());
 server.use("/api/auth", authRouter);
 server.use("/api/users", userRouter);
 server.use("/api/stores", storeRouter);
-// server.use("/api/cart", cartRouter);
 // server.use("/api/orders", orderRouter);
-// server.use("/api/products", productRouter);
-// server.use("/api/orderDetails", orderDetailsRouter);
+// server.use("/api/quotes", quoteRouter);
 
 //testing that the server works
 server.get("/", (req, res) => {
