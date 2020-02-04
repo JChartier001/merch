@@ -9,12 +9,12 @@ exports.up = function(knex) {
         users.boolean('seller').defaultTo(false).notNullable();
         users.string('stripe_account', 255).notNullable();
         users.string('address1', 255).notNullable();
-        users.string('address2', 255).notNullable();
+        users.string('address2', 255);
         users.string('city', 255).notNullable();
         users.string('state', 255).notNullable();
         users.integer('zip_code').notNullable();
         users.string('country', 255).notNullable();
-        users.string('phone', 20);
+        users.integer('phone', 20);
         users.string('email', 255).notNullable();
         users.string('billing_address', 255).notNullable();
         users.string('billing_city', 255).notNullable();
@@ -34,7 +34,7 @@ exports.up = function(knex) {
         stores.boolean('active').defaultTo(true);
         stores.string('store_name', 255).unique().notNullable();
         stores.string('hero_ImageURL', 255).defaultTo('https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png').notNullable();
-        stores.string('logo_url', 255).defaultTo('https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png').notNullable();
+        stores.string('logo_url', 255).defaultTo('https://uxmasters.org/images/ant_logo.svg').notNullable();
         stores.date('date_created').defaultTo(Date.now()).notNullable();
         stores.date('date_updated').defaultTo(Date.now()).notNullable();
     })
