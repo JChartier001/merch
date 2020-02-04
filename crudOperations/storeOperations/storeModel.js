@@ -21,7 +21,7 @@ function insert(store) {
 }
 
 function insertStoreUsers(store_name, username) {
-  return db("user_party")
+  return db("users_store")
     .insert({ store_name, username, admin: true })
 
     .then(res => {
@@ -47,9 +47,9 @@ function find() {
   );
 }
 
-function findById(id) {
+function findById(storeID) {
   return db("stores")
-    .where("storeID", id)
+    .where("storeID", storeID)
     .select(
       "active",
       "store_name",

@@ -49,9 +49,9 @@ router.get("/", restricted, async (req, res) => {
 // @desc     Get a store by ID
 // @route    GET /api/stores/:id
 // @access   Private
-router.get("/:id", restricted, async (req, res) => {
+router.get("/:storeID", restricted, async (req, res) => {
   try {
-    const user = await Stores.findById(req.params.id);
+    const store = await Stores.findById(req.params.storeID);
     res.status(200).json(store);
   } catch (error) {
     res.status(500).json({

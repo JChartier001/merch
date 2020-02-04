@@ -8,6 +8,7 @@ const userRouter = require("./crudOperations/userOperations/userRouter");
 const storeRouter = require("./crudOperations/storeOperations/storeRouter");
 // const orderRouter = require("./crudOperations/orderOperations/orderRouter");
 // const quoteRouter = require("./crudOperations/quoteOperations/quoteRouter");
+// const designsRouter = require("./crudOperations/designOperations/designsRouter");
 
 const server = express();
 
@@ -28,6 +29,7 @@ server.use("/api/users", userRouter);
 server.use("/api/stores", storeRouter);
 // server.use("/api/orders", orderRouter);
 // server.use("/api/quotes", quoteRouter);
+// server.use("/api/designs", designsRouter);
 
 //testing that the server works
 server.get("/", (req, res) => {
