@@ -69,15 +69,17 @@ exports.up = function(knex) {
         orders.decimal('tax', null).notNullable();
         orders.decimal('fees', null).notNullable();
         orders.decimal('shipping', null).notNullable();
-        orders.string('orderToken', 255).unique().notNullable();       
+        orders.string('orderToken', 255).unique().notNullable();
+        orders.string('spOrderID', 255).unique().notNullable();       
         orders.string('mode', 255).notNullable();
         orders.string('createdAt', 255).notNullable();
         orders.string('store_name', 255).notNullable().references('store_name').inTable('stores').onUpdate('CASCADE').onDelete('CASCADE');
         orders.string('username', 255).notNullable().references('username').inTable('users').onUpdate('CASCADE').onDelete('CASCADE');
     })
 
-    .createTable("design_urls", design_urls => {
+    .createTable("designs", design_urls => {
         design_urls.increments('designID').primary();
+        design_urls.string('design_name', 255).notNullable();
         design_urls.string('design_url', 255).notNullable();
         design_urls.string('store_name', 255).notNullable().references('store_name').inTable('stores').onUpdate('CASCADE').onDelete('CASCADE');
         design_urls.string('username', 255).notNullable().references('username').inTable('users').onUpdate('CASCADE').onDelete('CASCADE');

@@ -7,6 +7,7 @@ exports.seed = function(knex) {
     fees: 1.26,
     shipping: 4.64,
     orderToken: '70192HJALKANOIAMNL',
+    spOrderID: '70192HJALKANOIAMNL',
     mode: '-',
     createdAt: 1529644667898,
     store_name: 'Anthill Store',
