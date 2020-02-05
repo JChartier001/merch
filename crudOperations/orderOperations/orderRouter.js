@@ -171,8 +171,8 @@ router.put("/:spOrderID", restricted, async (req, res) => {
   }
 });
 
-// @desc     Delete a Store by orderID
-// @route    DELETE /api/stores/:orderID
+// @desc     Delete an order by orderID
+// @route    DELETE /api/orders/:orderID
 // @access   Private
 router.delete("/:orderID", restricted, async (req, res) => {
   try {
@@ -190,8 +190,8 @@ router.delete("/:orderID", restricted, async (req, res) => {
   }
 });
 
-// @desc     Delete a Store by 	orderToken
-// @route    DELETE /api/stores/:orderToken
+// @desc     Delete an order by	orderToken
+// @route    DELETE /api/orders/:orderToken
 // @access   Private
 router.delete("/:orderToken", restricted, async (req, res) => {
   try {
@@ -209,7 +209,7 @@ router.delete("/:orderToken", restricted, async (req, res) => {
   }
 });
 
-// @desc     Delete a Store by an order by Scalable press order ID
+// @desc     Delete an order by Scalable press order ID
 // @route    DELETE /api/stores/:spOrderID
 // @access   Private
 router.delete("/:spOrderID", restricted, async (req, res) => {
