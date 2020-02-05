@@ -40,7 +40,7 @@ exports.up = function(knex) {
     })
     
     .createTable("quotes", quotes => {
-        quotes.increments('orderID').primary();
+        quotes.increments('quoteID').primary();
         quotes.decimal('total', null).notNullable();
         quotes.decimal('subtotal', null).notNullable();
         quotes.decimal('tax', null).notNullable();
