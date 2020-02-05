@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const Users = require("./userModel");
-const Stores = require("../storeOperations/storeModel");
 const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
 // @desc     Get all Users
@@ -86,9 +85,9 @@ router.delete("/:username", restricted, async (req, res) => {
 });
 
 // @desc     Get a users stores
-// @route    GET /api/users/stores/:username
+// @route    GET /api/users/:username/stores
 // @access   Private
-router.get("/stores/:username", restricted, async (req, res) => {
+router.get("/:username/stores", restricted, async (req, res) => {
   try {
     const stores = await Users.getUsersStores(req.params.username);
 
