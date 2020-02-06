@@ -18,11 +18,13 @@ exports.up = function(knex) {
         users.string('email', 255).notNullable();
         users.string('billing_address', 255).notNullable();
         users.string('billing_city', 255).notNullable();
-        users.string('billing_zip_code', 255).notNullable();
+        users.string('billing_state', 255).notNullable();
+        users.integer('billing_zip_code', 255).notNullable();
         users.string('billing_country', 255).notNullable();
         users.string('shipping_address', 255).notNullable();
         users.string('shipping_city', 255).notNullable();
-        users.string('shipping_zip_code', 255).notNullable();
+        users.string('shipping_state', 255).notNullable();
+        users.integer('shipping_zip_code', 255).notNullable();
         users.string('shipping_country', 255).notNullable();
         users.date('date_created', 255).defaultTo(Date.now()).notNullable();
         users.date('date_updated', 255).defaultTo(Date.now()).notNullable();
@@ -40,7 +42,7 @@ exports.up = function(knex) {
     })
     
     .createTable("quotes", quotes => {
-        quotes.increments('orderID').primary();
+        quotes.increments('quoteID').primary();
         quotes.decimal('total', null).notNullable();
         quotes.decimal('subtotal', null).notNullable();
         quotes.decimal('tax', null).notNullable();
