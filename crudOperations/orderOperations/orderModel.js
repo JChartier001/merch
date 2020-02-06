@@ -35,8 +35,7 @@ function find() {
     "shipping",
     "orderToken",
     "spOrderID",
-    "mode",
-    "createdAt"
+    "mode"
   );
 } //may need to restrict what this returns after development, perhaps in the router that uses it by destructuring res.json
 
@@ -54,8 +53,7 @@ function findById(orderID) {
       "shipping",
       "orderToken",
       "spOrderID",
-      "mode",
-      "createdAt"
+      "mode"
     )
     .first();
 } //may need to restrict what this returns after development, perhaps in the router that uses it by destructuring res.json
@@ -74,8 +72,7 @@ function findBySPId(spOrderID) {
       "shipping",
       "orderToken",
       "spOrderID",
-      "mode",
-      "createdAt"
+      "mode"
     )
     .first();
 } //may need to restrict what this returns after development, perhaps in the router that uses it by destructuring res.json
@@ -94,8 +91,7 @@ function findByOrderToken(orderToken) {
       "shipping",
       "orderToken",
       "spOrderID",
-      "mode",
-      "createdAt"
+      "mode"
     )
     .first();
 } //may need to restrict what this returns after development, perhaps in the router that uses it by destructuring res.json

@@ -1,11 +1,11 @@
 const router = require("express").Router();
 const Orders = require("../orderOperations/orderModel");
-const restricted = require("../../globalMiddleware/restrictedMiddleware");
+// const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
 // @desc     Post an Order
 // @route    POST /api/orders
 // @access   Private
-router.post("/", restricted, async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const {
       store_name,
@@ -55,7 +55,7 @@ router.post("/", restricted, async (req, res) => {
 // @desc     Get all orders
 // @route    GET /api/orders
 // @access   Private
-router.get("/", restricted, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const orders = await Orders.find();
     res.status(200).json(orders);
@@ -69,7 +69,7 @@ router.get("/", restricted, async (req, res) => {
 // @desc     Get an order by orderID
 // @route    GET /api/orders/:orderID
 // @access   Private
-router.get("/:orderID", restricted, async (req, res) => {
+router.get("/:orderID", async (req, res) => {
   try {
     const order = await Orders.findById(req.params.orderID);
     res.status(200).json(order);
@@ -84,7 +84,7 @@ router.get("/:orderID", restricted, async (req, res) => {
 // @desc     Get an order by Scalable Press orderID
 // @route    GET /api/orders/:spOrderID
 // @access   Private
-router.get("/:spOrderID", restricted, async (req, res) => {
+router.get("/:spOrderID", async (req, res) => {
   try {
     const order = await Orders.findBySPId(req.params.spOrderID);
     res.status(200).json(order);
@@ -99,7 +99,7 @@ router.get("/:spOrderID", restricted, async (req, res) => {
 // @desc     Get an order by Scalable Press order token
 // @route    GET /api/orders/:orderToken
 // @access   Private
-router.get("/:orderToken", restricted, async (req, res) => {
+router.get("/:orderToken", async (req, res) => {
   try {
     const order = await Orders.findByOrderToken(req.params.orderToken);
     res.status(200).json(order);
@@ -114,7 +114,7 @@ router.get("/:orderToken", restricted, async (req, res) => {
 // @desc     Edit an order by orderID
 // @route    PUT /api/orders/:orderID
 // @access   Private
-router.put("/:orderID", restricted, async (req, res) => {
+router.put("/:orderID", async (req, res) => {
   try {
     const order = await Orders.updateByOrderId(req.params.orderID, req.body);
     if (order) {
@@ -133,7 +133,7 @@ router.put("/:orderID", restricted, async (req, res) => {
 // @desc     Edit an order by order token
 // @route    PUT /api/orders/:orderToken
 // @access   Private
-router.put("/:orderToken", restricted, async (req, res) => {
+router.put("/:orderToken", async (req, res) => {
   try {
     const order = await Orders.updateByOrderToken(
       req.params.orderToken,
@@ -155,7 +155,7 @@ router.put("/:orderToken", restricted, async (req, res) => {
 // @desc     Edit an order by Scalable press order ID
 // @route    PUT /api/orders/:spOrderID
 // @access   Private
-router.put("/:spOrderID", restricted, async (req, res) => {
+router.put("/:spOrderID", async (req, res) => {
   try {
     const order = await Orders.updateBySpOrderID(req.params.orderID, req.body);
     if (order) {
@@ -174,7 +174,7 @@ router.put("/:spOrderID", restricted, async (req, res) => {
 // @desc     Delete an order by orderID
 // @route    DELETE /api/orders/:orderID
 // @access   Private
-router.delete("/:orderID", restricted, async (req, res) => {
+router.delete("/:orderID", async (req, res) => {
   try {
     const count = await Orders.remove(req.params.orderID);
     if (count > 0) {
@@ -193,7 +193,7 @@ router.delete("/:orderID", restricted, async (req, res) => {
 // @desc     Delete an order by	orderToken
 // @route    DELETE /api/orders/:orderToken
 // @access   Private
-router.delete("/:orderToken", restricted, async (req, res) => {
+router.delete("/:orderToken", async (req, res) => {
   try {
     const count = await Orders.remove(req.params.orderToken);
     if (count > 0) {
@@ -212,7 +212,7 @@ router.delete("/:orderToken", restricted, async (req, res) => {
 // @desc     Delete an order by Scalable press order ID
 // @route    DELETE /api/stores/:spOrderID
 // @access   Private
-router.delete("/:spOrderID", restricted, async (req, res) => {
+router.delete("/:spOrderID", async (req, res) => {
   try {
     const count = await Orders.remove(req.params.spOrderID);
     if (count > 0) {
