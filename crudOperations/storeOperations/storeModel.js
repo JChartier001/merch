@@ -2,7 +2,7 @@ const db = require("../../databaseOperations/db-config");
 
 module.exports = {
   insert,
-  insertStoreUsers,
+  // insertStoreUsers,
   find,
   findById,
   findByStoreName,
@@ -19,69 +19,55 @@ function insert(store) {
       return findByStoreName(store_name);
     });
 }
+//FUTURE RELEASE//////////////
+// function insertStoreUsers(store_name, username) {
+//   return db("users_store")
+//     .insert({ store_name, username, admin: true })
 
-function insertStoreUsers(store_name, username) {
-  return db("users_store")
-    .insert({ store_name, username, admin: true })
-
-    .then(res => {
-      console.log(res);
-    })
-    .catch(error => {
-      res.status(500).json({
-        error,
-        message:
-          "Unable to add this into user_party Table, its not you.. its me"
-      });
-    });
-}
+//     .then(res => {
+//       console.log(res);
+//     })
+//     .catch(error => {
+//       res.status(500).json({
+//         error,
+//         message:
+//           "Unable to add this into user_party Table, its not you.. its me"
+//       });
+//     });
+// }
 
 function find() {
   return db("stores").select(
+    "storeID",
+    "userID",
     "active",
     "store_name",
     "hero_ImageURL",
-    "logo_url",
-    "date_created",
-    "date_updated"
+    "logo_url"
   );
 }
 
 function findById(storeID) {
   return db("stores")
     .where("storeID", storeID)
-    .select(
-      "active",
-      "store_name",
-      "hero_ImageURL",
-      "logo_url",
-      "date_created",
-      "date_updated"
-    )
+    .select("storeID", "active", "store_name", "hero_ImageURL", "logo_url")
     .first();
 }
 
 function findByStoreName(store_name) {
   return db("stores")
     .where("store_name", store_name)
-    .select(
-      "active",
-      "store_name",
-      "hero_ImageURL",
-      "logo_url",
-      "date_created",
-      "date_updated"
-    )
+    .select("storeID", "active", "store_name", "hero_ImageURL", "logo_url")
     .first();
 }
 
-function update(store_name, changes) {
+function update(storeID, changes) {
   return db("stores")
-    .where("store_name", store_name)
+    .where("storeID", storeID)
     .update(changes)
     .then(count => {
       if (count > 0) {
-        return findByStoreName(store_name);
+        return findById(storeID);
       } else {
         return null;
       }
@@ -105,8 +91,6 @@ function getStoresUsers(store_name) {
       "stores.store_name",
       "stores.hero_imageURL",
       "stores.logo_url",
-      "stores.date_created",
-      "stores.date_updated",
 
       "users.username",
       "users.first_name",
@@ -120,8 +104,6 @@ function getStoresUsers(store_name) {
       "users.country",
       "users.phone",
       "users.email",
-      "users.date_created",
-      "users.date_updated",
       "users.support_pin"
     )
     .join("stores", "store_name", "=", "stores.store_name")

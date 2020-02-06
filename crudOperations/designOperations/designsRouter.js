@@ -1,11 +1,11 @@
 const router = require("express").Router();
 const Designs = require("../designOperations/designsModel");
-const restricted = require("../../globalMiddleware/restrictedMiddleware");
+// const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
 // @desc     Post a Design
 // @route    POST /api/designs
 // @access   Private
-router.post("/", restricted, async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const { store_name, username, design_name, design_url } = req.body;
 
@@ -34,7 +34,7 @@ router.post("/", restricted, async (req, res) => {
 // @desc     Get all designs
 // @route    GET /api/designs
 // @access   Private
-router.get("/", restricted, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const designs = await Designs.find();
     res.status(200).json(designs);
@@ -48,7 +48,7 @@ router.get("/", restricted, async (req, res) => {
 // @desc     Get an design by designID
 // @route    GET /api/designs/:designID
 // @access   Private
-router.get("/:designID", restricted, async (req, res) => {
+router.get("/:designID", async (req, res) => {
   try {
     const design = await Designs.findById(req.params.designID);
     res.status(200).json(design);
@@ -63,7 +63,7 @@ router.get("/:designID", restricted, async (req, res) => {
 // @desc     Edit a design by designID
 // @route    PUT /api/designs/:designID
 // @access   Private
-router.put("/:designID", restricted, async (req, res) => {
+router.put("/:designID", async (req, res) => {
   try {
     const design = await Designs.updateByDesignId(req.params.quoteID, req.body);
     if (design) {
@@ -84,7 +84,7 @@ router.put("/:designID", restricted, async (req, res) => {
 // @desc     Delete a design by designID
 // @route    DELETE /api/designs/:designID
 // @access   Private
-router.delete("/:designID", restricted, async (req, res) => {
+router.delete("/:designID", async (req, res) => {
   try {
     const count = await Designs.removeByDesignId(req.params.designID);
     if (count > 0) {

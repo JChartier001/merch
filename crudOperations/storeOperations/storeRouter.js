@@ -1,23 +1,18 @@
 const router = require("express").Router();
 const Stores = require("../storeOperations/storeModel");
-const restricted = require("../../globalMiddleware/restrictedMiddleware");
+// const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
 // @desc     Post a Store
 // @route    POST /api/stores
 // @access   Private
-router.post("/", restricted, async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    const { active, store_name, hero_imageURL, logo_url, username } = req.body;
-
-    const store = await Stores.insert({
-      active,
-      store_name,
-      hero_imageURL,
-      logo_url
-    });
+    let store = req.body;
+    console.log(store);
 
     if (store) {
-      Stores.insertStoresUsers(store.store_name, username);
+      Stores.insert(store);
+      // Stores.insertStoresUsers(store.store_name, username);
       res
         .status(201)
         .json({ store, message: "You have successfully added a Store!" });
@@ -35,10 +30,15 @@ router.post("/", restricted, async (req, res) => {
 // @desc     Get all stores
 // @route    GET /api/stores
 // @access   Private
-router.get("/", restricted, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const stores = await Stores.find();
-    res.status(200).json(stores);
+
+    if (stores) {
+      res.status(200).json(stores);
+    } else {
+      res.status(404).json({ message: "not found!" });
+    }
   } catch (error) {
     res
       .status(500)
@@ -49,10 +49,15 @@ router.get("/", restricted, async (req, res) => {
 // @desc     Get a store by ID
 // @route    GET /api/stores/:id
 // @access   Private
-router.get("/:storeID", restricted, async (req, res) => {
+router.get("/:storeID", async (req, res) => {
   try {
     const store = await Stores.findById(req.params.storeID);
-    res.status(200).json(store);
+
+    if (store) {
+      res.status(200).json(store);
+    } else {
+      res.status(404).json({ message: "That store could not be found!" });
+    }
   } catch (error) {
     res.status(500).json({
       error,
@@ -62,12 +67,20 @@ router.get("/:storeID", restricted, async (req, res) => {
 });
 
 // @desc     Get a store by Name
-// @route    GET /api/stores/:store_name
-// @access   Private
-router.get("/:store_name", restricted, async (req, res) => {
+// @route    GET /api/stores/storename/:store_name
+// @access   Public
+router.get("/storename/:store_name", async (req, res) => {
   try {
     const store = await Stores.findByStoreName(req.params.store_name);
-    res.status(200).json(store);
+
+    if (store) {
+      res.status(200).json(store);
+    } else {
+      res.status(404).json({
+        message:
+          "Please enter a valid store name, keep in mind that store names are case sensitive"
+      });
+    }
   } catch (error) {
     res.status(500).json({
       error,
@@ -77,11 +90,11 @@ router.get("/:store_name", restricted, async (req, res) => {
 });
 
 // @desc     Edit a Store
-// @route    PUT /api/stores/:store_name
+// @route    PUT /api/stores/:storeID
 // @access   Private
-router.put("/:store_name", restricted, async (req, res) => {
+router.put("/:storeID", async (req, res) => {
   try {
-    const store = await Stores.update(req.params.store_name, req.body);
+    const store = await Stores.update(req.params.storeID, req.body);
     if (store) {
       res.status(200).json({ store, message: "Store info updated!" });
     } else {
@@ -96,15 +109,18 @@ router.put("/:store_name", restricted, async (req, res) => {
 });
 
 // @desc     Delete a Store
-// @route    DELETE /api/stores/:store_name
+// @route    DELETE /api/stores/storename:store_name
 // @access   Private
-router.delete("/:store_name", restricted, async (req, res) => {
+router.delete("/storename/:store_name", async (req, res) => {
   try {
     const count = await Stores.remove(req.params.store_name);
     if (count > 0) {
       res.status(200).json({ message: "this Store has been deleted!" });
     } else {
-      res.status(404).json({ message: "Store unable to be deleted!" });
+      res.status(404).json({
+        message:
+          "Please enter a valid store name, keep in mind that store names are case sensitive"
+      });
     }
   } catch (error) {
     res.status(500).json({
@@ -117,7 +133,7 @@ router.delete("/:store_name", restricted, async (req, res) => {
 // @desc     Get a Stores Users
 // @route    GET /api/stores/:store_name/users
 // @access   Private
-router.get("/:store_name/users", restricted, async (req, res) => {
+router.get("/:store_name/users", async (req, res) => {
   try {
     const users = await Stores.getStoresUsers(req.params.store_name);
     if (users) {
