@@ -4,7 +4,7 @@ const morgan = require("morgan");
 const colors = require("colors");
 
 ////setting up environmental variables////
-dotenv.config({ path: "./config.env" });
+dotenv.config({ path: "./config/config.env" });
 
 if (process.env.NODE_ENV === "development") {
   server.use(morgan("dev"));
@@ -21,8 +21,8 @@ const app = server.listen(
 );
 
 //handle unhandled promise rejections
-process.on("unhandledRejection", (err, promise) => {
-  console.log(`Error: ${err.message}`.red.bold);
-  //close server and exit process
-  app.close(() => process.exit(1));
-});
+// process.on("unhandledRejection", (err, promise) => {
+//   console.log(`Error: ${err.message}`.red.bold);
+//   //close server and exit process
+//   app.close(() => process.exit(1));
+// });
