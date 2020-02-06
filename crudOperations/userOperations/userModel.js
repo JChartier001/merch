@@ -32,6 +32,7 @@ function findBy(username) {
 
 function find() {
   return db("users").select(
+    "userID",
     "first_name",
     "last_name",
     "username",
@@ -63,6 +64,7 @@ function findById(id) {
   return db("users")
     .where("userID", id)
     .select(
+      "userID",
       "first_name",
       "last_name",
       "username",
@@ -95,6 +97,7 @@ function findByUsername(username) {
   return db("users")
     .where("username", username)
     .select(
+      "userID",
       "first_name",
       "last_name",
       "username",

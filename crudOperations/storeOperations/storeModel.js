@@ -38,6 +38,7 @@ function insertStoreUsers(store_name, username) {
 
 function find() {
   return db("stores").select(
+    "storeID",
     "active",
     "store_name",
     "hero_ImageURL",
@@ -51,6 +52,7 @@ function findById(storeID) {
   return db("stores")
     .where("storeID", storeID)
     .select(
+      "storeID",
       "active",
       "store_name",
       "hero_ImageURL",
@@ -65,6 +67,7 @@ function findByStoreName(store_name) {
   return db("stores")
     .where("store_name", store_name)
     .select(
+      "storeID",
       "active",
       "store_name",
       "hero_ImageURL",
@@ -75,13 +78,13 @@ function findByStoreName(store_name) {
     .first();
 }
 
-function update(store_name, changes) {
+function update(storeID, changes) {
   return db("stores")
-    .where("store_name", store_name)
+    .where("storeID", storeID)
     .update(changes)
     .then(count => {
       if (count > 0) {
-        return findByStoreName(store_name);
+        return findById(storeID);
       } else {
         return null;
       }
