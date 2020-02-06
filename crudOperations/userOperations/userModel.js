@@ -54,8 +54,6 @@ function find() {
     "shipping_city",
     "shipping_zip_code",
     "shipping_country",
-    "date_created",
-    "date_updated",
     "support_pin"
   );
 }
@@ -86,8 +84,6 @@ function findById(id) {
       "shipping_city",
       "shipping_zip_code",
       "shipping_country",
-      "date_created",
-      "date_updated",
       "support_pin"
     )
     .first();
@@ -119,8 +115,6 @@ function findByUsername(username) {
       "shipping_city",
       "shipping_zip_code",
       "shipping_country",
-      "date_created",
-      "date_updated",
       "support_pin"
     )
     .first();
@@ -158,9 +152,7 @@ function getUsersStores(username) {
       "stores.active",
       "stores.store_name",
       "stores.hero_imageURL",
-      "stores.logo_url",
-      "stores.date_created",
-      "stores.date_updated"
+      "stores.logo_url"
     )
     .join("stores", "store_name", "=", "stores.store_name")
     .join("users", "username", "=", "users.username")

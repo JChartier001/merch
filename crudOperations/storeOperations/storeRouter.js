@@ -7,17 +7,12 @@ const Stores = require("../storeOperations/storeModel");
 // @access   Private
 router.post("/", async (req, res) => {
   try {
-    const { active, store_name, hero_imageURL, logo_url, username } = req.body;
-
-    const store = await Stores.insert({
-      active,
-      store_name,
-      hero_imageURL,
-      logo_url
-    });
+    let store = req.body;
+    console.log(store);
 
     if (store) {
-      Stores.insertStoresUsers(store.store_name, username);
+      Stores.insert(store);
+      // Stores.insertStoresUsers(store.store_name, username);
       res
         .status(201)
         .json({ store, message: "You have successfully added a Store!" });

@@ -23,8 +23,6 @@ exports.seed = function(knex) {
       shipping_city: "Denver",
       shipping_zip_code: 80204,
       shipping_country: "USA",
-      date_created: 1529644667834,
-      date_updated: 1529644667834,
       support_pin: "HRYI7820"
     }
   ]);
