@@ -110,14 +110,14 @@ exports.up = function(knex) {
         .defaultTo(true)
         .notNullable();
       users_store
-        .integer("storeID", 255)
+        .integer("storeID")
         .notNullable()
         .references("storeID")
         .inTable("stores")
         .onUpdate("CASCADE")
         .onDelete("CASCADE");
       users_store
-        .integer("userID", 255)
+        .integer("userID")
         .notNullable()
         .references("userID")
         .inTable("users")
