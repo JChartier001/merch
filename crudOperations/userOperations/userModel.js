@@ -32,6 +32,7 @@ function findBy(username) {
 
 function find() {
   return db("users").select(
+    "userID",
     "first_name",
     "last_name",
     "username",
@@ -53,8 +54,6 @@ function find() {
     "shipping_city",
     "shipping_zip_code",
     "shipping_country",
-    "date_created",
-    "date_updated",
     "support_pin"
   );
 }
@@ -63,6 +62,7 @@ function findById(id) {
   return db("users")
     .where("userID", id)
     .select(
+      "userID",
       "first_name",
       "last_name",
       "username",
@@ -84,8 +84,6 @@ function findById(id) {
       "shipping_city",
       "shipping_zip_code",
       "shipping_country",
-      "date_created",
-      "date_updated",
       "support_pin"
     )
     .first();
@@ -95,6 +93,7 @@ function findByUsername(username) {
   return db("users")
     .where("username", username)
     .select(
+      "userID",
       "first_name",
       "last_name",
       "username",
@@ -116,8 +115,6 @@ function findByUsername(username) {
       "shipping_city",
       "shipping_zip_code",
       "shipping_country",
-      "date_created",
-      "date_updated",
       "support_pin"
     )
     .first();
@@ -155,9 +152,7 @@ function getUsersStores(username) {
       "stores.active",
       "stores.store_name",
       "stores.hero_imageURL",
-      "stores.logo_url",
-      "stores.date_created",
-      "stores.date_updated"
+      "stores.logo_url"
     )
     .join("stores", "store_name", "=", "stores.store_name")
     .join("users", "username", "=", "users.username")

@@ -1,11 +1,11 @@
 const router = require("express").Router();
 const Quotes = require("../quoteOperations/quoteModel");
-const restricted = require("../../globalMiddleware/restrictedMiddleware");
+// const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
 // @desc     Post a Quote
 // @route    POST /api/quotes
 // @access   Private
-router.post("/", restricted, async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const {
       store_name,
@@ -51,7 +51,7 @@ router.post("/", restricted, async (req, res) => {
 // @desc     Get all quotes
 // @route    GET /api/quotes
 // @access   Private
-router.get("/", restricted, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const quotes = await Quotes.find();
     res.status(200).json(quotes);
@@ -65,7 +65,7 @@ router.get("/", restricted, async (req, res) => {
 // @desc     Get an quote by quoteID
 // @route    GET /api/quotes/:quoteID
 // @access   Private
-router.get("/:quoteID", restricted, async (req, res) => {
+router.get("/:quoteID", async (req, res) => {
   try {
     const quote = await Quotes.findById(req.params.quoteID);
     res.status(200).json(quote);
@@ -80,7 +80,7 @@ router.get("/:quoteID", restricted, async (req, res) => {
 // @desc     Get a quote by Scalable Press order token
 // @route    GET /api/quotes/:orderToken
 // @access   Private
-router.get("/:orderToken", restricted, async (req, res) => {
+router.get("/:orderToken", async (req, res) => {
   try {
     const quote = await Quotes.findByOrderToken(req.params.orderToken);
     res.status(200).json(quote);
@@ -95,7 +95,7 @@ router.get("/:orderToken", restricted, async (req, res) => {
 // @desc     Edit a quote by quoteID
 // @route    PUT /api/quotes/:quoteID
 // @access   Private
-router.put("/:quoteID", restricted, async (req, res) => {
+router.put("/:quoteID", async (req, res) => {
   try {
     const quote = await Quotes.updateByQuoteId(req.params.quoteID, req.body);
     if (quote) {
@@ -114,7 +114,7 @@ router.put("/:quoteID", restricted, async (req, res) => {
 // @desc     Edit an quote by order token
 // @route    PUT /api/quotes/:orderToken
 // @access   Private
-router.put("/:orderToken", restricted, async (req, res) => {
+router.put("/:orderToken", async (req, res) => {
   try {
     const quote = await Quotes.updateByQuoteToken(
       req.params.orderToken,
@@ -136,7 +136,7 @@ router.put("/:orderToken", restricted, async (req, res) => {
 // @desc     Delete a quote by quoteID
 // @route    DELETE /api/quotes/:quoteID
 // @access   Private
-router.delete("/:quoteID", restricted, async (req, res) => {
+router.delete("/:quoteID", async (req, res) => {
   try {
     const count = await Quotes.removeByQuoteId(req.params.quoteID);
     if (count > 0) {
@@ -155,7 +155,7 @@ router.delete("/:quoteID", restricted, async (req, res) => {
 // @desc     Delete a quote by order token
 // @route    DELETE /api/quotes/:orderToken
 // @access   Private
-router.delete("/:orderToken", restricted, async (req, res) => {
+router.delete("/:orderToken", async (req, res) => {
   try {
     const count = await Quotes.removeByOrderToken(req.params.orderToken);
     if (count > 0) {
