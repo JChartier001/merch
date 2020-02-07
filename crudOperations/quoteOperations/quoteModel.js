@@ -7,7 +7,6 @@ module.exports = {
   findByOrderToken,
   updateByQuoteId,
   updateByOrderToken,
-
   removeByQuoteId,
   removeByOrderToken
 };
@@ -23,8 +22,9 @@ function insert(quote) {
 
 function find() {
   return db("quotes").select(
-    "store_name",
-    "username",
+    "quoteID",
+    "storeID",
+    "userID",
     "total",
     "subtotal",
     "tax",
@@ -40,8 +40,9 @@ function findById(quoteID) {
   return db("quotes")
     .where("quoteID", quoteID)
     .select(
-      "store_name",
-      "username",
+      "quoteID",
+      "storeID",
+      "userID",
       "total",
       "subtotal",
       "tax",
@@ -58,8 +59,9 @@ function findByOrderToken(orderToken) {
   return db("quotes")
     .where("orderToken", orderToken)
     .select(
-      "store_name",
-      "username",
+      "quoteID",
+      "storeID",
+      "userID",
       "total",
       "subtotal",
       "tax",
@@ -86,7 +88,7 @@ function updateByQuoteId(quoteID, changes) {
 }
 
 function updateByOrderToken(orderToken, changes) {
-  return db("orders")
+  return db("quotes")
     .where("orderToken", orderToken)
     .update(changes)
     .then(count => {
