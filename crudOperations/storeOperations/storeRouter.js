@@ -111,7 +111,7 @@ router.put("/:storeID", async (req, res) => {
 // @desc     Delete a Store
 // @route    DELETE /api/stores/storename:store_name
 // @access   Private
-router.delete("/storename/:store_name", async (req, res) => {
+router.delete("/:store_name", async (req, res) => {
   try {
     const count = await Stores.remove(req.params.store_name);
     if (count > 0) {

@@ -54,7 +54,9 @@ function find() {
     "shipping_city",
     "shipping_zip_code",
     "shipping_country",
-    "support_pin"
+    "support_pin",
+    "created_at",
+    "updated_at"
   );
 }
 
@@ -84,7 +86,9 @@ function findById(id) {
       "shipping_city",
       "shipping_zip_code",
       "shipping_country",
-      "support_pin"
+      "support_pin",
+      "created_at",
+      "updated_at"
     )
     .first();
 }
@@ -115,7 +119,9 @@ function findByUsername(username) {
       "shipping_city",
       "shipping_zip_code",
       "shipping_country",
-      "support_pin"
+      "support_pin",
+      "created_at",
+      "updated_at"
     )
     .first();
 }

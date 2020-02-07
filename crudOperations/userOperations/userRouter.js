@@ -56,7 +56,7 @@ router.get("/username/:username", async (req, res) => {
 });
 
 // @desc     Edit a User
-// @route    PUT /api/users/username/username
+// @route    PUT /api/users/:username
 // @access   Private
 router.put("/:username", async (req, res) => {
   try {
