@@ -7,16 +7,10 @@ const Designs = require("../designOperations/designsModel");
 // @access   Private
 router.post("/", async (req, res) => {
   try {
-    const { store_name, username, design_name, design_url } = req.body;
-
-    const design = await Designs.insert({
-      store_name,
-      username,
-      design_name,
-      design_url
-    });
+    let design = req.body;
 
     if (design) {
+      Designs.insert(design);
       res
         .status(201)
         .json({ design, message: "You have successfully added this Design!" });
@@ -65,7 +59,10 @@ router.get("/:designID", async (req, res) => {
 // @access   Private
 router.put("/:designID", async (req, res) => {
   try {
-    const design = await Designs.updateByDesignId(req.params.quoteID, req.body);
+    const design = await Designs.updateByDesignId(
+      req.params.designID,
+      req.body
+    );
     if (design) {
       res
         .status(200)

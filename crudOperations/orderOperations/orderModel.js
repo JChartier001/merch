@@ -24,20 +24,7 @@ function insert(order) {
 }
 
 function find() {
-  return db("orders").select(
-    "orderID",
-    "userID",
-    "storeID",
-    "status",
-    "total",
-    "subtotal",
-    "tax",
-    "fees",
-    "shipping",
-    "orderToken",
-    "spOrderID",
-    "mode"
-  );
+  return db("orders").select("*");
 } //may need to restrict what this returns after development, perhaps in the router that uses it by destructuring res.json
 
 function findById(orderID) {
