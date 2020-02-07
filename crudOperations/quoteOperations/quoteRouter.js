@@ -9,6 +9,7 @@ router.post("/", async (req, res) => {
   try {
     let quote = req.body;
     console.log(quote);
+
     if (quote) {
       Quotes.insert(quote);
       res
