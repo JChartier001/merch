@@ -18,28 +18,23 @@ function insert(design) {
 }
 
 function find() {
-  return db("designs").select(
-    "store_name",
-    "username",
-    "design_name",
-    "design_url"
-  );
+  return db("designs").select("*");
 } //may need to restrict what this returns after development, perhaps in the router that uses it by destructuring res.json
 
 function findById(designID) {
   return db("designs")
     .where("designID", designID)
-    .select("store_name", "username", "design_name", "design_url")
+    .select("*")
     .first();
 } //may need to restrict what this returns after development, perhaps in the router that uses it by destructuring res.json
 
-function updateByDesignId(quoteID, changes) {
-  return db("quotes")
-    .where("quoteID", quoteID)
+function updateByDesignId(designID, changes) {
+  return db("designs")
+    .where("designID", designID)
     .update(changes)
     .then(count => {
       if (count > 0) {
-        return findById(quoteID);
+        return findById(designID);
       } else {
         return null;
       }

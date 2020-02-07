@@ -24,27 +24,16 @@ function insert(order) {
 }
 
 function find() {
-  return db("orders").select(
-    "store_name",
-    "username",
-    "status",
-    "total",
-    "subtotal",
-    "tax",
-    "fees",
-    "shipping",
-    "orderToken",
-    "spOrderID",
-    "mode"
-  );
+  return db("orders").select("*");
 } //may need to restrict what this returns after development, perhaps in the router that uses it by destructuring res.json
 
 function findById(orderID) {
   return db("orders")
     .where("orderID", orderID)
     .select(
-      "store_name",
-      "username",
+      "orderID",
+      "userID",
+      "storeID",
       "status",
       "total",
       "subtotal",
@@ -62,8 +51,9 @@ function findBySPId(spOrderID) {
   return db("orders")
     .where("spOrderID", spOrderID)
     .select(
-      "store_name",
-      "username",
+      "orderID",
+      "userID",
+      "storeID",
       "status",
       "total",
       "subtotal",
@@ -81,8 +71,9 @@ function findByOrderToken(orderToken) {
   return db("orders")
     .where("orderToken", orderToken)
     .select(
-      "store_name",
-      "username",
+      "orderID",
+      "userID",
+      "storeID",
       "status",
       "total",
       "subtotal",
@@ -128,7 +119,7 @@ function updateBySpOrderID(spOrderID, changes) {
     .update(changes)
     .then(count => {
       if (count > 0) {
-        return findByOrderToken(spOrderID);
+        return findBySPId(spOrderID);
       } else {
         return null;
       }
