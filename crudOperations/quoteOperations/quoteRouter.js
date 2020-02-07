@@ -7,33 +7,10 @@ const Quotes = require("../quoteOperations/quoteModel");
 // @access   Private
 router.post("/", async (req, res) => {
   try {
-    const {
-      store_name,
-      username,
-      total,
-      subtotal,
-      tax,
-      fees,
-      shipping,
-      orderToken,
-      warnings,
-      mode
-    } = req.body;
-
-    const quote = await Quotes.insert({
-      store_name,
-      username,
-      total,
-      subtotal,
-      tax,
-      fees,
-      shipping,
-      orderToken,
-      warnings,
-      mode
-    });
-
+    let quote = req.body;
+    console.log(quote);
     if (quote) {
+      Quotes.insert(quote);
       res
         .status(201)
         .json({ quote, message: "You have successfully added this Quote!" });
@@ -54,6 +31,7 @@ router.post("/", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const quotes = await Quotes.find();
+    console.log(quotes);
     res.status(200).json(quotes);
   } catch (error) {
     res
@@ -80,10 +58,18 @@ router.get("/:quoteID", async (req, res) => {
 // @desc     Get a quote by Scalable Press order token
 // @route    GET /api/quotes/:orderToken
 // @access   Private
-router.get("/:orderToken", async (req, res) => {
+router.get("/quotetoken/:orderToken", async (req, res) => {
   try {
     const quote = await Quotes.findByOrderToken(req.params.orderToken);
-    res.status(200).json(quote);
+
+    if (quote) {
+      res.status(200).json(quote);
+    } else {
+      res.status(404).json({
+        message:
+          "Please enter a valid quote token, keep in mind they are case sensitive"
+      });
+    }
   } catch (error) {
     res.status(500).json({
       error,
@@ -112,14 +98,16 @@ router.put("/:quoteID", async (req, res) => {
 });
 
 // @desc     Edit an quote by order token
-// @route    PUT /api/quotes/:orderToken
+// @route    PUT /api/quotes/ordertokenedit/:orderToken
 // @access   Private
-router.put("/:orderToken", async (req, res) => {
+router.put("/ordertokenedit/:orderToken", async (req, res) => {
   try {
-    const quote = await Quotes.updateByQuoteToken(
+    console.log(req.params.orderToken);
+    const quote = await Quotes.updateByOrderToken(
       req.params.orderToken,
       req.body
     );
+    console.log(quote);
     if (quote) {
       res.status(200).json({ quote, message: "Quote info has been updated!" });
     } else {
@@ -155,7 +143,7 @@ router.delete("/:quoteID", async (req, res) => {
 // @desc     Delete a quote by order token
 // @route    DELETE /api/quotes/:orderToken
 // @access   Private
-router.delete("/:orderToken", async (req, res) => {
+router.delete("/ordertoken/:orderToken", async (req, res) => {
   try {
     const count = await Quotes.removeByOrderToken(req.params.orderToken);
     if (count > 0) {
