@@ -7,37 +7,11 @@ const Orders = require("../orderOperations/orderModel");
 // @access   Private
 router.post("/", async (req, res) => {
   try {
-    const {
-      store_name,
-      username,
-      status,
-      total,
-      subtotal,
-      tax,
-      fees,
-      shipping,
-      orderToken,
-      spOrderID,
-      mode,
-      createdAt
-    } = req.body;
-
-    const order = await Orders.insert({
-      store_name,
-      username,
-      status,
-      total,
-      subtotal,
-      tax,
-      fees,
-      shipping,
-      orderToken,
-      spOrderID,
-      mode,
-      createdAt
-    });
+    let order = req.body;
+    console.log(order);
 
     if (order) {
+      Orders.insert(order);
       res
         .status(201)
         .json({ order, message: "You have successfully added this Order!" });
@@ -82,9 +56,9 @@ router.get("/:orderID", async (req, res) => {
 });
 
 // @desc     Get an order by Scalable Press orderID
-// @route    GET /api/orders/:spOrderID
+// @route    GET /api/orders/sporderid/:spOrderID
 // @access   Private
-router.get("/:spOrderID", async (req, res) => {
+router.get("/sporderid/:spOrderID", async (req, res) => {
   try {
     const order = await Orders.findBySPId(req.params.spOrderID);
     res.status(200).json(order);
@@ -97,9 +71,9 @@ router.get("/:spOrderID", async (req, res) => {
 });
 
 // @desc     Get an order by Scalable Press order token
-// @route    GET /api/orders/:orderToken
+// @route    GET /api/orders/ordertoken/:orderToken
 // @access   Private
-router.get("/:orderToken", async (req, res) => {
+router.get("/ordertoken/:orderToken", async (req, res) => {
   try {
     const order = await Orders.findByOrderToken(req.params.orderToken);
     res.status(200).json(order);
@@ -117,6 +91,7 @@ router.get("/:orderToken", async (req, res) => {
 router.put("/:orderID", async (req, res) => {
   try {
     const order = await Orders.updateByOrderId(req.params.orderID, req.body);
+    console.log(order);
     if (order) {
       res.status(200).json({ order, message: "Order info has been updated!" });
     } else {
@@ -131,9 +106,9 @@ router.put("/:orderID", async (req, res) => {
 });
 
 // @desc     Edit an order by order token
-// @route    PUT /api/orders/:orderToken
+// @route    PUT /api/orders/ordertoken/:orderToken
 // @access   Private
-router.put("/:orderToken", async (req, res) => {
+router.put("/ordertoken/:orderToken", async (req, res) => {
   try {
     const order = await Orders.updateByOrderToken(
       req.params.orderToken,
@@ -153,11 +128,14 @@ router.put("/:orderToken", async (req, res) => {
 });
 
 // @desc     Edit an order by Scalable press order ID
-// @route    PUT /api/orders/:spOrderID
+// @route    PUT /api/orders/sporderid/:spOrderID
 // @access   Private
-router.put("/:spOrderID", async (req, res) => {
+router.put("/sporderid/:spOrderID", async (req, res) => {
   try {
-    const order = await Orders.updateBySpOrderID(req.params.orderID, req.body);
+    const order = await Orders.updateBySpOrderID(
+      req.params.spOrderID,
+      req.body
+    );
     if (order) {
       res.status(200).json({ order, message: "Order info has been updated!" });
     } else {
@@ -176,7 +154,7 @@ router.put("/:spOrderID", async (req, res) => {
 // @access   Private
 router.delete("/:orderID", async (req, res) => {
   try {
-    const count = await Orders.remove(req.params.orderID);
+    const count = await Orders.removeByOrderId(req.params.orderID);
     if (count > 0) {
       res.status(200).json({ message: "this Order has been deleted!" });
     } else {
@@ -191,11 +169,11 @@ router.delete("/:orderID", async (req, res) => {
 });
 
 // @desc     Delete an order by	orderToken
-// @route    DELETE /api/orders/:orderToken
+// @route    DELETE /api/orders/ordertoken/:orderToken
 // @access   Private
-router.delete("/:orderToken", async (req, res) => {
+router.delete("/ordertoken/:orderToken", async (req, res) => {
   try {
-    const count = await Orders.remove(req.params.orderToken);
+    const count = await Orders.removeByOrderToken(req.params.orderToken);
     if (count > 0) {
       res.status(200).json({ message: "this Order has been deleted!" });
     } else {
@@ -210,11 +188,11 @@ router.delete("/:orderToken", async (req, res) => {
 });
 
 // @desc     Delete an order by Scalable press order ID
-// @route    DELETE /api/stores/:spOrderID
+// @route    DELETE /api/stores/sporderid/:spOrderID
 // @access   Private
-router.delete("/:spOrderID", async (req, res) => {
+router.delete("/sporderid/:spOrderID", async (req, res) => {
   try {
-    const count = await Orders.remove(req.params.spOrderID);
+    const count = await Orders.removeBySpOrderID(req.params.spOrderID);
     if (count > 0) {
       res.status(200).json({ message: "this Order has been deleted!" });
     } else {
