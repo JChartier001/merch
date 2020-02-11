@@ -19,7 +19,7 @@ exports.up = function(knex) {
     users.string("state", 255).notNullable();
     users.integer("zip_code").notNullable();
     users.string("country", 255).notNullable();
-    users.bigint("phone", 20);
+    users.bigint("phone");
     users.string("email", 255).notNullable();
     users.string("billing_address", 255);
     users.string("billing_city", 255);
