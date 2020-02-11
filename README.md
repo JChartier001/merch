@@ -2,64 +2,78 @@
 
 [![Test Coverage](https://api.codeclimate.com/v1/badges/7eb2c53b1f21eab6e1de/test_coverage)](https://codeclimate.com/github/Lambda-School-Labs/Merch-Dropper-be/test_coverage)
 
-🚫 Note: All lines that start with 🚫 are instructions and should be deleted before this is posted to your portfolio. This is intended to be a guideline. Feel free to add your own flare to it.
-
-🚫 The numbers 1️⃣ through 3️⃣ next to each item represent the week that part of the docs needs to be comepleted by. Make sure to delete the numbers by the end of Labs.
-
-🚫 Each student has a required minimum number of meaningful PRs each week per the rubric. Contributing to docs does NOT count as a PR to meet your weekly requirements.
-
 # API Documentation
 
-#### 1️⃣ Backend delpoyed at [🚫name service here](🚫add URL here) <br>
+#### Backend deployed at [Heroku](https://merchdropper-production.herokuapp.com) <br>
 
-## 1️⃣ Getting started
+## Getting started
 
 To get the server running locally:
 
-🚫 adjust these scripts to match your project
-
-- Clone this repo
-- **yarn install** to install all required dependencies
-- **yarn server** to start the local server
-- **yarn test** to start server using testing environment
+1. Clone this repo
+2. **yarn install** to install all required dependencies
+3. **yarn server** to start the local server
+4. **yarn test** to start server using testing environment
 
 ### Backend framework goes here
 
-🚫 Why did you choose this framework?
+- NodeJS
+- Express,
+- Postgres
 
-- Point One
-- Point Two
-- Point Three
-- Point Four
+#### Why did you choose this framework?
 
-## 2️⃣ Endpoints
+- Ease of use
+- Familiarity
+- A true Relational Database best serves our purposes at this time
 
-🚫This is a placeholder, replace the endpoints, access controll, and descriptioin to match your project
+## Endpoints
 
-#### Organization Routes
+### base URL `https://merchdropper-production.herokuapp.com/`
 
-| Method | Endpoint                | Access Control | Description                                  |
-| ------ | ----------------------- | -------------- | -------------------------------------------- |
-| GET    | `/organizations/:orgId` | all users      | Returns the information for an organization. |
-| PUT    | `/organizatoins/:orgId` | owners         | Modify an existing organization.             |
-| DELETE | `/organizations/:orgId` | owners         | Delete an organization.                      |
+<br> <br>
 
-#### User Routes
+### User Routes
 
-| Method | Endpoint                | Access Control      | Description                                        |
-| ------ | ----------------------- | ------------------- | -------------------------------------------------- |
-| GET    | `/users/current`        | all users           | Returns info for the logged in user.               |
-| GET    | `/users/org/:userId`    | owners, supervisors | Returns all users for an organization.             |
-| GET    | `/users/:userId`        | owners, supervisors | Returns info for a single user.                    |
-| POST   | `/users/register/owner` | none                | Creates a new user as owner of a new organization. |
-| PUT    | `/users/:userId`        | owners, supervisors |                                                    |
-| DELETE | `/users/:userId`        | owners, supervisors |                                                    |
+- project has JWT as a back up auth system(disabled), primary system is Auth0
+
+| Method | Endpoint                        | Access Control | Description                                |
+| ------ | ------------------------------- | -------------- | ------------------------------------------ |
+| POST   | `/api/auth/register`            | all users      | Registers a new user.                      |
+| POST   | `/api/auth/login`               | all users      | Logs a registered user in                  |
+| GET    | `/api/users`                    | admin          | get all users                              |
+| GET    | `/api/users/:id`                | admin          | get a user by ID                           |
+| GET    | `/api/users/:username`          | admin          | get a user by username                     |
+| PUT    | `/api/users/username/:username` | mixed          | Edit a user in system, Admin and self only |
+| DELETE | `/api/users/:username`          | owners         | Delete a user, admin and self only.        |
+
+### Store Routes
+
+| Method | Endpoint                            | Access Control | Description                                 |
+| ------ | ----------------------------------- | -------------- | ------------------------------------------- |
+| POST   | `/api/stores`                       | logged in user | Registers a new store to user logged.       |
+| GET    | `/api/stores`                       | logged in user | get all stores                              |
+| GET    | `/api/stores/:id`                   | logged in user | Get a Store by ID                           |
+| GET    | `/api/stores/storename/:store_name` | logged in user | Get a Store by store_name                   |
+| PUT    | `/api/stores/:storeID`              | logged in user | Edit a store in system, Admin and self only |
+| DELETE | `/api/stores/:store_name`           | logged in user | Delete a store, admin and self only.        |
+
+### Quote Routes
+
+| Method | Endpoint                             | Access Control | Description                           |
+| ------ | ------------------------------------ | -------------- | ------------------------------------- |
+| POST   | `/api/quotes`                        | admin          | Adds a new quote tied to user logged. |
+| GET    | `/api/quotes`                        | mixed          | get all quotes                        |
+| GET    | `/api/quotes/:id`                    | mixed          | Get a quote by ID                     |
+| GET    | `/api/quotes/quotetoken/:quoteToken` | mixed          | Get a quote by order_token            |
+| PUT    | `/api/quotes/:quoteID`               | admin          | Edit a quote in system by ID          |
+| PUT    | `/api/quotes/ordertoken/:ordertoken` | admin          | Edit a quote in system by order_token |
+| DELETE | `/api/quotes/:quoteID`               | admin          | Delete a quote.                       |
+| DELETE | `/api/quotes/ordertoken/:orderToken` | admin          | Delete a quote.                       |
 
 # Data Model
 
-🚫This is just an example. Replace this with your data model
-
-#### 2️⃣ ORGANIZATIONS
+#### ORGANIZATIONS
 
 ---
 
@@ -94,9 +108,7 @@ To get the server running locally:
 }
 ```
 
-## 2️⃣ Actions
-
-🚫 This is an example, replace this with the actions that pertain to your backend
+## Actions
 
 `getOrgs()` -> Returns all organizations
 
@@ -120,22 +132,19 @@ To get the server running locally:
 
 `deleteUser(userId)` -> deletes everything dependent on the user
 
-## 3️⃣ Environment Variables
+## Environment Variables
 
 In order for the app to function correctly, the user must set up their own environment variables.
 
-create a .env file that includes the following:
+- ### create a .env file that includes the following:
 
-🚫 These are just examples, replace them with the specifics for your app
-  
- _ STAGING_DB - optional development db for using functionality not available in SQLite
-_ NODE_ENV - set to "development" until ready for "production"
-_ JWT_SECRET - you can generate this by using a python shell and running import random''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#\$%^&amp;_(-_=+)') for i in range(50)])
-_ SENDGRID_API_KEY - this is generated in your Sendgrid account \* stripe_secret - this is generated in the Stripe dashboard
+- PORT=5032
+- NODE_ENV=development --- set to "development" until ready for "production"
+- JWT_SECRET=[any randomly generated or complex string will work here]
 
 ## Contributing
 
-When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
+- When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
 
 Please note we have a [code of conduct](./code_of_conduct.md). Please follow it in all your interactions with the project.
 
@@ -172,5 +181,5 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 
 ## Documentation
 
-See [Frontend Documentation](🚫link to your frontend readme here) for details on the fronend of our project.
-🚫 Add DS iOS and/or Andriod links here if applicable.
+1. See [Frontend Documentation](https://github.com/Lambda-School-Labs/Merch-Dropper-fe/blob/master/README.md) for details on the frontend of our project.
+2. See [Postman Backend Documentation](https://documenter.getpostman.com/view/9427795/SWTHYuA5?version=latest) for more details on the backend of our project.
