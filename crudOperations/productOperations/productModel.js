@@ -1,11 +1,13 @@
 const db = require("../../databaseOperations/db-config");
+const axios = require("axios");
 
 module.exports = {
   insert,
   find,
   findById,
   updateByProductId,
-  removeByProductId
+  removeByProductId,
+  ShirtMaker
 };
 
 function insert(product) {
@@ -45,4 +47,35 @@ function removeByProductId(productID) {
   return db("products")
     .where("productID", productID)
     .del();
+}
+
+function ShirtMaker(data) {
+  console.log("data inside shirtmaker", data);
+  console.log(process.env.TEST);
+
+  async function makeShirt(data) {
+    let config = await {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Basic ${process.env.TEST}` //this an actual TEST api key - it has to be a env variable moving forward === TEST
+      }
+    };
+
+    try {
+      if ((data, config)) {
+        const shirtImage = await axios.post(
+          "https://api.scalablepress.com/v3/mockup",
+          data,
+          config
+        );
+        return shirtImage;
+      }
+    } catch (err) {
+      console.log("ERROR:", err);
+    }
+  }
+
+  makeShirt();
+
+  return shirtImage;
 }

@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Products = require("./productModel");
+
 // const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
 // @desc     Post a product
@@ -8,7 +9,7 @@ const Products = require("./productModel");
 router.post("/", async (req, res) => {
   try {
     let product = req.body;
-
+    console.log("product from req,body", product);
     if (product) {
       Products.insert(product);
       res.status(201).json({
