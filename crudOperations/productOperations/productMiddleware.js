@@ -1,7 +1,4 @@
-import React from "react";
 import axios from "axios";
-
-let data = req.body;
 
 const ShirtMaker = async data => {
   console.log(data);
@@ -34,4 +31,6 @@ const ShirtMaker = async data => {
   return shirtImage;
 };
 
-export default ShirtMaker;
+module.exports = {
+  ShirtMaker
+};
