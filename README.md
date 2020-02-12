@@ -2,140 +2,388 @@
 
 [![Test Coverage](https://api.codeclimate.com/v1/badges/7eb2c53b1f21eab6e1de/test_coverage)](https://codeclimate.com/github/Lambda-School-Labs/Merch-Dropper-be/test_coverage)
 
-🚫 Note: All lines that start with 🚫 are instructions and should be deleted before this is posted to your portfolio. This is intended to be a guideline. Feel free to add your own flare to it.
-
-🚫 The numbers 1️⃣ through 3️⃣ next to each item represent the week that part of the docs needs to be comepleted by. Make sure to delete the numbers by the end of Labs.
-
-🚫 Each student has a required minimum number of meaningful PRs each week per the rubric. Contributing to docs does NOT count as a PR to meet your weekly requirements.
-
 # API Documentation
 
-#### 1️⃣ Backend delpoyed at [🚫name service here](🚫add URL here) <br>
+#### Backend deployed at [Heroku](https://merchdropper-production.herokuapp.com) <br>
 
-## 1️⃣ Getting started
+## Getting started
 
 To get the server running locally:
 
-🚫 adjust these scripts to match your project
-
-- Clone this repo
-- **yarn install** to install all required dependencies
-- **yarn server** to start the local server
-- **yarn test** to start server using testing environment
+1. Clone this repo
+2. **yarn install** to install all required dependencies
+3. **yarn server** to start the local server
+4. **yarn test** to start server using testing environment
 
 ### Backend framework goes here
 
-🚫 Why did you choose this framework?
+- NodeJS
+- Express,
+- Postgres
 
-- Point One
-- Point Two
-- Point Three
-- Point Four
+#### Why did you choose this framework?
 
-## 2️⃣ Endpoints
+- Ease of use
+- Familiarity
+- A true Relational Database best serves our purposes at this time
 
-🚫This is a placeholder, replace the endpoints, access controll, and descriptioin to match your project
+## Endpoints
 
-#### Organization Routes
+### base URL `https://merchdropper-production.herokuapp.com/`
 
-| Method | Endpoint                | Access Control | Description                                  |
-| ------ | ----------------------- | -------------- | -------------------------------------------- |
-| GET    | `/organizations/:orgId` | all users      | Returns the information for an organization. |
-| PUT    | `/organizatoins/:orgId` | owners         | Modify an existing organization.             |
-| DELETE | `/organizations/:orgId` | owners         | Delete an organization.                      |
+<br> <br>
 
-#### User Routes
+### User Routes
 
-| Method | Endpoint                | Access Control      | Description                                        |
-| ------ | ----------------------- | ------------------- | -------------------------------------------------- |
-| GET    | `/users/current`        | all users           | Returns info for the logged in user.               |
-| GET    | `/users/org/:userId`    | owners, supervisors | Returns all users for an organization.             |
-| GET    | `/users/:userId`        | owners, supervisors | Returns info for a single user.                    |
-| POST   | `/users/register/owner` | none                | Creates a new user as owner of a new organization. |
-| PUT    | `/users/:userId`        | owners, supervisors |                                                    |
-| DELETE | `/users/:userId`        | owners, supervisors |                                                    |
+- project has JWT as a back up auth system(disabled), primary system is Auth0
 
-# Data Model
+| Method | Endpoint                        | Access Control | Description                                |
+| ------ | ------------------------------- | -------------- | ------------------------------------------ |
+| POST   | `/api/auth/register`            | all users      | Registers a new user.                      |
+| POST   | `/api/auth/login`               | all users      | Logs a registered user in                  |
+| GET    | `/api/users`                    | admin          | get all users                              |
+| GET    | `/api/users/:id`                | admin          | get a user by ID                           |
+| GET    | `/api/users/:username`          | admin          | get a user by username                     |
+| PUT    | `/api/users/username/:username` | mixed          | Edit a user in system, Admin and self only |
+| DELETE | `/api/users/:username`          | owners         | Delete a user, admin and self only.        |
 
-🚫This is just an example. Replace this with your data model
+### Store Routes
 
-#### 2️⃣ ORGANIZATIONS
+| Method | Endpoint                            | Access Control | Description                                 |
+| ------ | ----------------------------------- | -------------- | ------------------------------------------- |
+| POST   | `/api/stores`                       | logged in user | Registers a new store to user logged.       |
+| GET    | `/api/stores`                       | logged in user | get all stores                              |
+| GET    | `/api/stores/:id`                   | logged in user | Get a Store by ID                           |
+| GET    | `/api/stores/storename/:store_name` | logged in user | Get a Store by store_name                   |
+| PUT    | `/api/stores/:storeID`              | logged in user | Edit a store in system, Admin and self only |
+| DELETE | `/api/stores/:store_name`           | logged in user | Delete a store, admin and self only.        |
+
+### Quote Routes
+
+| Method | Endpoint                             | Access Control | Description                           |
+| ------ | ------------------------------------ | -------------- | ------------------------------------- |
+| POST   | `/api/quotes`                        | admin          | Adds a new quote tied to user logged. |
+| GET    | `/api/quotes`                        | mixed          | get all quotes                        |
+| GET    | `/api/quotes/:id`                    | mixed          | Get a quote by ID                     |
+| GET    | `/api/quotes/quotetoken/:quoteToken` | mixed          | Get a quote by order_token            |
+| PUT    | `/api/quotes/:quoteID`               | admin          | Edit a quote in system by ID          |
+| PUT    | `/api/quotes/ordertoken/:ordertoken` | admin          | Edit a quote in system by order_token |
+| DELETE | `/api/quotes/:quoteID`               | admin          | Delete a quote.                       |
+| DELETE | `/api/quotes/ordertoken/:orderToken` | admin          | Delete a quote.                       |
+
+### Store Routes
+
+| Method | Endpoint                             | Access Control | Description                                      |
+| ------ | ------------------------------------ | -------------- | ------------------------------------------------ |
+| POST   | `/api/orders`                        | admin          | Adds an new order tied to user logged.           |
+| GET    | `/api/orders`                        | mixed          | get all orders                                   |
+| GET    | `/api/orders/:id`                    | mixed          | Get an order by ID                               |
+| GET    | `/api/orders/ordertoken/:orderToken` | mixed          | Get an order by order_token                      |
+| GET    | `/api/orders/sporderid/:spOrderID`   | mixed          | Get an order by ScalablePress orderID            |
+| PUT    | `/api/orders/:orderID`               | admin          | Edit an order in system by ID                    |
+| PUT    | `/api/orders/sporderid/:spOrderID`   | admin          | Edit an order in system by ScalablePress orderID |
+| PUT    | `/api/orders/ordertoken/:orderToken` | admin          | Edit an order in system by order_token           |
+| DELETE | `/api/orders/:orderID`               | admin          | Delete an order by ID.                           |
+| DELETE | `/api/orders/ordertoken/:orderToken` | admin          | Delete an order by order_token.                  |
+| DELETE | `/api/orders/sporderid/:spOrderID`   | admin          | Delete an order by ScalablePress order_token.    |
+
+### Design Routes
+
+| Method | Endpoint                 | Access Control | Description                            |
+| ------ | ------------------------ | -------------- | -------------------------------------- |
+| POST   | `/api/designs`           | mixed          | Adds a new design tied to user logged. |
+| GET    | `/api/designs`           | mixed          | get all designs                        |
+| GET    | `/api/designs/:id`       | mixed          | Get a design by ID                     |
+| PUT    | `/api/designs/:designID` | mixed          | Edit a design in system by ID          |
+| DELETE | `/api/designs/:designID` | admin          | Delete a design.                       |
+
+<br> <br>
+
+# Data Models
+
+https://dbdesigner.page.link/TmhBUamZbHMiXanV8
+
+### Users
+
+---
+
+```{
+    users.increments("userID").primary();
+    users.string("first_name", 255).notNullable();
+    users.string("last_name", 255).notNullable();
+    users
+      .string("username", 255)
+      .notNullable()
+      .unique();
+    users.string("password", 255).notNullable();
+    users
+      .boolean("seller")
+      .defaultTo(false)
+      .notNullable();
+    users.string("stripe_account", 255).notNullable();
+    users.string("address1", 255).notNullable();
+    users.string("address2", 255).defaultTo("-");
+    users.string("city", 255).notNullable();
+    users.string("state", 255).notNullable();
+    users.integer("zip_code").notNullable();
+    users.string("country", 255).notNullable();
+    users.bigint("phone");
+    users.string("email", 255).notNullable();
+    users.string("billing_address", 255);
+    users.string("billing_city", 255);
+    users.string("billing_state", 255);
+    users.string("billing_zip_code", 255);
+    users.string("billing_country", 255);
+    users.string("shipping_address", 255);
+    users.string("shipping_city", 255);
+    users.string("shipping_state", 255);
+    users.string("shipping_zip_code", 255);
+    users.string("shipping_country", 255);
+    users.timestamps(true, true);
+    users.string("support_pin", 10);
+}
+```
+
+### Stores
+
+---
+
+```
+{ stores.increments("storeID").primary();
+  stores.boolean("active").defaultTo(true);
+  stores.string("store_name", 255).unique().notNullable();
+  stores.string("hero_ImageURL", 255)
+    .defaultTo("https://www.dalesjewelers.com/wp-content/uploads/2018/10placeholder-silhouette-male.png")
+    .notNullable();
+  stores.string("logo_url", 255)
+    .defaultTo("https://uxmasters.org/images/ant_logo.svg")
+    .notNullable();
+  stores.timestamps(true, true);
+  stores.integer("userID")
+    .notNullable()
+    .references("userID")
+    .inTable("users")
+    .onUpdate("CASCADE")
+    .onDelete("CASCADE");
+
+}
+```
+
+### Quotes
 
 ---
 
 ```
 {
-  id: UUID
-  name: STRING
-  industry: STRING
-  paid: BOOLEAN
-  customer_id: STRING
-  subscription_id: STRING
+  quotes.increments("quoteID").primary();
+  quotes.decimal("total", null).notNullable();
+  quotes.decimal("subtotal", null).notNullable();
+  quotes.decimal("tax", null).notNullable();
+  quotes.decimal("fees", null).notNullable();
+  quotes.decimal("shipping", null).notNullable();
+  quotes.string("orderToken", 255).unique().notNullable();
+  quotes.string("warnings", 255).defaultTo("-");
+  quotes.string("mode", 255).notNullable().defaultTo("-");
+  quotes.integer("storeID")
+    .notNullable()
+    .references("storeID")
+    .inTable("stores")
+    .onUpdate("CASCADE")
+    .onDelete("CASCADE");
+  quotes.integer("userID")
+    .notNullable()
+    .references("userID")
+    .inTable("users")
+    .onUpdate("CASCADE")
+    .onDelete("CASCADE");
+
 }
 ```
 
-#### USERS
+### Orders
 
 ---
 
 ```
 {
-  id: UUID
-  organization_id: UUID foreign key in ORGANIZATIONS table
-  first_name: STRING
-  last_name: STRING
-  role: STRING [ 'owner', 'supervisor', 'employee' ]
-  email: STRING
-  phone: STRING
-  cal_visit: BOOLEAN
-  emp_visit: BOOLEAN
-  emailpref: BOOLEAN
-  phonepref: BOOLEAN
+  orders.increments("orderID").primary();
+  orders.string("status", 255).notNullable();
+  orders.decimal("total", null).notNullable();
+  orders.decimal("subtotal", null).notNullable();
+  orders.decimal("tax", null).notNullable();
+  orders.decimal("fees", null).notNullable();
+  orders.decimal("shipping", null).notNullable();
+  orders
+    .string("orderToken", 255)
+    .unique()
+    .notNullable();
+  orders
+    .string("spOrderID", 255)
+    .unique()
+    .notNullable();
+   orders.string("mode", 255).notNullable();
+  orders.timestamps(true, true);
+  orders
+    .integer("storeID")
+    .notNullable()
+    .references("storeID")
+    .inTable("stores")
+    .onUpdate("CASCADE")
+    .onDelete("CASCADE");
+  orders
+    .integer("userID")
+    .notNullable()
+    .references("userID")
+    .inTable("users")
+    .onUpdate("CASCADE")
+    .onDelete("CASCADE");
 }
 ```
 
-## 2️⃣ Actions
+### Designs
 
-🚫 This is an example, replace this with the actions that pertain to your backend
+---
 
-`getOrgs()` -> Returns all organizations
+```
+{
+  designs.increments("designID").primary();
+  designs.string("design_name", 255).notNullable();
+  designs.string("design_url", 255).notNullable();
+  designs
+    .integer("storeID")
+    .notNullable()
+    .references("storeID")
+    .inTable("stores")
+    .onUpdate("CASCADE")
+    .onDelete("CASCADE");
+  designs
+    .integer("userID")
+    .notNullable()
+    .references("userID")
+    .inTable("users")
+    .onUpdate("CASCADE")
+    .onDelete("CASCADE");
+  designs.timestamps(true, true);
+}
+```
 
-`getOrg(orgId)` -> Returns a single organization by ID
+## Actions
 
-`addOrg(org)` -> Returns the created org
+### Users
 
-`updateOrg(orgId)` -> Update an organization by ID
+`insert(user)` -> inserts a new user, and Returns newly created User
 
-`deleteOrg(orgId)` -> Delete an organization by ID
+`find()` -> Returns the entire User table
+
+`findBy(username)` -> returns the user that matches the username passed in
+
+`findById(id)` -> Returns the user that matched the userID passed in
+
+`findByUsername(username)` -> Returns the user that matches the username passed in
+
+`update(username, changes)` -> Updates a user and Returns the newly updated user that matches the username passed in.
+
+`remove(username)` -> Deletes the user passed in and returns a success message
+
 <br>
 <br>
 <br>
-`getUsers(orgId)` -> if no param all users
 
-`getUser(userId)` -> Returns a single user by user ID
+### Stores
 
-`addUser(user object)` --> Creates a new user and returns that user. Also creates 7 availabilities defaulted to hours of operation for their organization.
+`insert(store)` -> inserts a new store, and Returns newly created Store
 
-`updateUser(userId, changes object)` -> Updates a single user by ID.
+`find()` -> Returns the entire Store table
 
-`deleteUser(userId)` -> deletes everything dependent on the user
+`findById(storeID)` -> Returns the store that matched the storeID passed in
 
-## 3️⃣ Environment Variables
+`findByStorename(store_name)` -> Returns the store that matches the store_name passed in
+
+`update(storeID, changes)` -> Updates a store and Returns the newly updated store that matches the storeID passed in.
+
+`remove(store_name)` -> Deletes the user passed in and returns a success message
+<br>
+<br>
+<br>
+
+### Quotes
+
+`insert(quote)` -> inserts a new quote, and Returns newly created quote
+
+`find()` -> Returns the entire quote table
+
+`findById(quoteID)` -> Returns the quote that matched the quoteID passed in
+
+`findByOrderToken(orderToken)` -> Returns the quote that matches the orderToken passed in
+
+`updateByQuoteID(quoteID, changes)` -> Updates a quote and Returns the newly updated quote that matches the quoteID passed in.
+
+`updateByOrderToken(orderToken, changes)` -> Updates a quote and Returns the newly updated quote that matches the orderToken passed in.
+
+`removeByQuoteId(quoteID)` -> Deletes the quote by quoteID passed in and returns a success message
+
+`removeByOrderToken(orderToken)` -> Deletes the quote by orderToken passed in and returns a success message
+
+<br>
+<br>
+<br>
+
+### Orders
+
+`insert(order)` -> inserts a new order, and Returns newly created order
+
+`find()` -> Returns the entire order table
+
+`findById(orderID)` -> Returns the order that matched the orderID passed in
+
+`findByOrderToken(orderToken)` -> Returns the order that matches the orderToken passed in
+
+`findBySPId(spOrderID)` -> Returns the order that matches the spOrderID passed in
+
+`updateByOrderID(orderID, changes)` -> Updates a order and Returns the newly updated order that matches the orderID passed in.
+
+`updateByOrderToken(orderToken, changes)` -> Updates a order and Returns the newly updated order that matches the orderToken passed in.
+
+`updateBySpOrderID(spOrderID, changes)` -> Updates a order and Returns the newly updated order that matches the spOrderID passed in.
+
+`removeByOrderId(orderID)` -> Deletes the order by orderID passed in and returns a success message
+
+`removeByOrderToken(orderToken)` -> Deletes the order by orderToken passed in and returns a success message
+
+`removeBySpOrderID(spOrderID)` -> Deletes the order by spOrderID passed in and returns a success message
+
+<br>
+<br>
+<br>
+
+### Designs
+
+`insert(user)` -> inserts a new design, and Returns newly created design
+
+`find()` -> Returns the entire design table
+
+`findById(id)` -> Returns the design that matched the designID passed in
+
+`updateByDesignId(designID, changes)` -> Updates a design and Returns the newly updated design that matches the designID passed in.
+
+`removeByDesignId(designID)` -> Deletes the design passed in and returns a success message
+<br>
+<br>
+<br>
+
+## Environment Variables
 
 In order for the app to function correctly, the user must set up their own environment variables.
 
-create a .env file that includes the following:
+- ### create a .env file that includes the following:
 
-🚫 These are just examples, replace them with the specifics for your app
-  
- _ STAGING_DB - optional development db for using functionality not available in SQLite
-_ NODE_ENV - set to "development" until ready for "production"
-_ JWT_SECRET - you can generate this by using a python shell and running import random''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#\$%^&amp;_(-_=+)') for i in range(50)])
-_ SENDGRID_API_KEY - this is generated in your Sendgrid account \* stripe_secret - this is generated in the Stripe dashboard
+- PORT=5032 or pick your favorite ;) defaults to 4000 in Development
+- NODE_ENV=development --- set to "development" until ready for "production"
+- JWT_SECRET=[any randomly generated or complex string will work here]
 
 ## Contributing
 
-When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
+- When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
 
 Please note we have a [code of conduct](./code_of_conduct.md). Please follow it in all your interactions with the project.
 
@@ -172,5 +420,5 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 
 ## Documentation
 
-See [Frontend Documentation](🚫link to your frontend readme here) for details on the fronend of our project.
-🚫 Add DS iOS and/or Andriod links here if applicable.
+1. See [Frontend Documentation](https://github.com/Lambda-School-Labs/Merch-Dropper-fe/blob/master/README.md) for details on the frontend of our project.
+2. See [Postman Backend Documentation](https://documenter.getpostman.com/view/9427795/SWTHYuA5?version=latest) for more details on the backend of our project.
