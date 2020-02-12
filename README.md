@@ -71,66 +71,305 @@ To get the server running locally:
 | DELETE | `/api/quotes/:quoteID`               | admin          | Delete a quote.                       |
 | DELETE | `/api/quotes/ordertoken/:orderToken` | admin          | Delete a quote.                       |
 
-# Data Model
+### Store Routes
 
-#### ORGANIZATIONS
+| Method | Endpoint                             | Access Control | Description                                      |
+| ------ | ------------------------------------ | -------------- | ------------------------------------------------ |
+| POST   | `/api/orders`                        | admin          | Adds an new order tied to user logged.           |
+| GET    | `/api/orders`                        | mixed          | get all orders                                   |
+| GET    | `/api/orders/:id`                    | mixed          | Get an order by ID                               |
+| GET    | `/api/orders/ordertoken/:orderToken` | mixed          | Get an order by order_token                      |
+| GET    | `/api/orders/sporderid/:spOrderID`   | mixed          | Get an order by ScalablePress orderID            |
+| PUT    | `/api/orders/:orderID`               | admin          | Edit an order in system by ID                    |
+| PUT    | `/api/orders/sporderid/:spOrderID`   | admin          | Edit an order in system by ScalablePress orderID |
+| PUT    | `/api/orders/ordertoken/:orderToken` | admin          | Edit an order in system by order_token           |
+| DELETE | `/api/orders/:orderID`               | admin          | Delete an order by ID.                           |
+| DELETE | `/api/orders/ordertoken/:orderToken` | admin          | Delete an order by order_token.                  |
+| DELETE | `/api/orders/sporderid/:spOrderID`   | admin          | Delete an order by ScalablePress order_token.    |
+
+### Design Routes
+
+| Method | Endpoint                 | Access Control | Description                            |
+| ------ | ------------------------ | -------------- | -------------------------------------- |
+| POST   | `/api/designs`           | mixed          | Adds a new design tied to user logged. |
+| GET    | `/api/designs`           | mixed          | get all designs                        |
+| GET    | `/api/designs/:id`       | mixed          | Get a design by ID                     |
+| PUT    | `/api/designs/:designID` | mixed          | Edit a design in system by ID          |
+| DELETE | `/api/designs/:designID` | admin          | Delete a design.                       |
+
+<br> <br>
+
+# Data Models
+
+https://dbdesigner.page.link/TmhBUamZbHMiXanV8
+
+### Users
 
 ---
 
-```
-{
-  id: UUID
-  name: STRING
-  industry: STRING
-  paid: BOOLEAN
-  customer_id: STRING
-  subscription_id: STRING
+```{
+    users.increments("userID").primary();
+    users.string("first_name", 255).notNullable();
+    users.string("last_name", 255).notNullable();
+    users
+      .string("username", 255)
+      .notNullable()
+      .unique();
+    users.string("password", 255).notNullable();
+    users
+      .boolean("seller")
+      .defaultTo(false)
+      .notNullable();
+    users.string("stripe_account", 255).notNullable();
+    users.string("address1", 255).notNullable();
+    users.string("address2", 255).defaultTo("-");
+    users.string("city", 255).notNullable();
+    users.string("state", 255).notNullable();
+    users.integer("zip_code").notNullable();
+    users.string("country", 255).notNullable();
+    users.bigint("phone");
+    users.string("email", 255).notNullable();
+    users.string("billing_address", 255);
+    users.string("billing_city", 255);
+    users.string("billing_state", 255);
+    users.string("billing_zip_code", 255);
+    users.string("billing_country", 255);
+    users.string("shipping_address", 255);
+    users.string("shipping_city", 255);
+    users.string("shipping_state", 255);
+    users.string("shipping_zip_code", 255);
+    users.string("shipping_country", 255);
+    users.timestamps(true, true);
+    users.string("support_pin", 10);
 }
 ```
 
-#### USERS
+### Stores
+
+---
+
+```
+{ stores.increments("storeID").primary();
+  stores.boolean("active").defaultTo(true);
+  stores.string("store_name", 255).unique().notNullable();
+  stores.string("hero_ImageURL", 255)
+    .defaultTo("https://www.dalesjewelers.com/wp-content/uploads/2018/10placeholder-silhouette-male.png")
+    .notNullable();
+  stores.string("logo_url", 255)
+    .defaultTo("https://uxmasters.org/images/ant_logo.svg")
+    .notNullable();
+  stores.timestamps(true, true);
+  stores.integer("userID")
+    .notNullable()
+    .references("userID")
+    .inTable("users")
+    .onUpdate("CASCADE")
+    .onDelete("CASCADE");
+
+}
+```
+
+### Quotes
 
 ---
 
 ```
 {
-  id: UUID
-  organization_id: UUID foreign key in ORGANIZATIONS table
-  first_name: STRING
-  last_name: STRING
-  role: STRING [ 'owner', 'supervisor', 'employee' ]
-  email: STRING
-  phone: STRING
-  cal_visit: BOOLEAN
-  emp_visit: BOOLEAN
-  emailpref: BOOLEAN
-  phonepref: BOOLEAN
+  quotes.increments("quoteID").primary();
+  quotes.decimal("total", null).notNullable();
+  quotes.decimal("subtotal", null).notNullable();
+  quotes.decimal("tax", null).notNullable();
+  quotes.decimal("fees", null).notNullable();
+  quotes.decimal("shipping", null).notNullable();
+  quotes.string("orderToken", 255).unique().notNullable();
+  quotes.string("warnings", 255).defaultTo("-");
+  quotes.string("mode", 255).notNullable().defaultTo("-");
+  quotes.integer("storeID")
+    .notNullable()
+    .references("storeID")
+    .inTable("stores")
+    .onUpdate("CASCADE")
+    .onDelete("CASCADE");
+  quotes.integer("userID")
+    .notNullable()
+    .references("userID")
+    .inTable("users")
+    .onUpdate("CASCADE")
+    .onDelete("CASCADE");
+
+}
+```
+
+### Orders
+
+---
+
+```
+{
+  orders.increments("orderID").primary();
+  orders.string("status", 255).notNullable();
+  orders.decimal("total", null).notNullable();
+  orders.decimal("subtotal", null).notNullable();
+  orders.decimal("tax", null).notNullable();
+  orders.decimal("fees", null).notNullable();
+  orders.decimal("shipping", null).notNullable();
+  orders
+    .string("orderToken", 255)
+    .unique()
+    .notNullable();
+  orders
+    .string("spOrderID", 255)
+    .unique()
+    .notNullable();
+   orders.string("mode", 255).notNullable();
+  orders.timestamps(true, true);
+  orders
+    .integer("storeID")
+    .notNullable()
+    .references("storeID")
+    .inTable("stores")
+    .onUpdate("CASCADE")
+    .onDelete("CASCADE");
+  orders
+    .integer("userID")
+    .notNullable()
+    .references("userID")
+    .inTable("users")
+    .onUpdate("CASCADE")
+    .onDelete("CASCADE");
+}
+```
+
+### Designs
+
+---
+
+```
+{
+  designs.increments("designID").primary();
+  designs.string("design_name", 255).notNullable();
+  designs.string("design_url", 255).notNullable();
+  designs
+    .integer("storeID")
+    .notNullable()
+    .references("storeID")
+    .inTable("stores")
+    .onUpdate("CASCADE")
+    .onDelete("CASCADE");
+  designs
+    .integer("userID")
+    .notNullable()
+    .references("userID")
+    .inTable("users")
+    .onUpdate("CASCADE")
+    .onDelete("CASCADE");
+  designs.timestamps(true, true);
 }
 ```
 
 ## Actions
 
-`getOrgs()` -> Returns all organizations
+### Users
 
-`getOrg(orgId)` -> Returns a single organization by ID
+`insert(user)` -> inserts a new user, and Returns newly created User
 
-`addOrg(org)` -> Returns the created org
+`find()` -> Returns the entire User table
 
-`updateOrg(orgId)` -> Update an organization by ID
+`findBy(username)` -> returns the user that matches the username passed in
 
-`deleteOrg(orgId)` -> Delete an organization by ID
+`findById(id)` -> Returns the user that matched the userID passed in
+
+`findByUsername(username)` -> Returns the user that matches the username passed in
+
+`update(username, changes)` -> Updates a user and Returns the newly updated user that matches the username passed in.
+
+`remove(username)` -> Deletes the user passed in and returns a success message
+
 <br>
 <br>
 <br>
-`getUsers(orgId)` -> if no param all users
 
-`getUser(userId)` -> Returns a single user by user ID
+### Stores
 
-`addUser(user object)` --> Creates a new user and returns that user. Also creates 7 availabilities defaulted to hours of operation for their organization.
+`insert(store)` -> inserts a new store, and Returns newly created Store
 
-`updateUser(userId, changes object)` -> Updates a single user by ID.
+`find()` -> Returns the entire Store table
 
-`deleteUser(userId)` -> deletes everything dependent on the user
+`findById(storeID)` -> Returns the store that matched the storeID passed in
+
+`findByStorename(store_name)` -> Returns the store that matches the store_name passed in
+
+`update(storeID, changes)` -> Updates a store and Returns the newly updated store that matches the storeID passed in.
+
+`remove(store_name)` -> Deletes the user passed in and returns a success message
+<br>
+<br>
+<br>
+
+### Quotes
+
+`insert(quote)` -> inserts a new quote, and Returns newly created quote
+
+`find()` -> Returns the entire quote table
+
+`findById(quoteID)` -> Returns the quote that matched the quoteID passed in
+
+`findByOrderToken(orderToken)` -> Returns the quote that matches the orderToken passed in
+
+`updateByQuoteID(quoteID, changes)` -> Updates a quote and Returns the newly updated quote that matches the quoteID passed in.
+
+`updateByOrderToken(orderToken, changes)` -> Updates a quote and Returns the newly updated quote that matches the orderToken passed in.
+
+`removeByQuoteId(quoteID)` -> Deletes the quote by quoteID passed in and returns a success message
+
+`removeByOrderToken(orderToken)` -> Deletes the quote by orderToken passed in and returns a success message
+
+<br>
+<br>
+<br>
+
+### Orders
+
+`insert(order)` -> inserts a new order, and Returns newly created order
+
+`find()` -> Returns the entire order table
+
+`findById(orderID)` -> Returns the order that matched the orderID passed in
+
+`findByOrderToken(orderToken)` -> Returns the order that matches the orderToken passed in
+
+`findBySPId(spOrderID)` -> Returns the order that matches the spOrderID passed in
+
+`updateByOrderID(orderID, changes)` -> Updates a order and Returns the newly updated order that matches the orderID passed in.
+
+`updateByOrderToken(orderToken, changes)` -> Updates a order and Returns the newly updated order that matches the orderToken passed in.
+
+`updateBySpOrderID(spOrderID, changes)` -> Updates a order and Returns the newly updated order that matches the spOrderID passed in.
+
+`removeByOrderId(orderID)` -> Deletes the order by orderID passed in and returns a success message
+
+`removeByOrderToken(orderToken)` -> Deletes the order by orderToken passed in and returns a success message
+
+`removeBySpOrderID(spOrderID)` -> Deletes the order by spOrderID passed in and returns a success message
+
+<br>
+<br>
+<br>
+
+### Designs
+
+`insert(user)` -> inserts a new design, and Returns newly created design
+
+`find()` -> Returns the entire design table
+
+`findById(id)` -> Returns the design that matched the designID passed in
+
+`updateByDesignId(designID, changes)` -> Updates a design and Returns the newly updated design that matches the designID passed in.
+
+`removeByDesignId(designID)` -> Deletes the design passed in and returns a success message
+<br>
+<br>
+<br>
 
 ## Environment Variables
 
@@ -138,7 +377,7 @@ In order for the app to function correctly, the user must set up their own envir
 
 - ### create a .env file that includes the following:
 
-- PORT=5032
+- PORT=5032 or pick your favorite ;) defaults to 4000 in Development
 - NODE_ENV=development --- set to "development" until ready for "production"
 - JWT_SECRET=[any randomly generated or complex string will work here]
 
