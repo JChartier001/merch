@@ -37,66 +37,14 @@ function find() {
 function findById(id) {
   return db("users")
     .where("userID", id)
-    .select(
-      "userID",
-      "first_name",
-      "last_name",
-      "username",
-      "seller",
-      "stripe_account",
-      "address1",
-      "address2",
-      "city",
-      "state",
-      "zip_code",
-      "country",
-      "phone",
-      "email",
-      "billing_address",
-      "billing_city",
-      "billing_zip_code",
-      "billing_country",
-      "shipping_address",
-      "shipping_city",
-      "shipping_zip_code",
-      "shipping_country",
-      "support_pin",
-      "created_at",
-      "updated_at"
-    )
+    .select("*")
     .first();
 }
 
 function findByUsername(username) {
   return db("users")
     .where("username", username)
-    .select(
-      "userID",
-      "first_name",
-      "last_name",
-      "username",
-      "seller",
-      "stripe_account",
-      "address1",
-      "address2",
-      "city",
-      "state",
-      "zip_code",
-      "country",
-      "phone",
-      "email",
-      "billing_address",
-      "billing_city",
-      "billing_zip_code",
-      "billing_country",
-      "shipping_address",
-      "shipping_city",
-      "shipping_zip_code",
-      "shipping_country",
-      "support_pin",
-      "created_at",
-      "updated_at"
-    )
+    .select("*")
     .first();
 }
 
