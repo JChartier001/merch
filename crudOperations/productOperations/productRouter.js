@@ -9,7 +9,6 @@ const Products = require("./productModel");
 router.post("/", async (req, res) => {
   try {
     let product = req.body;
-    console.log("product from req,body", product);
     if (product) {
       Products.insert(product);
       res.status(201).json({
@@ -23,6 +22,33 @@ router.post("/", async (req, res) => {
     res.status(500).json({
       error,
       message: "Unable to add this product, its not you.. its me"
+    });
+  }
+});
+
+// @desc     Post a mockup
+// @route    POST /api/products/mockup
+// @access   Private
+router.post("/mockup", async (req, res) => {
+  try {
+    let data = req.body;
+
+    if (data) {
+      const URL = await Products.ShirtMaker(data);
+
+      if (URL) {
+        res.status(201).json({
+          message: "product successfully sent to ScalablePress!",
+          URL
+        });
+      }
+    } else {
+      res.status(400).json({ message: "please include all required content" });
+    }
+  } catch (error) {
+    res.status(500).json({
+      error,
+      message: "Error posting to ScalablePress, its not you.. its me"
     });
   }
 });
