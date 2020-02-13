@@ -19,7 +19,7 @@ function insert(store) {
       return findByStoreName(store_name);
     });
 }
-//FUTURE RELEASE//////////////
+//FUTURE RELEASE////////////// lets a store have multiple users
 // function insertStoreUsers(store_name, username) {
 //   return db("users_store")
 //     .insert({ store_name, username, admin: true })
