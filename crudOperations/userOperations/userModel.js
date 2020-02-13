@@ -31,33 +31,7 @@ function findBy(username) {
 //for Auth router use primarily//
 
 function find() {
-  return db("users").select(
-    "userID",
-    "first_name",
-    "last_name",
-    "username",
-    "seller",
-    "stripe_account",
-    "address1",
-    "address2",
-    "city",
-    "state",
-    "zip_code",
-    "country",
-    "phone",
-    "email",
-    "billing_address",
-    "billing_city",
-    "billing_zip_code",
-    "billing_country",
-    "shipping_address",
-    "shipping_city",
-    "shipping_zip_code",
-    "shipping_country",
-    "support_pin",
-    "created_at",
-    "updated_at"
-  );
+  return db("users").select("*");
 }
 
 function findById(id) {
