@@ -5,6 +5,8 @@ on: [push, pull_request]
 jobs:
   coverage:
     name: Test and publish test coverage
+    	runs-on: ubuntu-latest
+    	steps:
 
     runs-on: ubuntu-latest
 
