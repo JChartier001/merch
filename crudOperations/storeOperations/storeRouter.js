@@ -8,7 +8,7 @@ const Stores = require("../storeOperations/storeModel");
 router.post("/", async (req, res) => {
   try {
     let store = req.body;
-    console.log(store);
+    // console.log(store);
 
     if (store) {
       Stores.insert(store);

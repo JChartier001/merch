@@ -8,7 +8,7 @@ const Orders = require("../orderOperations/orderModel");
 router.post("/", async (req, res) => {
   try {
     let order = req.body;
-    console.log(order);
+    // console.log(order);
 
     if (order) {
       Orders.insert(order);
@@ -91,7 +91,7 @@ router.get("/ordertoken/:orderToken", async (req, res) => {
 router.put("/:orderID", async (req, res) => {
   try {
     const order = await Orders.updateByOrderId(req.params.orderID, req.body);
-    console.log(order);
+    // console.log(order);
     if (order) {
       res.status(200).json({ order, message: "Order info has been updated!" });
     } else {

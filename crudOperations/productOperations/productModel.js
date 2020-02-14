@@ -47,6 +47,7 @@ function removeByProductId(productID) {
     .where("productID", productID)
     .del();
 }
+
 async function ShirtMaker(data) {
   let config = await {
     headers: {
@@ -54,6 +55,7 @@ async function ShirtMaker(data) {
       Authorization: `Basic ${process.env.TEST}` //this our TEST api key - it has to be a env variable moving forward === TEST
     }
   };
+
   if (data) {
     const mockupURL = await axios.post(
       "https://api.scalablepress.com/v3/mockup",
