@@ -1,3 +1,4 @@
 node_modules
 config
 *.sqlite3
+*.db3

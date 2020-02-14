@@ -21,7 +21,7 @@ module.exports = {
   testing: {
     client: "sqlite3",
     connection: {
-      filename: "./databaseOperations/test.db3"
+      filename: './databaseOperations/test.db3',
     },
     useNullAsDefault: true,
     pool: {
@@ -29,10 +29,10 @@ module.exports = {
       max: 10
     },
     migrations: {
-      directory: "./databaseOperations/migrations"
+      directory: "./databaseOperations/testMigrations"
     },
     seeds: {
-      directory: "./databaseOperations/seeds"
+      directory: "./databaseOperations/testSeeds"
     }
   },
   ////////////////////////////////////////////////////////
