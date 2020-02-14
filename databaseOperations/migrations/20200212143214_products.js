@@ -5,7 +5,7 @@ exports.up = function(knex) {
     products.string("fullSizeURL", 500).notNullable();
     products.string("thumbnailURL", 500).notNullable();
     products.string("description", 500).defaultTo("None");
-    products.decimal("price").defaultTo("None");
+    products.decimal("price").defaultTo(0);
     products
       .integer("storeID")
       .notNullable()
