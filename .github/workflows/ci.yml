@@ -1,15 +1,16 @@
-
 name: build
 
 on: [push, pull_request]
 
 jobs:
-
   coverage:
     name: Test and publish test coverage
     	runs-on: ubuntu-latest
     	steps:
 
+    runs-on: ubuntu-latest
+
+    steps:
       - uses: actions/checkout@master
 
       - uses: actions/setup-node@master
