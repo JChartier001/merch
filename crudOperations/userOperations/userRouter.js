@@ -39,7 +39,7 @@ router.get("/:id", async (req, res) => {
 // @route    GET /api/users/username/:username
 // @access   Private
 router.get("/username/:username", async (req, res) => {
-  console.log(req.params);
+  // console.log(req.params);
   try {
     const user = await Users.findByUsername(req.params.username);
     if (user) {
