@@ -5,8 +5,7 @@ on: [push, pull_request]
 jobs:
   coverage:
     name: Test and publish test coverage
-    	runs-on: ubuntu-latest
-      
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
 
