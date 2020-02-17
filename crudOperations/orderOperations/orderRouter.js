@@ -16,7 +16,7 @@ router.post("/", async (req, res) => {
 
       const spResponse = await Orders.orderMaker(data.spInfo);
 
-      console.log("data sent back from SP after BE post in ROUTER", spResponse);
+      // console.log("data sent back from SP after BE post in ROUTER", spResponse);
 
       if (spResponse) {
         let order = {
