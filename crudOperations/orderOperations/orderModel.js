@@ -1,4 +1,5 @@
 const db = require("../../databaseOperations/db-config");
+const axios = require("axios");
 
 module.exports = {
   insert,
@@ -11,7 +12,8 @@ module.exports = {
   updateBySpOrderID,
   removeByOrderId,
   removeByOrderToken,
-  removeBySpOrderID
+  removeBySpOrderID,
+  orderMaker
 };
 
 function insert(order) {
@@ -30,60 +32,21 @@ function find() {
 function findById(orderID) {
   return db("orders")
     .where("orderID", orderID)
-    .select(
-      "orderID",
-      "userID",
-      "storeID",
-      "status",
-      "total",
-      "subtotal",
-      "tax",
-      "fees",
-      "shipping",
-      "orderToken",
-      "spOrderID",
-      "mode"
-    )
+    .select("*")
     .first();
 } //may need to restrict what this returns after development, perhaps in the router that uses it by destructuring res.json
 
 function findBySPId(spOrderID) {
   return db("orders")
     .where("spOrderID", spOrderID)
-    .select(
-      "orderID",
-      "userID",
-      "storeID",
-      "status",
-      "total",
-      "subtotal",
-      "tax",
-      "fees",
-      "shipping",
-      "orderToken",
-      "spOrderID",
-      "mode"
-    )
+    .select("*")
     .first();
 } //may need to restrict what this returns after development, perhaps in the router that uses it by destructuring res.json
 
 function findByOrderToken(orderToken) {
   return db("orders")
     .where("orderToken", orderToken)
-    .select(
-      "orderID",
-      "userID",
-      "storeID",
-      "status",
-      "total",
-      "subtotal",
-      "tax",
-      "fees",
-      "shipping",
-      "orderToken",
-      "spOrderID",
-      "mode"
-    )
+    .select("*")
     .first();
 } //may need to restrict what this returns after development, perhaps in the router that uses it by destructuring res.json
 
@@ -142,4 +105,33 @@ function removeBySpOrderID(spOrderID) {
   return db("orders")
     .where("spOrderID", spOrderID)
     .del();
+}
+
+async function orderMaker(data) {
+  let config = await {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Basic ${process.env.TEST}` //this our TEST api key - it has to be a env variable moving forward === TEST
+    }
+  };
+
+  if (data) {
+    // console.log(
+    //   "----The info to be sent to Sp from inside orderMaker----",
+    //   data
+    // );
+
+    const order = await axios.post(
+      "https://api.scalablepress.com/v2/order",
+      data,
+      config
+    );
+
+    // console.log(
+    //   "----The info returned from SP from inside orderMaker----",
+    //   order.data
+    // );
+
+    return order.data;
+  }
 }
