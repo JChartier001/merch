@@ -16,6 +16,7 @@ exports.up = function(knex) {
       .unique()
       .notNullable();
     orders.string("mode", 255).notNullable();
+    orders.string("orderedAt", 255).notNullable();
     orders.timestamps(true, true);
     orders
       .integer("storeID")

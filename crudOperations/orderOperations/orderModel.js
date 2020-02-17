@@ -1,4 +1,5 @@
 const db = require("../../databaseOperations/db-config");
+const axios = require("axios");
 
 module.exports = {
   insert,
@@ -11,7 +12,8 @@ module.exports = {
   updateBySpOrderID,
   removeByOrderId,
   removeByOrderToken,
-  removeBySpOrderID
+  removeBySpOrderID,
+  orderMaker
 };
 
 function insert(order) {
@@ -142,4 +144,33 @@ function removeBySpOrderID(spOrderID) {
   return db("orders")
     .where("spOrderID", spOrderID)
     .del();
+}
+
+async function orderMaker(data) {
+  let config = await {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Basic ${process.env.TEST}` //this our TEST api key - it has to be a env variable moving forward === TEST
+    }
+  };
+
+  if (data) {
+    // console.log(
+    //   "----The info to be sent to Sp from inside orderMaker----",
+    //   data
+    // );
+
+    const order = await axios.post(
+      "https://api.scalablepress.com/v2/order",
+      data,
+      config
+    );
+
+    // console.log(
+    //   "----The info returned from SP from inside orderMaker----",
+    //   order.data
+    // );
+
+    return order.data;
+  }
 }

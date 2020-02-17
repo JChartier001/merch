@@ -10,6 +10,7 @@ exports.seed = function(knex) {
       orderToken: "70192HJALKANOIAMNL",
       spOrderID: "70192HJALKANOIAMNL",
       mode: "-",
+      orderedAt: "2020-02-17T18:23:38.640Z",
       storeID: 1,
       userID: 1
     }

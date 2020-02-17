@@ -2,26 +2,57 @@ const router = require("express").Router();
 const Orders = require("../orderOperations/orderModel");
 // const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
-// @desc     Post an Order
+// @desc     Post an order
 // @route    POST /api/orders
 // @access   Private
 router.post("/", async (req, res) => {
   try {
-    let order = req.body;
-    // console.log(order);
+    let data = req.body;
 
-    if (order) {
-      Orders.insert(order);
-      res
-        .status(201)
-        .json({ order, message: "You have successfully added this Order!" });
+    if (data) {
+      // console.log("----The whole thing passed from FE----", data);
+      // console.log("---Just the id's needed for our BE---", data.orderInfo);
+      // console.log("---Info to be sent to SP---", data.spInfo);
+
+      const spResponse = await Orders.orderMaker(data.spInfo);
+
+      // console.log("data sent back from SP after BE post in ROUTER", spResponse);
+
+      if (spResponse) {
+        let order = {
+          userID: data.orderInfo.userID,
+          storeID: data.orderInfo.storeID,
+          status: data.orderInfo.status,
+          total: spResponse.total,
+          subtotal: spResponse.subtotal,
+          tax: spResponse.tax,
+          fees: spResponse.fees,
+          shipping: spResponse.shipping,
+          orderToken: spResponse.orderToken,
+          spOrderID: spResponse.orderID,
+          mode: spResponse.mode,
+          orderedAt: spResponse.orderedAt
+        };
+        // console.log(
+        //   "order info sent to our backend line 59 router------>",
+        //   order
+        // );
+
+        Orders.insert(order);
+        res.status(201).json({
+          message:
+            "You have successfully added this Quote to our DB, spResponse is from SP!",
+          order,
+          spResponse
+        });
+      }
     } else {
       res.status(400).json({ message: "please include all required content" });
     }
   } catch (error) {
     res.status(500).json({
       error,
-      message: "Unable to add this order, its not you.. its me"
+      message: "Unable to add this quote, its not you.. its me"
     });
   }
 });
