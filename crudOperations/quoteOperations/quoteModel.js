@@ -1,4 +1,5 @@
 const db = require("../../databaseOperations/db-config");
+const axios = require("axios");
 
 module.exports = {
   insert,
@@ -8,7 +9,8 @@ module.exports = {
   updateByQuoteId,
   updateByOrderToken,
   removeByQuoteId,
-  removeByOrderToken
+  removeByOrderToken,
+  quoteMaker
 };
 
 function insert(quote) {
@@ -110,4 +112,33 @@ function removeByOrderToken(orderToken) {
   return db("quotes")
     .where("orderToken", orderToken)
     .del();
+}
+
+async function quoteMaker(data) {
+  let config = await {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Basic ${process.env.TEST}` //this our TEST api key - it has to be a env variable moving forward === TEST
+    }
+  };
+
+  if (data) {
+    // console.log(
+    //   "----The info to be sent to Sp from inside quoteMaker----",
+    //   data
+    // );
+
+    const quote = await axios.post(
+      "https://api.scalablepress.com/v2/quote",
+      data,
+      config
+    );
+
+    // console.log(
+    //   "----The info returned from SP from inside quoteMaker----",
+    //   quote.data
+    // );
+
+    return quote.data;
+  }
 }

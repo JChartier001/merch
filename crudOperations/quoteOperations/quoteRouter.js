@@ -7,14 +7,43 @@ const Quotes = require("../quoteOperations/quoteModel");
 // @access   Private
 router.post("/", async (req, res) => {
   try {
-    let quote = req.body;
-    console.log(quote);
+    let data = req.body;
 
-    if (quote) {
-      Quotes.insert(quote);
-      res
-        .status(201)
-        .json({ quote, message: "You have successfully added this Quote!" });
+    if (data) {
+      // console.log("----The whole thing passed from FE----", data);
+      // console.log("---Just the id's needed for our BE---", data.quoteInfo);
+      // console.log("---Info to be sent to SP---", data.spInfo);
+
+      const spResponse = await Quotes.quoteMaker(data.spInfo);
+
+      // console.log("data sent back from SP after BE post in ROUTER", spResponse);
+
+      if (spResponse) {
+        let quote = {
+          userID: data.quoteInfo.userID,
+          storeID: data.quoteInfo.storeID,
+          total: spResponse.total,
+          subtotal: spResponse.subtotal,
+          tax: spResponse.tax,
+          fees: spResponse.fees,
+          shipping: spResponse.shipping,
+          orderToken: spResponse.orderToken,
+          warnings: spResponse.warnings,
+          mode: spResponse.mode
+        };
+        // console.log(
+        //   "quote info sent to our backend line 32 router------>",
+        //   quote
+        // );
+
+        Quotes.insert(quote);
+        res.status(201).json({
+          message:
+            "You have successfully added this Quote to our DB, spResponse is from SP!",
+          quote,
+          spResponse
+        });
+      }
     } else {
       res.status(400).json({ message: "please include all required content" });
     }
@@ -32,7 +61,7 @@ router.post("/", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const quotes = await Quotes.find();
-    console.log(quotes);
+    // console.log(quotes);
     res.status(200).json(quotes);
   } catch (error) {
     res
@@ -103,12 +132,12 @@ router.put("/:quoteID", async (req, res) => {
 // @access   Private
 router.put("/ordertokenedit/:orderToken", async (req, res) => {
   try {
-    console.log(req.params.orderToken);
+    // console.log(req.params.orderToken);
     const quote = await Quotes.updateByOrderToken(
       req.params.orderToken,
       req.body
     );
-    console.log(quote);
+    // console.log(quote);
     if (quote) {
       res.status(200).json({ quote, message: "Quote info has been updated!" });
     } else {
