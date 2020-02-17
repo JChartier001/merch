@@ -32,60 +32,21 @@ function find() {
 function findById(orderID) {
   return db("orders")
     .where("orderID", orderID)
-    .select(
-      "orderID",
-      "userID",
-      "storeID",
-      "status",
-      "total",
-      "subtotal",
-      "tax",
-      "fees",
-      "shipping",
-      "orderToken",
-      "spOrderID",
-      "mode"
-    )
+    .select("*")
     .first();
 } //may need to restrict what this returns after development, perhaps in the router that uses it by destructuring res.json
 
 function findBySPId(spOrderID) {
   return db("orders")
     .where("spOrderID", spOrderID)
-    .select(
-      "orderID",
-      "userID",
-      "storeID",
-      "status",
-      "total",
-      "subtotal",
-      "tax",
-      "fees",
-      "shipping",
-      "orderToken",
-      "spOrderID",
-      "mode"
-    )
+    .select("*")
     .first();
 } //may need to restrict what this returns after development, perhaps in the router that uses it by destructuring res.json
 
 function findByOrderToken(orderToken) {
   return db("orders")
     .where("orderToken", orderToken)
-    .select(
-      "orderID",
-      "userID",
-      "storeID",
-      "status",
-      "total",
-      "subtotal",
-      "tax",
-      "fees",
-      "shipping",
-      "orderToken",
-      "spOrderID",
-      "mode"
-    )
+    .select("*")
     .first();
 } //may need to restrict what this returns after development, perhaps in the router that uses it by destructuring res.json
 

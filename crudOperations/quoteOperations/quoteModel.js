@@ -23,56 +23,20 @@ function insert(quote) {
 }
 
 function find() {
-  return db("quotes").select(
-    "quoteID",
-    "storeID",
-    "userID",
-    "total",
-    "subtotal",
-    "tax",
-    "fees",
-    "shipping",
-    "orderToken",
-    "warnings",
-    "mode"
-  );
+  return db("quotes").select("*");
 } //may need to restrict what this returns after development, perhaps in the router that uses it by destructuring res.json
 
 function findById(quoteID) {
   return db("quotes")
     .where("quoteID", quoteID)
-    .select(
-      "quoteID",
-      "storeID",
-      "userID",
-      "total",
-      "subtotal",
-      "tax",
-      "fees",
-      "shipping",
-      "orderToken",
-      "warnings",
-      "mode"
-    )
+    .select("*")
     .first();
 } //may need to restrict what this returns after development, perhaps in the router that uses it by destructuring res.json
 
 function findByOrderToken(orderToken) {
   return db("quotes")
     .where("orderToken", orderToken)
-    .select(
-      "quoteID",
-      "storeID",
-      "userID",
-      "total",
-      "subtotal",
-      "tax",
-      "fees",
-      "shipping",
-      "orderToken",
-      "warnings",
-      "mode"
-    )
+    .select("*")
     .first();
 } //may need to restrict what this returns after development, perhaps in the router that uses it by destructuring res.json
 
@@ -121,19 +85,16 @@ async function quoteMaker(data) {
       Authorization: `Basic ${process.env.TEST}` //this our TEST api key - it has to be a env variable moving forward === TEST
     }
   };
-
   if (data) {
     // console.log(
     //   "----The info to be sent to Sp from inside quoteMaker----",
     //   data
     // );
-
     const quote = await axios.post(
       "https://api.scalablepress.com/v2/quote",
       data,
       config
     );
-
     // console.log(
     //   "----The info returned from SP from inside quoteMaker----",
     //   quote.data
