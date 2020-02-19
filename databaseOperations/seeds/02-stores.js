@@ -1,5 +1,5 @@
 exports.seed = function(knex) {
   return knex("stores").insert([
-    { active: true, store_name: "Anthill Store", UserID: 1 }
+    { active: true, store_name: "Anthill Store", userID: 1 }
   ]);
 };
