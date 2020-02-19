@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const Users = require("./userModel");
+const Models = require("../helperVariables/models");
+
 // const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
 // @desc     Get all Users
@@ -7,7 +9,7 @@ const Users = require("./userModel");
 // @access   Private
 router.get("/", async (req, res) => {
   try {
-    const users = await Users.find();
+    const users = await Models.Users.find();
     res.status(200).json(users);
   } catch (error) {
     res
@@ -21,7 +23,7 @@ router.get("/", async (req, res) => {
 // @access   Private
 router.get("/:id", async (req, res) => {
   try {
-    const user = await Users.findById(req.params.id);
+    const user = await Models.Users.findBy(req.params.id);
     if (user) {
       res.status(200).json(user);
     } else {

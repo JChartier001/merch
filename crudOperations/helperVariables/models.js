@@ -21,18 +21,20 @@ class Model {
   findBy(filter) {
     return db(this.tableName)
       .where("id", filter)
-      .select("*");
+      .select("*")
+      .first();
   }
 
   findByUsername(username) {
     return db(this.tableName)
+      .where("username", username)
       .select("*")
-      .where("username", username);
+      .first();
   }
 
   findById(id) {
     return db("users")
-      .where("userID", id)
+      .where("id", id)
       .select("*")
       .first();
   }

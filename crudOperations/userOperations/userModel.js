@@ -1,28 +1,12 @@
 const db = require("../../databaseOperations/db-config");
 
 module.exports = {
-  find,
-  findBy,
   findById,
   findByUsername,
   update,
   remove
   // getUsersStores
 };
-
-//for Auth router use primarily//
-
-function findBy(username) {
-  return db("users")
-    .select("userID", "username", "password")
-    .where("username", username);
-}
-
-//for Auth router use primarily//
-
-function find() {
-  return db("users").select("*");
-}
 
 function findById(id) {
   return db("users")
