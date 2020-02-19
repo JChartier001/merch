@@ -38,7 +38,7 @@ class Model {
       .select("*")
       .first();
   }
-
+  //for finding user associated with id passed
   findById(id) {
     return db("users")
       .where("id", id)
@@ -72,6 +72,12 @@ class Model {
       });
   }
 
+  removeById(id) {
+    return db(this.tableName)
+      .where("id", id)
+      .del();
+  }
+
   removeByUsername(username) {
     return db(this.tableName)
       .where("username", username)
@@ -87,6 +93,6 @@ class Model {
 
 const Users = new Model("users");
 const Stores = new Model("stores");
-// const Categories = new Model('categories');
+const Designs = new Model("designs");
 // const ClassClients = new Model('class_clients');
-module.exports = { Users, Stores };
+module.exports = { Users, Stores, Designs };
