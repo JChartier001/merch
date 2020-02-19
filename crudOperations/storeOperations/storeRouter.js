@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const Stores = require("../storeOperations/storeModel");
+const Models = require("../helperVariables/models");
+
 // const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
 // @desc     Post a Store
@@ -8,14 +10,13 @@ const Stores = require("../storeOperations/storeModel");
 router.post("/", async (req, res) => {
   try {
     let store = req.body;
-    // console.log(store);
 
     if (store) {
-      Stores.insert(store);
+      Models.Stores.insert(store);
       // Stores.insertStoresUsers(store.store_name, username);
       res
         .status(201)
-        .json({ store, message: "You have successfully added a Store!" });
+        .json({ message: "You have successfully added a Store!", store });
     } else {
       res.status(400).json({ message: "please include all required content" });
     }
@@ -32,7 +33,7 @@ router.post("/", async (req, res) => {
 // @access   Private
 router.get("/", async (req, res) => {
   try {
-    const stores = await Stores.find();
+    const stores = await Models.Stores.find();
 
     if (stores) {
       res.status(200).json(stores);
@@ -49,9 +50,9 @@ router.get("/", async (req, res) => {
 // @desc     Get a store by ID
 // @route    GET /api/stores/:id
 // @access   Private
-router.get("/:storeID", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
-    const store = await Stores.findById(req.params.storeID);
+    const store = await Models.Stores.findById(req.params.id);
 
     if (store) {
       res.status(200).json(store);
@@ -71,7 +72,7 @@ router.get("/:storeID", async (req, res) => {
 // @access   Public
 router.get("/storename/:store_name", async (req, res) => {
   try {
-    const store = await Stores.findByStoreName(req.params.store_name);
+    const store = await Models.Stores.findByStoreName(req.params.store_name);
 
     if (store) {
       res.status(200).json(store);
@@ -90,11 +91,11 @@ router.get("/storename/:store_name", async (req, res) => {
 });
 
 // @desc     Edit a Store
-// @route    PUT /api/stores/:storeID
+// @route    PUT /api/stores/:id
 // @access   Private
-router.put("/:storeID", async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
-    const store = await Stores.update(req.params.storeID, req.body);
+    const store = await Models.Stores.updateById(req.params.id, req.body);
     if (store) {
       res.status(200).json({ store, message: "Store info updated!" });
     } else {
@@ -108,12 +109,12 @@ router.put("/:storeID", async (req, res) => {
   }
 });
 
-// @desc     Delete a Store
+// @desc     Delete a Store by Store name
 // @route    DELETE /api/stores/storename:store_name
 // @access   Private
 router.delete("/:store_name", async (req, res) => {
   try {
-    const count = await Stores.remove(req.params.store_name);
+    const count = await Models.Stores.removeByStoreName(req.params.store_name);
     if (count > 0) {
       res.status(200).json({ message: "this Store has been deleted!" });
     } else {
@@ -130,24 +131,26 @@ router.delete("/:store_name", async (req, res) => {
   }
 });
 
-// @desc     Get a Stores Users
-// @route    GET /api/stores/:store_name/users
-// @access   Private
-router.get("/:store_name/users", async (req, res) => {
-  try {
-    const users = await Stores.getStoresUsers(req.params.store_name);
-    if (users) {
-      res.status(200).json(users);
-    } else {
-      res.status(404).json({ message: "Please enter a valid store name" });
-    }
-  } catch (error) {
-    res.status(500).json({
-      error,
-      message: "Unable to find this Stores Users, its not you.. its me"
-    });
-  }
-});
+//FUTURE RELEASE
+
+// // @desc     Get a Stores Users
+// // @route    GET /api/stores/:store_name/users
+// // @access   Private
+// router.get("/:store_name/users", async (req, res) => {
+//   try {
+//     const users = await Stores.getStoresUsers(req.params.store_name);
+//     if (users) {
+//       res.status(200).json(users);
+//     } else {
+//       res.status(404).json({ message: "Please enter a valid store name" });
+//     }
+//   } catch (error) {
+//     res.status(500).json({
+//       error,
+//       message: "Unable to find this Stores Users, its not you.. its me"
+//     });
+//   }
+// });
 
 // Export router
 module.exports = router;

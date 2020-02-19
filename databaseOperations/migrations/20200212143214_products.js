@@ -1,6 +1,6 @@
 exports.up = function(knex) {
   return knex.schema.createTable("products", products => {
-    products.increments("productID").primary();
+    products.increments("id").primary();
     products.string("productName", 255).notNullable();
     products.string("fullSizeURL", 500).notNullable();
     products.string("thumbnailURL", 500).notNullable();
@@ -9,7 +9,7 @@ exports.up = function(knex) {
     products
       .integer("storeID")
       .notNullable()
-      .references("storeID")
+      .references("id")
       .inTable("stores")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");

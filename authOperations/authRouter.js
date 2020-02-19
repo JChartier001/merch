@@ -2,19 +2,19 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const Users = require("../crudOperations/userOperations/userModel");
+const Models = require("../crudOperations/helperVariables/models");
 
 // const validateRegisterInfo = require("./authMiddleware/verifyRegisterInfo");
 // const validateLoginInfo = require("./authMiddleware/verifyLoginInfo");
 
 router.post("/register", (req, res) => {
-  let user = req.body;
-  const hash = bcrypt.hashSync(user.password, 12);
-  user.password = hash;
+  let newUser = req.body;
+  const hash = bcrypt.hashSync(newUser.password, 12);
+  newUser.password = hash;
 
-  Users.insert(user)
+  Models.Users.insert(newUser)
     .then(newUser => {
-      res.status(201).json(newUser);
+      res.status(201).json({ message: "created new user!! ", newUser });
     })
     .catch(error => {
       res.status(500).json({
@@ -27,7 +27,7 @@ router.post("/register", (req, res) => {
 router.post("/login", (req, res) => {
   let { username, password } = req.body;
 
-  Users.findBy(username)
+  Models.Users.findByUsername(username)
     .first()
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {

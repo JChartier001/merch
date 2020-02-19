@@ -1,6 +1,6 @@
 exports.up = function(knex) {
   return knex.schema.createTable("users", users => {
-    users.increments("userID").primary();
+    users.increments("id").primary();
     users.string("first_name", 255).notNullable();
     users.string("last_name", 255).notNullable();
     users
@@ -31,8 +31,8 @@ exports.up = function(knex) {
     users.string("shipping_state", 255);
     users.string("shipping_zip_code", 255);
     users.string("shipping_country", 255);
-    users.timestamps(true, true);
     users.string("support_pin", 10);
+    users.timestamps(true, true);
   });
 };
 

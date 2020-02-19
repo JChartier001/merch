@@ -1,5 +1,6 @@
 const db = require("../../databaseOperations/db-config");
 const axios = require("axios");
+const { headers } = require("../helperVariables/headers");
 
 module.exports = {
   insert,
@@ -79,12 +80,8 @@ function removeByOrderToken(orderToken) {
 }
 
 async function quoteMaker(data) {
-  let config = await {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Basic ${process.env.TEST}` //this our TEST api key - it has to be a env variable moving forward === TEST
-    }
-  };
+  let config = headers;
+
   if (data) {
     // console.log(
     //   "----The info to be sent to Sp from inside quoteMaker----",

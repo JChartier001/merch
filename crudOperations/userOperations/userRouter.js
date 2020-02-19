@@ -1,5 +1,7 @@
 const router = require("express").Router();
-const Users = require("./userModel");
+// const Users = require("./userModel");
+const Models = require("../helperVariables/models");
+
 // const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
 // @desc     Get all Users
@@ -7,7 +9,7 @@ const Users = require("./userModel");
 // @access   Private
 router.get("/", async (req, res) => {
   try {
-    const users = await Users.find();
+    const users = await Models.Users.find();
     res.status(200).json(users);
   } catch (error) {
     res
@@ -21,7 +23,7 @@ router.get("/", async (req, res) => {
 // @access   Private
 router.get("/:id", async (req, res) => {
   try {
-    const user = await Users.findById(req.params.id);
+    const user = await Models.Users.findBy(req.params.id);
     if (user) {
       res.status(200).json(user);
     } else {
@@ -41,7 +43,7 @@ router.get("/:id", async (req, res) => {
 router.get("/username/:username", async (req, res) => {
   // console.log(req.params);
   try {
-    const user = await Users.findByUsername(req.params.username);
+    const user = await Models.Users.findByUsername(req.params.username);
     if (user) {
       res.status(200).json(user);
     } else {
@@ -55,12 +57,15 @@ router.get("/username/:username", async (req, res) => {
   }
 });
 
-// @desc     Edit a User
+// @desc     Edit a User by username
 // @route    PUT /api/users/:username
 // @access   Private
 router.put("/:username", async (req, res) => {
   try {
-    const user = await Users.update(req.params.username, req.body);
+    const user = await Models.Users.updateByUsername(
+      req.params.username,
+      req.body
+    );
     if (user) {
       res.status(200).json({ user, message: "Info updated!" });
     } else {
@@ -79,7 +84,7 @@ router.put("/:username", async (req, res) => {
 // @access   Private
 router.delete("/:username", async (req, res) => {
   try {
-    const count = await Users.remove(req.params.username);
+    const count = await Models.Users.removeByUsername(req.params.username);
     if (count > 0) {
       res.status(200).json({ message: "this User has been deleted!" });
     } else {
@@ -93,21 +98,23 @@ router.delete("/:username", async (req, res) => {
   }
 });
 
-// @desc     Get a users stores
-// @route    GET /api/users/:username/stores
-// @access   Private
-router.get("/:username/stores", async (req, res) => {
-  try {
-    const stores = await Users.getUsersStores(req.params.username);
+//future release
 
-    res.status(200).json(stores);
-  } catch (error) {
-    res.status(500).json({
-      error,
-      message: "Unable to find this users stores, its not you.. its me"
-    });
-  }
-});
+// // @desc     Get a users stores
+// // @route    GET /api/users/:username/stores
+// // @access   Private
+// router.get("/:username/stores", async (req, res) => {
+//   try {
+//     const stores = await Users.getUsersStores(req.params.username);
+
+//     res.status(200).json(stores);
+//   } catch (error) {
+//     res.status(500).json({
+//       error,
+//       message: "Unable to find this users stores, its not you.. its me"
+//     });
+//   }
+// });
 
 // Export router
 module.exports = router;
