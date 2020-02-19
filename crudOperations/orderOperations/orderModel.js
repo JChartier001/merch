@@ -1,4 +1,4 @@
-const { headers } = require("../helpers/headers");
+const { headers } = require("../helperVariables/headers");
 
 const db = require("../../databaseOperations/db-config");
 const axios = require("axios");
