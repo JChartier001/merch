@@ -32,6 +32,13 @@ class Model {
       .first();
   }
 
+  findByStoreName(store_name) {
+    return db(this.tableName)
+      .where("store_name", store_name)
+      .select("*")
+      .first();
+  }
+
   findById(id) {
     return db("users")
       .where("id", id)
@@ -39,22 +46,47 @@ class Model {
       .first();
   }
 
-  update(id, item) {
+  updateById(id, changes) {
     return db(this.tableName)
-      .where({ id })
-      .update(item)
-      .returning("*");
+      .where("id", id)
+      .update(changes)
+      .then(changesMade => {
+        if (changesMade > 0) {
+          return this.findBy(id);
+        } else {
+          return null;
+        }
+      });
   }
 
-  remove(id) {
+  updateByUsername(username, changes) {
     return db(this.tableName)
-      .where({ id })
+      .where("username", username)
+      .update(changes)
+      .then(changesMade => {
+        if (changesMade > 0) {
+          return this.findByUsername(username);
+        } else {
+          return null;
+        }
+      });
+  }
+
+  removeByUsername(username) {
+    return db(this.tableName)
+      .where("username", username)
+      .del();
+  }
+
+  removeByStoreName(store_name) {
+    return db(this.tableName)
+      .where("store_name", store_name)
       .del();
   }
 }
 
 const Users = new Model("users");
-// const Classes = new Model('classes');
+const Stores = new Model("stores");
 // const Categories = new Model('categories');
 // const ClassClients = new Model('class_clients');
-module.exports = { Users };
+module.exports = { Users, Stores };

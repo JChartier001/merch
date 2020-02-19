@@ -1,45 +1,10 @@
-const db = require("../../databaseOperations/db-config");
+// const db = require("../../databaseOperations/db-config");
 
-module.exports = {
-  findById,
-  findByUsername,
-  update,
-  remove
-  // getUsersStores
-};
+// module.exports = {
+//   // getUsersStores
+// };
 
-function findById(id) {
-  return db("users")
-    .where("userID", id)
-    .select("*")
-    .first();
-}
-
-function findByUsername(username) {
-  return db("users")
-    .where("username", username)
-    .select("*")
-    .first();
-}
-
-function update(username, changes) {
-  return db("users")
-    .where("username", username)
-    .update(changes)
-    .then(count => {
-      if (count > 0) {
-        return findByUsername(username);
-      } else {
-        return null;
-      }
-    });
-}
-
-function remove(username) {
-  return db("users")
-    .where("username", username)
-    .del();
-}
+////Future release//////
 
 // function getUsersStores(username) {
 //   return db("users_store")
