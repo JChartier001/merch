@@ -24,6 +24,12 @@ class Model {
       .select("*");
   }
 
+  findByUsername(username) {
+    return db(this.tableName)
+      .select("*")
+      .where("username", username);
+  }
+
   findById(id) {
     return db("users")
       .where("userID", id)

@@ -1,7 +1,6 @@
 const db = require("../../databaseOperations/db-config");
 
 module.exports = {
-  // insert,
   find,
   findBy,
   findById,
@@ -12,15 +11,6 @@ module.exports = {
 };
 
 //for Auth router use primarily//
-
-// function insert(user) {
-//   return db("users")
-//     .insert(user, "userID")
-//     .then(ids => {
-//       const [id] = ids;
-//       return findById(id);
-//     });
-// }
 
 function findBy(username) {
   return db("users")
