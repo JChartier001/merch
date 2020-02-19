@@ -1,19 +1,19 @@
 exports.up = function(knex) {
   return knex.schema.createTable("designs", designs => {
-    designs.increments("designID").primary();
+    designs.increments("id").primary();
     designs.string("design_name", 255).notNullable();
     designs.string("design_url", 255).notNullable();
     designs
       .integer("storeID")
       .notNullable()
-      .references("storeID")
+      .references("id")
       .inTable("stores")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");
     designs
       .integer("userID")
       .notNullable()
-      .references("userID")
+      .references("id")
       .inTable("users")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");

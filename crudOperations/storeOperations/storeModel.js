@@ -1,24 +1,10 @@
 const db = require("../../databaseOperations/db-config");
 
 module.exports = {
-  insert,
   // insertStoreUsers,
-  find,
-  findById,
-  findByStoreName,
-  update,
-  remove
   // getStoresUsers
 };
 
-function insert(store) {
-  return db("stores")
-    .insert(store, "storeID")
-    .then(stores => {
-      const [store_name] = stores;
-      return findByStoreName(store_name);
-    });
-}
 //FUTURE RELEASE////////////// lets a store have multiple users
 // function insertStoreUsers(store_name, username) {
 //   return db("users_store")
@@ -35,52 +21,6 @@ function insert(store) {
 //       });
 //     });
 // }
-
-function find() {
-  return db("stores").select(
-    "storeID",
-    "userID",
-    "active",
-    "store_name",
-    "hero_ImageURL",
-    "logo_url",
-    "created_at",
-    "updated_at"
-  );
-}
-
-function findById(storeID) {
-  return db("stores")
-    .where("storeID", storeID)
-    .select("storeID", "active", "store_name", "hero_ImageURL", "logo_url")
-    .first();
-}
-
-function findByStoreName(store_name) {
-  return db("stores")
-    .where("store_name", store_name)
-    .select("storeID", "active", "store_name", "hero_ImageURL", "logo_url")
-    .first();
-}
-
-function update(storeID, changes) {
-  return db("stores")
-    .where("storeID", storeID)
-    .update(changes)
-    .then(count => {
-      if (count > 0) {
-        return findById(storeID);
-      } else {
-        return null;
-      }
-    });
-}
-
-function remove(store_name) {
-  return db("stores")
-    .where("store_name", store_name)
-    .del();
-}
 
 // function getStoresUsers(store_name) {
 //   return db("users_store")
