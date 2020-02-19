@@ -2,19 +2,19 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const Users = require("../crudOperations/userOperations/userModel");
+const Models = require("../crudOperations/helperVariables/models");
 
 // const validateRegisterInfo = require("./authMiddleware/verifyRegisterInfo");
 // const validateLoginInfo = require("./authMiddleware/verifyLoginInfo");
 
 router.post("/register", (req, res) => {
-  let user = req.body;
-  const hash = bcrypt.hashSync(user.password, 12);
-  user.password = hash;
+  let newItem = req.body;
+  const hash = bcrypt.hashSync(newItem.password, 12);
+  newItem.password = hash;
 
-  Users.insert(user)
+  Models.Users.insert(newItem)
     .then(newUser => {
-      res.status(201).json(newUser);
+      res.status(201).json({ message: "created new user!! ", newUser });
     })
     .catch(error => {
       res.status(500).json({
