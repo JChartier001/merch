@@ -1,6 +1,6 @@
 exports.up = function(knex) {
   return knex.schema.createTable("stores", stores => {
-    stores.increments("storeID").primary();
+    stores.increments("id").primary();
     stores.boolean("active").defaultTo(true);
     stores
       .string("store_name", 255)
@@ -20,7 +20,7 @@ exports.up = function(knex) {
     stores
       .integer("userID")
       .notNullable()
-      .references("userID")
+      .references("id")
       .inTable("users")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");

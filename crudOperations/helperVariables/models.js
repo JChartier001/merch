@@ -10,7 +10,7 @@ class Model {
       .insert(newItem)
       .then(ids => {
         const [id] = ids;
-        return this.findById(id);
+        return this.findBy(id);
       });
   }
 
@@ -20,8 +20,8 @@ class Model {
 
   findBy(filter) {
     return db(this.tableName)
-      .select("userID", "username", "password")
-      .where("username", filter);
+      .where("id", filter)
+      .select("*");
   }
 
   findById(id) {

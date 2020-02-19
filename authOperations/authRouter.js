@@ -8,11 +8,11 @@ const Models = require("../crudOperations/helperVariables/models");
 // const validateLoginInfo = require("./authMiddleware/verifyLoginInfo");
 
 router.post("/register", (req, res) => {
-  let newItem = req.body;
-  const hash = bcrypt.hashSync(newItem.password, 12);
-  newItem.password = hash;
+  let newUser = req.body;
+  const hash = bcrypt.hashSync(newUser.password, 12);
+  newUser.password = hash;
 
-  Models.Users.insert(newItem)
+  Models.Users.insert(newUser)
     .then(newUser => {
       res.status(201).json({ message: "created new user!! ", newUser });
     })

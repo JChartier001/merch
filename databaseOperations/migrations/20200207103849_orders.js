@@ -1,6 +1,6 @@
 exports.up = function(knex) {
   return knex.schema.createTable("orders", orders => {
-    orders.increments("orderID").primary();
+    orders.increments("id").primary();
     orders.string("status", 255).notNullable();
     orders.decimal("total", null).notNullable();
     orders.decimal("subtotal", null).notNullable();
@@ -18,14 +18,14 @@ exports.up = function(knex) {
     orders
       .integer("storeID")
       .notNullable()
-      .references("storeID")
+      .references("id")
       .inTable("stores")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");
     orders
       .integer("userID")
       .notNullable()
-      .references("userID")
+      .references("id")
       .inTable("users")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");
