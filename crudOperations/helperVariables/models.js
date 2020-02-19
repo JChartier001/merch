@@ -21,7 +21,7 @@ class Model {
   findBy(filter) {
     return db(this.tableName)
       .select("userID", "username", "password")
-      .where(filter);
+      .where("username", filter);
   }
 
   findById(id) {
