@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Orders = require("../orderOperations/orderModel");
+const order = require("../helperVariables/orderHelpers");
 // const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
 // @desc     Post an order
@@ -10,13 +11,7 @@ router.post("/", async (req, res) => {
     let data = req.body;
 
     if (data) {
-      // console.log("----The whole thing passed from FE----", data);
-      // console.log("---Just the id's needed for our BE---", data.orderInfo);
-      // console.log("---Info to be sent to SP---", data.spInfo);
-
       const spResponse = await Orders.orderMaker(data.spInfo);
-
-      // console.log("data sent back from SP after BE post in ROUTER", spResponse);
 
       if (spResponse) {
         let order = {
@@ -33,10 +28,6 @@ router.post("/", async (req, res) => {
           mode: spResponse.mode,
           orderedAt: spResponse.orderedAt
         };
-        // console.log(
-        //   "order info sent to our backend line 59 router------>",
-        //   order
-        // );
 
         Orders.insert(order);
         res.status(201).json({

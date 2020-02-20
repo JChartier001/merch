@@ -25,6 +25,13 @@ class Model {
       .first();
   }
 
+  findByOrderToken(orderToken) {
+    return db(this.tableName)
+      .where("orderToken", orderToken)
+      .select("*")
+      .first();
+  }
+
   findByUsername(username) {
     return db(this.tableName)
       .where("username", username)
@@ -72,9 +79,28 @@ class Model {
       });
   }
 
+  updateByOrderToken(orderToken, changes) {
+    return db(this.tableName)
+      .where("orderToken", orderToken)
+      .update(changes)
+      .then(changesMade => {
+        if (changesMade > 0) {
+          return this.findByOrderToken(orderToken);
+        } else {
+          return null;
+        }
+      });
+  }
+
   removeById(id) {
     return db(this.tableName)
       .where("id", id)
+      .del();
+  }
+
+  removeByOrderToken(orderToken) {
+    return db(this.tableName)
+      .where("orderToken", orderToken)
       .del();
   }
 
@@ -94,5 +120,5 @@ class Model {
 const Users = new Model("users");
 const Stores = new Model("stores");
 const Designs = new Model("designs");
-// const ClassClients = new Model('class_clients');
-module.exports = { Users, Stores, Designs };
+const Quotes = new Model("quotes");
+module.exports = { Users, Stores, Designs, Quotes };
