@@ -25,6 +25,13 @@ class Model {
       .first();
   }
 
+  findBySPId(spOrderID) {
+    return db(this.tableName)
+      .where("spOrderID", spOrderID)
+      .select("*")
+      .first();
+  } //may need to restrict what this returns after development, perhaps in the router that uses it by destructuring res.json
+
   findByOrderToken(orderToken) {
     return db(this.tableName)
       .where("orderToken", orderToken)
@@ -92,6 +99,19 @@ class Model {
       });
   }
 
+  updateBySpOrderID(spOrderID, changes) {
+    return db(this.tableName)
+      .where("spOrderID", spOrderID)
+      .update(changes)
+      .then(count => {
+        if (count > 0) {
+          return this.findBySPId(spOrderID);
+        } else {
+          return null;
+        }
+      });
+  }
+
   removeById(id) {
     return db(this.tableName)
       .where("id", id)
@@ -115,10 +135,18 @@ class Model {
       .where("store_name", store_name)
       .del();
   }
+
+  removeBySpOrderID(spOrderID) {
+    return db(this.tableName)
+      .where("spOrderID", spOrderID)
+      .del();
+  }
 }
 
 const Users = new Model("users");
 const Stores = new Model("stores");
 const Designs = new Model("designs");
 const Quotes = new Model("quotes");
-module.exports = { Users, Stores, Designs, Quotes };
+const Orders = new Model("orders");
+
+module.exports = { Users, Stores, Designs, Quotes, Orders };
