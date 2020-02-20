@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const Orders = require("../orderOperations/orderModel");
+const Models = require("../helperVariables/models");
+
 // const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
 // @desc     Post an order
@@ -8,16 +10,8 @@ const Orders = require("../orderOperations/orderModel");
 router.post("/", async (req, res) => {
   try {
     let data = req.body;
-
     if (data) {
-      // console.log("----The whole thing passed from FE----", data);
-      // console.log("---Just the id's needed for our BE---", data.orderInfo);
-      // console.log("---Info to be sent to SP---", data.spInfo);
-
       const spResponse = await Orders.orderMaker(data.spInfo);
-
-      // console.log("data sent back from SP after BE post in ROUTER", spResponse);
-
       if (spResponse) {
         let order = {
           userID: data.orderInfo.userID,
@@ -33,12 +27,7 @@ router.post("/", async (req, res) => {
           mode: spResponse.mode,
           orderedAt: spResponse.orderedAt
         };
-        // console.log(
-        //   "order info sent to our backend line 59 router------>",
-        //   order
-        // );
-
-        Orders.insert(order);
+        Models.Orders.insert(order);
         res.status(201).json({
           message:
             "You have successfully added this Quote to our DB, spResponse is from SP!",
@@ -62,7 +51,7 @@ router.post("/", async (req, res) => {
 // @access   Private
 router.get("/", async (req, res) => {
   try {
-    const orders = await Orders.find();
+    const orders = await Models.Orders.find();
     res.status(200).json(orders);
   } catch (error) {
     res
@@ -71,12 +60,12 @@ router.get("/", async (req, res) => {
   }
 });
 
-// @desc     Get an order by orderID
-// @route    GET /api/orders/:orderID
+// @desc     Get an order by id
+// @route    GET /api/orders/:id
 // @access   Private
-router.get("/:orderID", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
-    const order = await Orders.findById(req.params.orderID);
+    const order = await Models.Orders.findBy(req.params.id);
     res.status(200).json(order);
   } catch (error) {
     res.status(500).json({
@@ -91,8 +80,12 @@ router.get("/:orderID", async (req, res) => {
 // @access   Private
 router.get("/sporderid/:spOrderID", async (req, res) => {
   try {
-    const order = await Orders.findBySPId(req.params.spOrderID);
-    res.status(200).json(order);
+    const order = await Models.Orders.findBySPId(req.params.spOrderID);
+    if (order) {
+      res.status(200).json({ message: "Found it! ", order });
+    } else {
+      res.status(400).json({ message: "That order could not be found" });
+    }
   } catch (error) {
     res.status(500).json({
       error,
@@ -106,7 +99,7 @@ router.get("/sporderid/:spOrderID", async (req, res) => {
 // @access   Private
 router.get("/ordertoken/:orderToken", async (req, res) => {
   try {
-    const order = await Orders.findByOrderToken(req.params.orderToken);
+    const order = await Models.Orders.findByOrderToken(req.params.orderToken);
     res.status(200).json(order);
   } catch (error) {
     res.status(500).json({
@@ -116,13 +109,13 @@ router.get("/ordertoken/:orderToken", async (req, res) => {
   }
 });
 
-// @desc     Edit an order by orderID
-// @route    PUT /api/orders/:orderID
+// @desc     Edit an order by id
+// @route    PUT /api/orders/:id
 // @access   Private
-router.put("/:orderID", async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
-    const order = await Orders.updateByOrderId(req.params.orderID, req.body);
-    // console.log(order);
+    const order = await Models.Orders.updateById(req.params.id, req.body);
+
     if (order) {
       res.status(200).json({ order, message: "Order info has been updated!" });
     } else {
@@ -141,7 +134,7 @@ router.put("/:orderID", async (req, res) => {
 // @access   Private
 router.put("/ordertoken/:orderToken", async (req, res) => {
   try {
-    const order = await Orders.updateByOrderToken(
+    const order = await Models.Orders.updateByOrderToken(
       req.params.orderToken,
       req.body
     );
@@ -163,7 +156,7 @@ router.put("/ordertoken/:orderToken", async (req, res) => {
 // @access   Private
 router.put("/sporderid/:spOrderID", async (req, res) => {
   try {
-    const order = await Orders.updateBySpOrderID(
+    const order = await Models.Orders.updateBySpOrderID(
       req.params.spOrderID,
       req.body
     );
@@ -180,12 +173,12 @@ router.put("/sporderid/:spOrderID", async (req, res) => {
   }
 });
 
-// @desc     Delete an order by orderID
-// @route    DELETE /api/orders/:orderID
+// @desc     Delete an order by id
+// @route    DELETE /api/orders/:id
 // @access   Private
-router.delete("/:orderID", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
-    const count = await Orders.removeByOrderId(req.params.orderID);
+    const count = await Models.Orders.removeById(req.params.id);
     if (count > 0) {
       res.status(200).json({ message: "this Order has been deleted!" });
     } else {
@@ -204,7 +197,7 @@ router.delete("/:orderID", async (req, res) => {
 // @access   Private
 router.delete("/ordertoken/:orderToken", async (req, res) => {
   try {
-    const count = await Orders.removeByOrderToken(req.params.orderToken);
+    const count = await Models.Orders.removeByOrderToken(req.params.orderToken);
     if (count > 0) {
       res.status(200).json({ message: "this Order has been deleted!" });
     } else {
@@ -223,7 +216,7 @@ router.delete("/ordertoken/:orderToken", async (req, res) => {
 // @access   Private
 router.delete("/sporderid/:spOrderID", async (req, res) => {
   try {
-    const count = await Orders.removeBySpOrderID(req.params.spOrderID);
+    const count = await Models.Orders.removeBySpOrderID(req.params.spOrderID);
     if (count > 0) {
       res.status(200).json({ message: "this Order has been deleted!" });
     } else {

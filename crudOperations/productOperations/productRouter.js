@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Products = require("./productModel");
+const Models = require("../helperVariables/models");
 
 // const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
@@ -10,10 +11,10 @@ router.post("/", async (req, res) => {
   try {
     let product = req.body;
     if (product) {
-      Products.insert(product);
+      Models.Products.insert(product);
       res.status(201).json({
-        product,
-        message: "You have successfully added this product!"
+        message: "You have successfully added this product!",
+        product
       });
     } else {
       res.status(400).json({ message: "please include all required content" });
@@ -58,7 +59,7 @@ router.post("/mockup", async (req, res) => {
 // @access   Private
 router.get("/", async (req, res) => {
   try {
-    const products = await Products.find();
+    const products = await Models.Products.find();
     res.status(200).json(products);
   } catch (error) {
     res
@@ -67,12 +68,12 @@ router.get("/", async (req, res) => {
   }
 });
 
-// @desc     Get an product by productID
-// @route    GET /api/Products/:productID
+// @desc     Get an product by id
+// @route    GET /api/products/:id
 // @access   Private
-router.get("/:productID", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
-    const product = await Products.findById(req.params.productID);
+    const product = await Models.Products.findBy(req.params.id);
     res.status(200).json(product);
   } catch (error) {
     res.status(500).json({
@@ -82,15 +83,13 @@ router.get("/:productID", async (req, res) => {
   }
 });
 
-// @desc     Edit a product by productID
-// @route    PUT /api/Products/:productID
+// @desc     Edit a product by id
+// @route    PUT /api/Products/:id
 // @access   Private
-router.put("/:productID", async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
-    const product = await Products.updateByProductId(
-      req.params.productID,
-      req.body
-    );
+    const product = await Models.Products.updateById(req.params.id, req.body);
+    console.log(product);
     if (product) {
       res
         .status(200)
@@ -106,12 +105,12 @@ router.put("/:productID", async (req, res) => {
   }
 });
 
-// @desc     Delete a product by productID
-// @route    DELETE /api/Products/:productID
+// @desc     Delete a product by id
+// @route    DELETE /api/Products/:id
 // @access   Private
-router.delete("/:productID", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
-    const count = await Products.removeByProductId(req.params.productID);
+    const count = await Models.Products.removeById(req.params.id);
     if (count > 0) {
       res.status(200).json({ message: "this product has been deleted!" });
     } else {

@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Designs = require("../designOperations/designsModel");
+const Models = require("../helperVariables/models");
 // const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
 // @desc     Post a Design
@@ -10,10 +11,10 @@ router.post("/", async (req, res) => {
     let design = req.body;
 
     if (design) {
-      Designs.insert(design);
+      Models.Designs.insert(design);
       res
         .status(201)
-        .json({ design, message: "You have successfully added this Design!" });
+        .json({ message: "You have successfully added this Design!", design });
     } else {
       res.status(400).json({ message: "please include all required content" });
     }
@@ -30,7 +31,7 @@ router.post("/", async (req, res) => {
 // @access   Private
 router.get("/", async (req, res) => {
   try {
-    const designs = await Designs.find();
+    const designs = await Models.Designs.find();
     res.status(200).json(designs);
   } catch (error) {
     res
@@ -44,7 +45,7 @@ router.get("/", async (req, res) => {
 // @access   Private
 router.get("/:designID", async (req, res) => {
   try {
-    const design = await Designs.findById(req.params.designID);
+    const design = await Models.Designs.findBy(req.params.designID);
     res.status(200).json(design);
   } catch (error) {
     res.status(500).json({
@@ -59,14 +60,14 @@ router.get("/:designID", async (req, res) => {
 // @access   Private
 router.put("/:designID", async (req, res) => {
   try {
-    const design = await Designs.updateByDesignId(
+    const design = await Models.Designs.updateById(
       req.params.designID,
       req.body
     );
     if (design) {
       res
         .status(200)
-        .json({ design, message: "Design info has been updated!" });
+        .json({ message: "Design info has been updated!", design });
     } else {
       res.status(404).json({ message: "That design could not be found!" });
     }
@@ -83,7 +84,7 @@ router.put("/:designID", async (req, res) => {
 // @access   Private
 router.delete("/:designID", async (req, res) => {
   try {
-    const count = await Designs.removeByDesignId(req.params.designID);
+    const count = await Models.Designs.removeById(req.params.designID);
     if (count > 0) {
       res.status(200).json({ message: "this Design has been deleted!" });
     } else {

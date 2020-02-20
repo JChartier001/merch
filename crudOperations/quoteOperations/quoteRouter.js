@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const Quotes = require("../quoteOperations/quoteModel");
+const Models = require("../helperVariables/models");
+// const orderHelper = require("../helperVariables/orderHelpers");
 // const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
 // @desc     Post a Quote
@@ -8,16 +10,8 @@ const Quotes = require("../quoteOperations/quoteModel");
 router.post("/", async (req, res) => {
   try {
     let data = req.body;
-
     if (data) {
-      // console.log("----The whole thing passed from FE----", data);
-      // console.log("---Just the id's needed for our BE---", data.quoteInfo);
-      // console.log("---Info to be sent to SP---", data.spInfo);
-
       const spResponse = await Quotes.quoteMaker(data.spInfo);
-
-      // console.log("data sent back from SP after BE post in ROUTER", spResponse);
-
       if (spResponse) {
         let quote = {
           userID: data.quoteInfo.userID,
@@ -31,12 +25,7 @@ router.post("/", async (req, res) => {
           warnings: spResponse.warnings,
           mode: spResponse.mode
         };
-        // console.log(
-        //   "quote info sent to our backend line 32 router------>",
-        //   quote
-        // );
-
-        Quotes.insert(quote);
+        Models.Quotes.insert(quote);
         res.status(201).json({
           message:
             "You have successfully added this Quote to our DB, spResponse is from SP!",
@@ -60,7 +49,7 @@ router.post("/", async (req, res) => {
 // @access   Private
 router.get("/", async (req, res) => {
   try {
-    const quotes = await Quotes.find();
+    const quotes = await Models.Quotes.find();
     // console.log(quotes);
     res.status(200).json(quotes);
   } catch (error) {
@@ -70,12 +59,12 @@ router.get("/", async (req, res) => {
   }
 });
 
-// @desc     Get an quote by quoteID
-// @route    GET /api/quotes/:quoteID
+// @desc     Get an quote by id
+// @route    GET /api/quotes/:id
 // @access   Private
-router.get("/:quoteID", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
-    const quote = await Quotes.findById(req.params.quoteID);
+    const quote = await Models.Quotes.findBy(req.params.id);
     res.status(200).json(quote);
   } catch (error) {
     res.status(500).json({
@@ -90,7 +79,7 @@ router.get("/:quoteID", async (req, res) => {
 // @access   Private
 router.get("/quotetoken/:orderToken", async (req, res) => {
   try {
-    const quote = await Quotes.findByOrderToken(req.params.orderToken);
+    const quote = await Models.Quotes.findByOrderToken(req.params.orderToken);
 
     if (quote) {
       res.status(200).json(quote);
@@ -108,12 +97,12 @@ router.get("/quotetoken/:orderToken", async (req, res) => {
   }
 });
 
-// @desc     Edit a quote by quoteID
-// @route    PUT /api/quotes/:quoteID
+// @desc     Edit a quote by id
+// @route    PUT /api/quotes/:id
 // @access   Private
-router.put("/:quoteID", async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
-    const quote = await Quotes.updateByQuoteId(req.params.quoteID, req.body);
+    const quote = await Models.Quotes.updateById(req.params.id, req.body);
     if (quote) {
       res.status(200).json({ quote, message: "Quote info has been updated!" });
     } else {
@@ -133,13 +122,13 @@ router.put("/:quoteID", async (req, res) => {
 router.put("/ordertokenedit/:orderToken", async (req, res) => {
   try {
     // console.log(req.params.orderToken);
-    const quote = await Quotes.updateByOrderToken(
+    const quote = await Models.Quotes.updateByOrderToken(
       req.params.orderToken,
       req.body
     );
     // console.log(quote);
     if (quote) {
-      res.status(200).json({ quote, message: "Quote info has been updated!" });
+      res.status(200).json({ message: "Quote info has been updated!", quote });
     } else {
       res.status(404).json({ message: "That quote could not be found!" });
     }
@@ -151,12 +140,12 @@ router.put("/ordertokenedit/:orderToken", async (req, res) => {
   }
 });
 
-// @desc     Delete a quote by quoteID
-// @route    DELETE /api/quotes/:quoteID
+// @desc     Delete a quote by id
+// @route    DELETE /api/quotes/:id
 // @access   Private
-router.delete("/:quoteID", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
-    const count = await Quotes.removeByQuoteId(req.params.quoteID);
+    const count = await Models.Quotes.removeById(req.params.id);
     if (count > 0) {
       res.status(200).json({ message: "this Quote has been deleted!" });
     } else {
@@ -175,7 +164,7 @@ router.delete("/:quoteID", async (req, res) => {
 // @access   Private
 router.delete("/ordertoken/:orderToken", async (req, res) => {
   try {
-    const count = await Quotes.removeByOrderToken(req.params.orderToken);
+    const count = await Models.Quotes.removeByOrderToken(req.params.orderToken);
     if (count > 0) {
       res.status(200).json({ message: "this Quote has been deleted!" });
     } else {
