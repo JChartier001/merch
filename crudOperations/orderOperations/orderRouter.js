@@ -60,12 +60,12 @@ router.get("/", async (req, res) => {
   }
 });
 
-// @desc     Get an order by orderID
-// @route    GET /api/orders/:orderID
+// @desc     Get an order by id
+// @route    GET /api/orders/:id
 // @access   Private
-router.get("/:orderID", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
-    const order = await Models.Orders.findById(req.params.orderID);
+    const order = await Models.Orders.findBy(req.params.id);
     res.status(200).json(order);
   } catch (error) {
     res.status(500).json({
@@ -115,7 +115,7 @@ router.get("/ordertoken/:orderToken", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const order = await Models.Orders.updateById(req.params.id, req.body);
-    // console.log(order);
+
     if (order) {
       res.status(200).json({ order, message: "Order info has been updated!" });
     } else {

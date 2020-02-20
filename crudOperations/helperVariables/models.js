@@ -148,5 +148,6 @@ const Stores = new Model("stores");
 const Designs = new Model("designs");
 const Quotes = new Model("quotes");
 const Orders = new Model("orders");
+const Products = new Model("products");
 
-module.exports = { Users, Stores, Designs, Quotes, Orders };
+module.exports = { Users, Stores, Designs, Quotes, Orders, Products };
