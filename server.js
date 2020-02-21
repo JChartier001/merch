@@ -12,6 +12,7 @@ const orderRouter = require("./crudOperations/orderOperations/orderRouter");
 const quoteRouter = require("./crudOperations/quoteOperations/quoteRouter");
 const designsRouter = require("./crudOperations/designOperations/designsRouter");
 const productRouter = require("./crudOperations/productOperations/productRouter");
+const paymentRouter = require("./crudOperations/paymentOperations/paymentRouter");
 
 const server = express();
 
@@ -20,7 +21,7 @@ server.use(cors());
 server.use(express.json());
 
 server.use(
-  morgan(function(tokens, req, res) {
+  morgan(function (tokens, req, res) {
     return [
       tokens.method(req, res),
       tokens.url(req, res),
@@ -48,6 +49,7 @@ server.use("/api/orders", orderRouter);
 server.use("/api/quotes", quoteRouter);
 server.use("/api/designs", designsRouter);
 server.use("/api/products", productRouter);
+server.use("/api/payments", paymentRouter);
 
 //testing that the server works
 server.get("/", (req, res) => {
