@@ -8,11 +8,36 @@ class Model {
   insert(newItem) {
     return db(this.tableName)
       .insert(newItem)
-      .then(ids => {
+      .then((ids) => {
         const [id] = ids;
         return this.findBy(id);
       });
   }
+
+  // I'm not really sure how the above function is suppoosed to work.
+  //  I'm assuming it works in SQLite because of whatever the default response is after doing an insert
+  // PostgreSQL makes use of the .returning method to define which columns are included in the response object when doing
+  //  POST and PUT requests. This is the reason I started using the same flavor of database from development to production.
+  //
+  // The function below is the one I used. I think the class and method solution works really well for GET and DELETE
+  //  but the POST and PUT need a little more flexibility. Maybe that can be worked in, or they need a different approach.
+  async insertProduct(newItem) {
+    const [addedItem] = await db(this.tableName)
+      .returning([
+        "id",
+        "productName",
+        "fullSizeURL",
+        "thumbnailURL",
+        "description",
+        "price",
+        "storeID"
+      ])
+      .insert(newItem);
+
+    return addedItem;
+  }
+  // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   find() {
     return db(this.tableName).select("*");
@@ -64,7 +89,7 @@ class Model {
     return db(this.tableName)
       .where("id", id)
       .update(changes)
-      .then(changesMade => {
+      .then((changesMade) => {
         if (changesMade > 0) {
           return this.findBy(id);
         } else {
@@ -77,7 +102,7 @@ class Model {
     return db(this.tableName)
       .where("username", username)
       .update(changes)
-      .then(changesMade => {
+      .then((changesMade) => {
         if (changesMade > 0) {
           return this.findByUsername(username);
         } else {
@@ -90,7 +115,7 @@ class Model {
     return db(this.tableName)
       .where("orderToken", orderToken)
       .update(changes)
-      .then(changesMade => {
+      .then((changesMade) => {
         if (changesMade > 0) {
           return this.findByOrderToken(orderToken);
         } else {
@@ -103,7 +128,7 @@ class Model {
     return db(this.tableName)
       .where("spOrderID", spOrderID)
       .update(changes)
-      .then(count => {
+      .then((count) => {
         if (count > 0) {
           return this.findBySPId(spOrderID);
         } else {

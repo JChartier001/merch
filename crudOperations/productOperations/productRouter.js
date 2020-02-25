@@ -11,11 +11,25 @@ router.post("/", async (req, res) => {
   try {
     let product = req.body;
     if (product) {
-      Models.Products.insert(product);
-      res.status(201).json({
-        message: "You have successfully added this product!",
-        product
-      });
+      // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      // This doesn't stop code coming in that doesn't have all the pieces. The storeID was the missing link here. I still don't know where
+      // the frontend is supposed to pull that from. Hardcoding is fine for now, but is that supposed to be in local storage?
+
+      // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      // --
+      let addedProduct = await Models.Products.insertProduct(product);
+
+      // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      // This was returning the body that the frontend sent. Doing it this way allows you to control what gets sent back
+      // in the response both omitting unnecessary parts from long, complex request bodies, and adding any additions
+      // that have been made server-side (the product's ID in this case)
+      //
+      // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      res.status(201).json(addedProduct);
     } else {
       res.status(400).json({ message: "please include all required content" });
     }
@@ -74,7 +88,11 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const product = await Models.Products.findBy(req.params.id);
-    res.status(200).json(product);
+    if (product) {
+      res.status(200).json(product);
+    } else {
+      res.status(406).json("PRODUCT AIN'T EXIST YO");
+    }
   } catch (error) {
     res.status(500).json({
       error,
