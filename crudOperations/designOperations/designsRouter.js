@@ -9,12 +9,22 @@ const Models = require("../helperVariables/models");
 router.post("/", async (req, res) => {
   try {
     let design = req.body;
+    let returnTables = [
+      "id",
+      "design_name",
+      "design_url",
+      "storeID",
+      "userID"
+    ];
 
     if (design) {
-      Models.Designs.insert(design);
-      res
-        .status(201)
-        .json({ message: "You have successfully added this Design!", design });
+      let addedDesign = await Models.addEntry(
+        "designs",
+        design,
+        returnTables
+      );
+
+      res.status(201).json(addedDesign);
     } else {
       res.status(400).json({ message: "please include all required content" });
     }
@@ -45,7 +55,7 @@ router.get("/", async (req, res) => {
 // @access   Private
 router.get("/:designID", async (req, res) => {
   try {
-    const design = await Models.Designs.findBy(req.params.designID);
+    const design = await Models.Designs.findById(req.params.designID);
     res.status(200).json(design);
   } catch (error) {
     res.status(500).json({

@@ -65,7 +65,7 @@ router.get("/", async (req, res) => {
 // @access   Private
 router.get("/:id", async (req, res) => {
   try {
-    const order = await Models.Orders.findBy(req.params.id);
+    const order = await Models.Orders.findById(req.params.id);
     res.status(200).json(order);
   } catch (error) {
     res.status(500).json({

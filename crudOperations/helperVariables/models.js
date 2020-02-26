@@ -5,47 +5,23 @@ class Model {
     this.tableName = tableName;
   }
 
-  insert(newItem) {
-    return db(this.tableName)
-      .insert(newItem)
-      .then((ids) => {
-        const [id] = ids;
-        return this.findBy(id);
-      });
-  }
+  // insert(newItem) {
+  //   return db(this.tableName)
+  //     .insert(newItem)
+  //     .then((ids) => {
+  //       const [id] = ids;
+  //       return this.findBy(id);
+  //     });
+  // }
 
-  // I'm not really sure how the above function is suppoosed to work.
-  //  I'm assuming it works in SQLite because of whatever the default response is after doing an insert
-  // PostgreSQL makes use of the .returning method to define which columns are included in the response object when doing
-  //  POST and PUT requests. This is the reason I started using the same flavor of database from development to production.
-  //
-  // The function below is the one I used. I think the class and method solution works really well for GET and DELETE
-  //  but the POST and PUT need a little more flexibility. Maybe that can be worked in, or they need a different approach.
-  async insertProduct(newItem) {
-    const [addedItem] = await db(this.tableName)
-      .returning([
-        "id",
-        "productName",
-        "fullSizeURL",
-        "thumbnailURL",
-        "description",
-        "price",
-        "storeID"
-      ])
-      .insert(newItem);
-
-    return addedItem;
-  }
-  // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   find() {
     return db(this.tableName).select("*");
   }
 
-  findBy(filter) {
+  findById(id) {
     return db(this.tableName)
-      .where("id", filter)
+      .where("id", id)
       .select("*")
       .first();
   }
@@ -77,13 +53,15 @@ class Model {
       .select("*")
       .first();
   }
-  //for finding user associated with id passed
-  findById(id) {
-    return db("users")
-      .where("id", id)
-      .select("*")
-      .first();
-  }
+  //for finding entry associated with id passed
+  // findById(tableName, id) {
+  //   return db(tableName)
+  //     .where("id", id)
+  //     .select("*")
+  //     .first();
+  // }
+
+  // ^^^^^ Refactored findBy function above to handle this as well as all other find by ids
 
   updateById(id, changes) {
     return db(this.tableName)
@@ -175,4 +153,17 @@ const Quotes = new Model("quotes");
 const Orders = new Model("orders");
 const Products = new Model("products");
 
-module.exports = { Users, Stores, Designs, Quotes, Orders, Products };
+// POST AND PUT FUNCTIONS HERE
+
+async function addEntry(tableName, entry, returnTables) {
+  const [addedItem] = await db(tableName)
+    .returning(returnTables)
+    .insert(entry);
+
+  return addedItem;
+}
+
+
+
+
+module.exports = { Users, Stores, Designs, Quotes, Orders, Products, addEntry };
