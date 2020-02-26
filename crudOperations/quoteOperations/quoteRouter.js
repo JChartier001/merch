@@ -64,7 +64,7 @@ router.get("/", async (req, res) => {
 // @access   Private
 router.get("/:id", async (req, res) => {
   try {
-    const quote = await Models.Quotes.findBy(req.params.id);
+    const quote = await Models.Quotes.findById(req.params.id);
     res.status(200).json(quote);
   } catch (error) {
     res.status(500).json({

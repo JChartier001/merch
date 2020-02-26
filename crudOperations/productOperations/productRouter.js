@@ -10,12 +10,23 @@ const Models = require("../helperVariables/models");
 router.post("/", async (req, res) => {
   try {
     let product = req.body;
+    let returnTables = [
+      "id",
+      "productName",
+      "fullSizeURL",
+      "thumbnailURL",
+      "description",
+      "price",
+      "storeID"
+    ];
     if (product) {
-      Models.Products.insert(product);
-      res.status(201).json({
-        message: "You have successfully added this product!",
-        product
-      });
+      let addedProduct = await Models.addEntry(
+        "products",
+        product,
+        returnTables
+      );
+
+      res.status(201).json(addedProduct);
     } else {
       res.status(400).json({ message: "please include all required content" });
     }
@@ -73,8 +84,12 @@ router.get("/", async (req, res) => {
 // @access   Private
 router.get("/:id", async (req, res) => {
   try {
-    const product = await Models.Products.findBy(req.params.id);
-    res.status(200).json(product);
+    const product = await Models.Products.findById(req.params.id);
+    if (product) {
+      res.status(200).json(product);
+    } else {
+      res.status(406).json("PRODUCT AIN'T EXIST YO");
+    }
   } catch (error) {
     res.status(500).json({
       error,
