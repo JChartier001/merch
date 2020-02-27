@@ -8,8 +8,8 @@
   "scripts": {
     "start": "node index.js",
     "server": "nodemon index.js",
-    "test": "jest --watch --detectOpenHandles --forceExit",
-    "coverage": "CI=true yarn test --coverage || true"
+    "test": "jest --detectOpenHandles --forceExit ",
+    "coverage": "jest --coverage --detectOpenHandles --forceExit || true"
   },
   "jest": {
     "testEnvironment": "node",
