@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
 // @access   Private
 router.get("/:id", async (req, res) => {
   try {
-    const user = await Models.Users.findBy(req.params.id);
+    const user = await Models.Users.findById(req.params.id);
     if (user) {
       res.status(200).json(user);
     } else {
