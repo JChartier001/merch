@@ -1,4 +1,18 @@
 module.exports = {
+  // development: {
+  //   client: 'pg',
+  //   connection: 'postgres://localhost:5432/',
+  //   pool: {
+  //     min: 2,
+  //     max: 10},
+  //   migrations: {
+  //     directory: './databaseOperations/migrations'
+  //   },
+  //   seeds: {
+  //     directory: './databaseOperations/seeds'
+  //   },
+  //   useNullAsDefault: true
+  // },
   development: {
     client: "sqlite3",
     useNullAsDefault: true,
@@ -21,7 +35,7 @@ module.exports = {
   testing: {
     client: "sqlite3",
     connection: {
-      filename: './databaseOperations/test.db3',
+      filename: "./databaseOperations/test.db3"
     },
     useNullAsDefault: true,
     pool: {

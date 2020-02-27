@@ -7,21 +7,22 @@ const Models = require("../crudOperations/helperVariables/models");
 // const validateRegisterInfo = require("./authMiddleware/verifyRegisterInfo");
 // const validateLoginInfo = require("./authMiddleware/verifyLoginInfo");
 
-router.post("/register", (req, res) => {
-  let newUser = req.body;
-  const hash = bcrypt.hashSync(newUser.password, 12);
-  newUser.password = hash;
+router.post("/register", async (req, res) => {
+  try {
+    let newUser = req.body;
+    const hash = bcrypt.hashSync(newUser.password, 12);
+    newUser.password = hash;
 
-  Models.Users.insert(newUser)
-    .then(newUser => {
-      res.status(201).json({ message: "created new user!! ", newUser });
-    })
-    .catch(error => {
-      res.status(500).json({
-        error,
-        message: "Username Must be Unique, please choose another"
-      });
+    let returnTables = ["id", "username", "email"];
+
+    let addedUser = Models.addEntry("users", newUser, returnTables);
+    res.status(201).json(addedUser);
+  } catch (error) {
+    res.status(500).json({
+      error,
+      message: "Username Must be Unique, please choose another"
     });
+  }
 });
 
 router.post("/login", (req, res) => {
@@ -29,7 +30,7 @@ router.post("/login", (req, res) => {
 
   Models.Users.findByUsername(username)
     .first()
-    .then(user => {
+    .then((user) => {
       if (user && bcrypt.compareSync(password, user.password)) {
         const token = generateToken(user);
         res.status(200).json({
@@ -40,7 +41,7 @@ router.post("/login", (req, res) => {
         res.status(401).json({ message: "Invalid credentials" });
       }
     })
-    .catch(error => {
+    .catch((error) => {
       // console.log(error);
       res
         .status(500)

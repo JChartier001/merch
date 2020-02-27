@@ -3,6 +3,7 @@ exports.up = function(knex) {
     designs.increments("id").primary();
     designs.string("design_name", 255).notNullable();
     designs.string("design_url", 255).notNullable();
+    designs.string("thumbnail_url", 255).notNullable();
     designs
       .integer("storeID")
       .notNullable()

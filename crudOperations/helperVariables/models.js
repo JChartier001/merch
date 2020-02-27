@@ -5,22 +5,23 @@ class Model {
     this.tableName = tableName;
   }
 
-  insert(newItem) {
-    return db(this.tableName)
-      .insert(newItem)
-      .then(ids => {
-        const [id] = ids;
-        return this.findBy(id);
-      });
-  }
+  // insert(newItem) {
+  //   return db(this.tableName)
+  //     .insert(newItem)
+  //     .then((ids) => {
+  //       const [id] = ids;
+  //       return this.findBy(id);
+  //     });
+  // }
+
 
   find() {
     return db(this.tableName).select("*");
   }
 
-  findBy(filter) {
+  findById(id) {
     return db(this.tableName)
-      .where("id", filter)
+      .where("id", id)
       .select("*")
       .first();
   }
@@ -52,19 +53,21 @@ class Model {
       .select("*")
       .first();
   }
-  //for finding user associated with id passed
-  findById(id) {
-    return db("users")
-      .where("id", id)
-      .select("*")
-      .first();
-  }
+  //for finding entry associated with id passed
+  // findById(tableName, id) {
+  //   return db(tableName)
+  //     .where("id", id)
+  //     .select("*")
+  //     .first();
+  // }
+
+  // ^^^^^ Refactored findBy function above to handle this as well as all other find by ids
 
   updateById(id, changes) {
     return db(this.tableName)
       .where("id", id)
       .update(changes)
-      .then(changesMade => {
+      .then((changesMade) => {
         if (changesMade > 0) {
           return this.findBy(id);
         } else {
@@ -77,7 +80,7 @@ class Model {
     return db(this.tableName)
       .where("username", username)
       .update(changes)
-      .then(changesMade => {
+      .then((changesMade) => {
         if (changesMade > 0) {
           return this.findByUsername(username);
         } else {
@@ -90,7 +93,7 @@ class Model {
     return db(this.tableName)
       .where("orderToken", orderToken)
       .update(changes)
-      .then(changesMade => {
+      .then((changesMade) => {
         if (changesMade > 0) {
           return this.findByOrderToken(orderToken);
         } else {
@@ -103,7 +106,7 @@ class Model {
     return db(this.tableName)
       .where("spOrderID", spOrderID)
       .update(changes)
-      .then(count => {
+      .then((count) => {
         if (count > 0) {
           return this.findBySPId(spOrderID);
         } else {
@@ -150,4 +153,17 @@ const Quotes = new Model("quotes");
 const Orders = new Model("orders");
 const Products = new Model("products");
 
-module.exports = { Users, Stores, Designs, Quotes, Orders, Products };
+// POST AND PUT FUNCTIONS HERE
+
+async function addEntry(tableName, entry, returnTables) {
+  const [addedItem] = await db(tableName)
+    .returning(returnTables)
+    .insert(entry);
+
+  return addedItem;
+}
+
+
+
+
+module.exports = { Users, Stores, Designs, Quotes, Orders, Products, addEntry };
