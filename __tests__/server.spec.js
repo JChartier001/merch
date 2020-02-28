@@ -17,7 +17,7 @@ describe("ROUTE TESTING", () => {
   });
 
   //   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  SERVER STATUS  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   //
-  describe("Should be in testing enviroment", () => {
+  describe("Should be in testing environment", () => {
     it("should be in testing environment", () => {
       expect(process.env.DB_ENV).toBe("testing");
     });
@@ -25,11 +25,11 @@ describe("ROUTE TESTING", () => {
   describe("Checking server status", () => {
     describe("Sanity check", () => {
       it("should return an OK status code from the index route", async () => {
-        const expectedStatusCode = 200;
+        const expectedStatus = 200;
 
         const response = await request(server).get("/");
 
-        expect(response.status).toEqual(expectedStatusCode);
+        expect(response.status).toEqual(expectedStatus);
       });
       it("should return a JSON object from the index route", async () => {
         const expectedBody = {
@@ -135,7 +135,7 @@ describe("ROUTE TESTING", () => {
         request(server)
           .get("/api/users/")
           .then(response => {
-            expect(response.statusCode).toBe(200);
+            expect(response.status).toBe(200);
             done();
           });
       });
@@ -146,7 +146,7 @@ describe("ROUTE TESTING", () => {
         request(server)
           .get("/api/users/1")
           .then(response => {
-            expect(response.statusCode).toBe(200);
+            expect(response.status).toBe(200);
             done();
           });
       });
@@ -176,7 +176,7 @@ describe("ROUTE TESTING", () => {
         request(server)
           .get("/api/users/username/TESTUSER")
           .then(response => {
-            expect(response.statusCode).toBe(200);
+            expect(response.status).toBe(200);
             done();
           });
       });
@@ -202,17 +202,23 @@ describe("ROUTE TESTING", () => {
     });
 
     describe("Edit a user by username", () => {
-      it("PUT /api/users/username/:username", done => {
+      it("PUT /api/users/:username", done => {
         request(server)
-          .get("/api/users/username/TESTUSER")
+          .put("/api/users/TESTUSER")
+          .send({
+            first_name: "TESTUSEREDITED"
+          })
           .then(response => {
-            expect(response.statusCode).toBe(200);
+            expect(response.status).toBe(200);
             done();
           });
       });
       it("Edit a user that doesn't exist - status check", done => {
         request(server)
-          .get("/api/users/username/DoesntExist")
+          .put("/api/users/DoesntExist")
+          .send({
+            first_name: "TESTUSEREDITED"
+          })
           .then(response => {
             expect(response.status).toBe(404);
 
@@ -221,7 +227,10 @@ describe("ROUTE TESTING", () => {
       });
       it("Edit a user that doesn't exist - message check", done => {
         request(server)
-          .get("/api/users/username/DoesntExist")
+          .put("/api/users/DoesntExist")
+          .send({
+            first_name: "TESTUSEREDITED"
+          })
           .then(response => {
             const expectedBody = { message: "That user could not be found!" };
             expect(response.body).toEqual(expectedBody);
@@ -232,17 +241,17 @@ describe("ROUTE TESTING", () => {
     });
 
     describe("Delete a user by username", () => {
-      it("PUT /api/users/username/:username", done => {
+      it("DELETE /api/users/:username", done => {
         request(server)
-          .get("/api/users/username/TESTUSER")
+          .delete("/api/users/TESTUSER")
           .then(response => {
-            expect(response.statusCode).toBe(200);
+            expect(response.status).toBe(200);
             done();
           });
       });
       it("Delete a user that doesn't exist - status check", done => {
         request(server)
-          .get("/api/users/username/DoesntExist")
+          .delete("/api/users/DoesntExist")
           .then(response => {
             expect(response.status).toBe(404);
 
@@ -251,9 +260,9 @@ describe("ROUTE TESTING", () => {
       });
       it("Delete a user that doesn't exist - message check", done => {
         request(server)
-          .get("/api/users/username/DoesntExist")
+          .delete("/api/users/DoesntExist")
           .then(response => {
-            const expectedBody = { message: "That user could not be found!" };
+            const expectedBody = { message: "User unable to be deleted!" };
             expect(response.body).toEqual(expectedBody);
 
             done();
@@ -263,18 +272,221 @@ describe("ROUTE TESTING", () => {
 
     //   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  STORE ROUTES  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   //
 
-    //   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  DESIGN ROUTES  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   //
+    describe("STORE ROUTES", () => {
+      describe("should insert provided store into the database", () => {
+        it("POST /api/stores", async () => {
+          await request(server)
+            .post("/api/stores")
+            .send({
+              active: 1,
+              store_name: "NewStore",
+              hero_ImageURL:
+                "https://www.dalesjewelers.com/wp-content/uploads/2018/10placeholder-silhouette-male.png",
+              logo_url: "https://uxmasters.org/images/ant_logo.svg",
+              userID: 1
+            })
+            .then(res => {
+              expect(res.status).toBe(201);
+            });
+        });
 
-    //   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  PRODUCT STATUS  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   //
+        // Need to figure out this validation
+        // it("Try to post store with taken store name", async () => {
+        //   await request(server)
+        //     .post("/api/stores")
+        //     .send({
+        //       active: 1,
+        //       store_name: "NewStore",
+        //       hero_ImageURL:
+        //         "https://www.dalesjewelers.com/wp-content/uploads/2018/10placeholder-silhouette-male.png",
+        //       logo_url: "https://uxmasters.org/images/ant_logo.svg",
+        //       userID: 1
+        //     })
+        //     .then(res => {
+        //       expect(res.status).toBe(400);
+        //     });
+        // });
 
-    //   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  QUOTE ROUTES  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   //
+        it("Try to insert store without everything required", async () => {
+          await request(server)
+            .post("/api/stores")
+            .send({
+              active: 1,
+              //missing store name
+              hero_ImageURL:
+                "https://www.dalesjewelers.com/wp-content/uploads/2018/10placeholder-silhouette-male.png",
+              logo_url: "https://uxmasters.org/images/ant_logo.svg",
+              userID: 1
+            })
+            .then(res => {
+              expect(res.status).toBe(400);
+            });
+        });
+      });
 
-    //   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  ORDER ROUTES  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   //
+      describe("Gets all stores", () => {
+        it("GET /api/stores", done => {
+          request(server)
+            .get("/api/stores/")
+            .then(response => {
+              expect(response.status).toBe(200);
+              done();
+            });
+        });
+      });
 
-    //   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  PRODUCT STATUS  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   //
+      describe("Get a store by id", () => {
+        it("GET /api/stores/1", done => {
+          request(server)
+            .get("/api/stores/1")
+            .then(response => {
+              expect(response.status).toBe(200);
+              done();
+            });
+        });
+        it("Get a store that doesn't exist - status check", done => {
+          request(server)
+            .get("/api/stores/999")
+            .then(response => {
+              expect(response.status).toBe(404);
 
-    // it('', () => {
-    // placeholder
-    // })
+              done();
+            });
+        });
+        it("Get a store that doesn't exist - message check", done => {
+          request(server)
+            .get("/api/stores/999")
+            .then(response => {
+              const expectedBody = {
+                message: "That store could not be found!"
+              };
+              expect(response.body).toEqual(expectedBody);
+
+              done();
+            });
+        });
+      });
+
+      describe("Get store by name", () => {
+        it("GET /api/stores/storename/:store_name", done => {
+          request(server)
+            .get("/api/stores/storename/NewStore")
+            .then(response => {
+              expect(response.status).toBe(200);
+              done();
+            });
+        });
+        it("Get a store that doesn't exist - status check", done => {
+          request(server)
+            .get("/api/stores/storename/DoesntExist")
+            .then(response => {
+              expect(response.status).toBe(404);
+
+              done();
+            });
+        });
+        it("Get a store that doesn't exist - message check", done => {
+          request(server)
+            .get("/api/stores/storename/DoesntExist")
+            .then(response => {
+              const expectedBody = {
+                message:
+                  "Please enter a valid store name, keep in mind that store names are case sensitive"
+              };
+              expect(response.body).toEqual(expectedBody);
+
+              done();
+            });
+        });
+      });
+
+      describe("Edit a store by id", () => {
+        it("PUT /api/stores/:id", done => {
+          request(server)
+            .put("/api/stores/1")
+            .send({
+              store_name: "NewStoreEDITED"
+            })
+            .then(response => {
+              expect(response.status).toBe(200);
+              done();
+            });
+        });
+        it("Edit a store that doesn't exist - status check", done => {
+          request(server)
+            .put("/api/stores/999")
+            .send({
+              store_name: "NewStoreEDITED"
+            })
+            .then(response => {
+              expect(response.status).toBe(404);
+
+              done();
+            });
+        });
+        it("Edit a store that doesn't exist - message check", done => {
+          request(server)
+            .put("/api/stores/999")
+            .send({
+              store_name: "NewStoreEDITED"
+            })
+            .then(response => {
+              const expectedBody = {
+                message: "That store could not be found!"
+              };
+              expect(response.body).toEqual(expectedBody);
+
+              done();
+            });
+        });
+      });
+
+      describe("Delete a store by storename", () => {
+        it("DELETE /api/stores/:storename", done => {
+          request(server)
+            .delete("/api/stores/NewStore")
+            .then(response => {
+              expect(response.status).toBe(200);
+              done();
+            });
+        });
+        it("Delete a store that doesn't exist - status check", done => {
+          request(server)
+            .delete("/api/stores/DoesntExist")
+            .then(response => {
+              expect(response.status).toBe(404);
+
+              done();
+            });
+        });
+        it("Delete a store that doesn't exist - message check", done => {
+          request(server)
+            .delete("/api/stores/DoesntExist")
+            .then(response => {
+              const expectedBody = {
+                message:
+                  "Please enter a valid store name, keep in mind that store names are case sensitive"
+              };
+              expect(response.body).toEqual(expectedBody);
+
+              done();
+            });
+        });
+      });
+
+      //   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  DESIGN ROUTES  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   //
+
+      //   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  PRODUCT STATUS  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   //
+
+      //   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  QUOTE ROUTES  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   //
+
+      //   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  ORDER ROUTES  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   //
+
+      //   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  PRODUCT STATUS  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   //
+
+      // it('', () => {
+      // placeholder
+      // })
+    });
   });
 });
