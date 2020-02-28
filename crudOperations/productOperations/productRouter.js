@@ -27,9 +27,11 @@ router.post("/", async (req, res) => {
       );
 
       res.status(201).json(addedProduct);
-    } else {
-      res.status(400).json({ message: "please include all required content" });
     }
+    //needs validations middleware
+    // else {
+    //   res.status(400).json({ message: "please include all required content" });
+    // }
   } catch (error) {
     res.status(500).json({
       error,
@@ -54,9 +56,10 @@ router.post("/mockup", async (req, res) => {
           URL
         });
       }
-    } else {
-      res.status(400).json({ message: "please include all required content" });
-    }
+    } //Needs validation middleware
+    // else {
+    //   res.status(400).json({ message: "please include all required content" });
+    // }
   } catch (error) {
     res.status(500).json({
       error,
@@ -88,12 +91,12 @@ router.get("/:id", async (req, res) => {
     if (product) {
       res.status(200).json(product);
     } else {
-      res.status(406).json("PRODUCT AIN'T EXIST YO");
+      res.status(404).json({ message: "That product could not be found!" });
     }
   } catch (error) {
     res.status(500).json({
       error,
-      message: "Unable to find this quote id, its not you.. its me"
+      message: "Unable to find this product id, its not you.. its me"
     });
   }
 });

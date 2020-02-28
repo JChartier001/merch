@@ -35,9 +35,11 @@ router.post("/", async (req, res) => {
           spResponse
         });
       }
-    } else {
-      res.status(400).json({ message: "please include all required content" });
     }
+    //figure out to verify duplicate or missing data
+    // else {
+    //   res.status(400).json({ message: "please include all required content" });
+    // }
   } catch (error) {
     res.status(500).json({
       error,
@@ -66,7 +68,13 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const order = await Models.Orders.findById(req.params.id);
-    res.status(200).json(order);
+    if (order) {
+      res.status(200).json(order);
+    } else {
+      res
+        .status(404)
+        .json({ message: "Unable to find this order, double check the id" });
+    }
   } catch (error) {
     res.status(500).json({
       error,
@@ -84,7 +92,9 @@ router.get("/sporderid/:spOrderID", async (req, res) => {
     if (order) {
       res.status(200).json({ message: "Found it! ", order });
     } else {
-      res.status(400).json({ message: "That order could not be found" });
+      res
+        .status(404)
+        .json({ message: "Unable to find this order, double check the id" });
     }
   } catch (error) {
     res.status(500).json({
@@ -100,7 +110,13 @@ router.get("/sporderid/:spOrderID", async (req, res) => {
 router.get("/ordertoken/:orderToken", async (req, res) => {
   try {
     const order = await Models.Orders.findByOrderToken(req.params.orderToken);
-    res.status(200).json(order);
+    if (order) {
+      res.status(200).json({ message: "Found it! ", order });
+    } else {
+      res
+        .status(404)
+        .json({ message: "Unable to find this order, double check the id" });
+    }
   } catch (error) {
     res.status(500).json({
       error,
