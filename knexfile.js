@@ -29,10 +29,10 @@ module.exports = {
       max: 10
     },
     migrations: {
-      directory: "./databaseOperations/testMigrations"
+      directory: "./databaseOperations/migrations"
     },
     seeds: {
-      directory: "./databaseOperations/testSeeds"
+      directory: "./databaseOperations/seeds"
     }
   },
   ////////////////////////////////////////////////////////

@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>18/18</span>
             </div>
         
             
@@ -36,16 +36,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>18/18</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -93,68 +93,68 @@
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a>
 <a name='L37'></a><a href='#L37'>37</a>
-<a name='L38'></a><a href='#L38'>38</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<a name='L38'></a><a href='#L38'>38</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >exports.up = <span class="fstat-no" title="function not covered" >fu</span>nction(knex) {</span>
-<span class="cstat-no" title="statement not covered" >  return knex.schema.createTable("orders", <span class="fstat-no" title="function not covered" >or</span>ders =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    orders.increments("id").primary();</span>
-<span class="cstat-no" title="statement not covered" >    orders.string("status", 255).notNullable();</span>
-<span class="cstat-no" title="statement not covered" >    orders.decimal("total", null).notNullable();</span>
-<span class="cstat-no" title="statement not covered" >    orders.decimal("subtotal", null).notNullable();</span>
-<span class="cstat-no" title="statement not covered" >    orders.decimal("tax", null).notNullable();</span>
-<span class="cstat-no" title="statement not covered" >    orders.decimal("fees", null).notNullable();</span>
-<span class="cstat-no" title="statement not covered" >    orders.decimal("shipping", null).notNullable();</span>
-<span class="cstat-no" title="statement not covered" >    orders</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">exports.up = function(knex) {
+  return knex.schema.createTable("orders", orders =&gt; {
+    orders.increments("id").primary();
+    orders.string("status", 255).notNullable();
+    orders.decimal("total", null).notNullable();
+    orders.decimal("subtotal", null).notNullable();
+    orders.decimal("tax", null).notNullable();
+    orders.decimal("fees", null).notNullable();
+    orders.decimal("shipping", null).notNullable();
+    orders
       .string("orderToken", 255)
       .unique()
       .notNullable();
-<span class="cstat-no" title="statement not covered" >    orders.string("spOrderID", 255).notNullable();</span>
-<span class="cstat-no" title="statement not covered" >    orders.string("mode", 255).notNullable();</span>
-<span class="cstat-no" title="statement not covered" >    orders.string("orderedAt", 255).notNullable();</span>
-<span class="cstat-no" title="statement not covered" >    orders.timestamps(true, true);</span>
-<span class="cstat-no" title="statement not covered" >    orders</span>
+    orders.string("spOrderID", 255).notNullable();
+    orders.string("mode", 255).notNullable();
+    orders.string("orderedAt", 255).notNullable();
+    orders.timestamps(true, true);
+    orders
       .integer("storeID")
       .notNullable()
       .references("id")
       .inTable("stores")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");
-<span class="cstat-no" title="statement not covered" >    orders</span>
+    orders
       .integer("userID")
       .notNullable()
       .references("id")
@@ -164,8 +164,8 @@
   });
 };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >exports.down = <span class="fstat-no" title="function not covered" >fu</span>nction(knex) {</span>
-<span class="cstat-no" title="statement not covered" >  return knex.schema.dropTableIfExists("orders");</span>
+exports.down = function(knex) {
+  return knex.schema.dropTableIfExists("orders");
 };
 &nbsp;</pre></td></tr></table></pre>
 
@@ -174,7 +174,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Feb 27 2020 17:21:56 GMT-0500 (Eastern Standard Time)
+                at Thu Feb 27 2020 22:04:03 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="..\..\..\prettify.js"></script>

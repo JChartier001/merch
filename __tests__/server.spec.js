@@ -1,10 +1,9 @@
 const server = require("../server");
 const request = require("supertest");
 const db = require("../databaseOperations/db-config");
-const Users = require("../crudOperations/userOperations/userModel");
-const knex = require("knex");
+// const Users = require("../crudOperations/userOperations/userModel");
 
-describe("test suite", () => {
+describe("ROUTE TESTING", () => {
   beforeAll(async () => {
     return (
       await db.migrate.rollback(),
@@ -13,12 +12,18 @@ describe("test suite", () => {
     );
   });
 
-  afterAll(() => {
-    return db.migrate.rollback().then(() => db.destroy());
+  afterAll(async () => {
+    return await db.migrate.rollback();
   });
 
-  describe("server.js", () => {
-    describe("index route", () => {
+  //   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  SERVER STATUS  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   //
+  describe("Should be in testing enviroment", () => {
+    it("should be in testing environment", () => {
+      expect(process.env.DB_ENV).toBe("testing");
+    });
+  });
+  describe("Checking server status", () => {
+    describe("Sanity check", () => {
       it("should return an OK status code from the index route", async () => {
         const expectedStatusCode = 200;
 
@@ -26,7 +31,6 @@ describe("test suite", () => {
 
         expect(response.status).toEqual(expectedStatusCode);
       });
-
       it("should return a JSON object from the index route", async () => {
         const expectedBody = {
           status: "The Merch Dropper server is running!!"
@@ -36,7 +40,6 @@ describe("test suite", () => {
 
         expect(response.body).toEqual(expectedBody);
       });
-
       it("should return a JSON object from the index route", async () => {
         const response = await request(server).get("/");
 
@@ -45,66 +48,90 @@ describe("test suite", () => {
     });
   });
 
-  describe("user model", () => {
-    describe("insert()", () => {
-      it("should insert provided user into the database", async () => {
-        await Users.insert({
-          first_name: "Mark",
-          last_name: "john",
-          username: "markJohn",
-          password: "secret",
-          seller: true,
-          stripe_account: "anything",
-          address1: "cool address",
-          city: "Chicago",
-          state: "IL",
-          zip_code: 60602,
-          country: "Merica",
-          email: "something@something.com"
-        });
-        await Users.insert({
-          first_name: "Mark",
-          last_name: "john",
-          username: "markJohnny",
-          password: "secret",
-          seller: true,
-          stripe_account: "anything",
-          address1: "cool address",
-          city: "Chicago",
-          state: "IL",
-          zip_code: 60602,
-          country: "Merica",
-          email: "something@something.com"
-        });
+  //   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  USER ROUTES  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   //
 
-        const users = await db("users");
-
-        expect(users).toHaveLength(2);
+  describe("USER ROUTES", () => {
+    describe("should insert provided user into the database", () => {
+      it("POST /api/auth/register", async () => {
+        await request(server)
+          .post("/api/auth/register")
+          .send({
+            first_name: "TESTUSER",
+            last_name: "TESTUSER",
+            username: "TESTUSER",
+            password: "TESTUSER",
+            stripe_account: "12345678912345678",
+            address1: "7822 Test Drive",
+            city: "Atlanta",
+            state: "Georgia",
+            zip_code: 30313,
+            country: "USA",
+            email: "merchdropper20@gmail.com"
+          })
+          .then(res => {
+            expect(res.status).toBe(201);
+          });
       });
-
-      it("should insert the provided user into the db", async () => {
-        let user = await Users.insert({
-          first_name: "Mark",
-          last_name: "john",
-          username: "something",
-          password: "secret",
-          seller: true,
-          stripe_account: "anything",
-          address1: "cool address",
-          city: "Chicago",
-          state: "IL",
-          zip_code: 60602,
-          country: "Merica",
-          email: "something@something.com"
-        });
-        expect(user.first_name).toBe("Mark");
+      it("insert a new user with duplicate username and throw an error", async () => {
+        await request(server)
+          .post("/api/auth/register")
+          .send({
+            first_name: "TESTUSER",
+            last_name: "TESTUSER",
+            username: "TESTUSER",
+            password: "TESTUSER",
+            stripe_account: "12345678912345678",
+            address1: "7822 Test Drive",
+            city: "Atlanta",
+            state: "Georgia",
+            zip_code: 30313,
+            country: "USA",
+            email: "merchdropper20@gmail.com"
+          })
+          .then(res => {
+            expect(res.status).toBe(500);
+          });
       });
     });
-  });
 
-  describe("User Router", () => {
-    describe("CRUD Functionality", () => {
-      it("Gets all users", done => {
+    describe("should log a user into the database", () => {
+      it("POST /api/auth/login", async () => {
+        await request(server)
+          .post("/api/auth/login")
+          .send({
+            username: "TESTUSER",
+            password: "TESTUSER"
+          })
+          .then(res => {
+            expect(res.status).toBe(200);
+          });
+      });
+      it("invalid username", async () => {
+        await request(server)
+          .post("/api/auth/login")
+          .send({
+            username: "invalid",
+            password: "TESTUSER"
+          })
+          .then(res => {
+            expect(res.status).toBe(401);
+          });
+      });
+      it("invalid password", async () => {
+        await request(server)
+          .post("/api/auth/login")
+          .send({
+            username: "TESTUSER",
+            password: "invalid"
+          })
+          .then(res => {
+            expect(res.status).toBe(401);
+          });
+      });
+    });
+
+    describe("Gets all users", () => {
+      it("GET /api/users", done => {
         request(server)
           .get("/api/users/")
           .then(response => {
@@ -112,41 +139,142 @@ describe("test suite", () => {
             done();
           });
       });
+    });
 
-      it("Gets user by id but receives 404 error", done => {
+    describe("Get user by id", () => {
+      it("GET /api/users/1", done => {
         request(server)
           .get("/api/users/1")
           .then(response => {
-            expect(response.statusCode).toBe(404);
+            expect(response.statusCode).toBe(200);
             done();
           });
       });
-
-      it("Creates a user w/ username sam and deletes it", async () => {
-        await Users.insert({
-          first_name: "Sam",
-          last_name: "Jam",
-          username: "sam",
-          password: "secret",
-          seller: true,
-          stripe_account: "anything",
-          address1: "cool address",
-          city: "Chicago",
-          state: "IL",
-          zip_code: 60602,
-          country: "Merica",
-          email: "something@something.com"
-        });
+      it("Get a user that doesn't exist - status check", done => {
         request(server)
-          .delete("/api/users/sam")
+          .get("/api/users/999")
           .then(response => {
-            expect(response.statusCode).toBe(200);
+            expect(response.status).toBe(404);
+
+            done();
           });
       });
+      it("Get a user that doesn't exist - message check", done => {
+        request(server)
+          .get("/api/users/999")
+          .then(response => {
+            const expectedBody = { message: "That user could not be found!" };
+            expect(response.body).toEqual(expectedBody);
 
-      // it('', () => {
-      // placeholder
-      // })
+            done();
+          });
+      });
     });
+
+    describe("Get user by username", () => {
+      it("GET /api/users/username/:username", done => {
+        request(server)
+          .get("/api/users/username/TESTUSER")
+          .then(response => {
+            expect(response.statusCode).toBe(200);
+            done();
+          });
+      });
+      it("Get a user that doesn't exist - status check", done => {
+        request(server)
+          .get("/api/users/username/DoesntExist")
+          .then(response => {
+            expect(response.status).toBe(404);
+
+            done();
+          });
+      });
+      it("Get a user that doesn't exist - message check", done => {
+        request(server)
+          .get("/api/users/username/DoesntExist")
+          .then(response => {
+            const expectedBody = { message: "That user could not be found!" };
+            expect(response.body).toEqual(expectedBody);
+
+            done();
+          });
+      });
+    });
+
+    describe("Edit a user by username", () => {
+      it("PUT /api/users/username/:username", done => {
+        request(server)
+          .get("/api/users/username/TESTUSER")
+          .then(response => {
+            expect(response.statusCode).toBe(200);
+            done();
+          });
+      });
+      it("Edit a user that doesn't exist - status check", done => {
+        request(server)
+          .get("/api/users/username/DoesntExist")
+          .then(response => {
+            expect(response.status).toBe(404);
+
+            done();
+          });
+      });
+      it("Edit a user that doesn't exist - message check", done => {
+        request(server)
+          .get("/api/users/username/DoesntExist")
+          .then(response => {
+            const expectedBody = { message: "That user could not be found!" };
+            expect(response.body).toEqual(expectedBody);
+
+            done();
+          });
+      });
+    });
+
+    describe("Delete a user by username", () => {
+      it("PUT /api/users/username/:username", done => {
+        request(server)
+          .get("/api/users/username/TESTUSER")
+          .then(response => {
+            expect(response.statusCode).toBe(200);
+            done();
+          });
+      });
+      it("Delete a user that doesn't exist - status check", done => {
+        request(server)
+          .get("/api/users/username/DoesntExist")
+          .then(response => {
+            expect(response.status).toBe(404);
+
+            done();
+          });
+      });
+      it("Delete a user that doesn't exist - message check", done => {
+        request(server)
+          .get("/api/users/username/DoesntExist")
+          .then(response => {
+            const expectedBody = { message: "That user could not be found!" };
+            expect(response.body).toEqual(expectedBody);
+
+            done();
+          });
+      });
+    });
+
+    //   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  STORE ROUTES  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   //
+
+    //   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  DESIGN ROUTES  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   //
+
+    //   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  PRODUCT STATUS  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   //
+
+    //   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  QUOTE ROUTES  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   //
+
+    //   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  ORDER ROUTES  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   //
+
+    //   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  PRODUCT STATUS  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   //
+
+    // it('', () => {
+    // placeholder
+    // })
   });
 });

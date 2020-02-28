@@ -8,7 +8,7 @@
   "scripts": {
     "start": "node index.js",
     "server": "nodemon index.js",
-    "test": "jest --detectOpenHandles --forceExit ",
+    "test": "cross-env DB_ENV=testing jest --detectOpenHandles --forceExit ",
     "coverage": "jest --coverage --detectOpenHandles --forceExit || true"
   },
   "jest": {
