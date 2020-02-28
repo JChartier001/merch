@@ -11,14 +11,13 @@ router.post("/", async (req, res) => {
   try {
     let store = req.body;
 
-    if (store) {
+    if (!store.store_name || !store.userID) {
+      res.status(400).json({ message: "please include all required content" });
+    } else {
       Models.Stores.insert(store);
-      // Stores.insertStoresUsers(store.store_name, username);
       res
         .status(201)
         .json({ message: "You have successfully added a Store!", store });
-    } else {
-      res.status(400).json({ message: "please include all required content" });
     }
   } catch (error) {
     res.status(500).json({
@@ -37,8 +36,6 @@ router.get("/", async (req, res) => {
 
     if (stores) {
       res.status(200).json(stores);
-    } else {
-      res.status(404).json({ message: "not found!" });
     }
   } catch (error) {
     res
