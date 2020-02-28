@@ -5,15 +5,14 @@ class Model {
     this.tableName = tableName;
   }
 
-  // insert(newItem) {
-  //   return db(this.tableName)
-  //     .insert(newItem)
-  //     .then((ids) => {
-  //       const [id] = ids;
-  //       return this.findBy(id);
-  //     });
-  // }
-
+  insert(newItem) {
+    return db(this.tableName)
+      .insert(newItem)
+      .then(ids => {
+        const [id] = ids;
+        return this.findById(id);
+      });
+  }
 
   find() {
     return db(this.tableName).select("*");
@@ -67,9 +66,9 @@ class Model {
     return db(this.tableName)
       .where("id", id)
       .update(changes)
-      .then((changesMade) => {
+      .then(changesMade => {
         if (changesMade > 0) {
-          return this.findBy(id);
+          return this.findById(id);
         } else {
           return null;
         }
@@ -80,7 +79,7 @@ class Model {
     return db(this.tableName)
       .where("username", username)
       .update(changes)
-      .then((changesMade) => {
+      .then(changesMade => {
         if (changesMade > 0) {
           return this.findByUsername(username);
         } else {
@@ -93,7 +92,7 @@ class Model {
     return db(this.tableName)
       .where("orderToken", orderToken)
       .update(changes)
-      .then((changesMade) => {
+      .then(changesMade => {
         if (changesMade > 0) {
           return this.findByOrderToken(orderToken);
         } else {
@@ -106,7 +105,7 @@ class Model {
     return db(this.tableName)
       .where("spOrderID", spOrderID)
       .update(changes)
-      .then((count) => {
+      .then(count => {
         if (count > 0) {
           return this.findBySPId(spOrderID);
         } else {
@@ -162,8 +161,5 @@ async function addEntry(tableName, entry, returnTables) {
 
   return addedItem;
 }
-
-
-
 
 module.exports = { Users, Stores, Designs, Quotes, Orders, Products, addEntry };

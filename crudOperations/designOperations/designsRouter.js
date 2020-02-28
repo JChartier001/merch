@@ -12,19 +12,14 @@ router.post("/", async (req, res) => {
     let returnTables = [
       "id",
       "design_name",
+      "thumbnail_url",
       "design_url",
       "storeID",
       "userID"
     ];
-
     if (design) {
-      let addedDesign = await Models.addEntry(
-        "designs",
-        design,
-        returnTables
-      );
-
-      res.status(201).json(addedDesign);
+      await Models.addEntry("designs", design, returnTables);
+      res.status(201).json({ message: "Design Added!", design });
     } else {
       res.status(400).json({ message: "please include all required content" });
     }
@@ -56,11 +51,18 @@ router.get("/", async (req, res) => {
 router.get("/:designID", async (req, res) => {
   try {
     const design = await Models.Designs.findById(req.params.designID);
-    res.status(200).json(design);
+
+    if (design) {
+      res.status(200).json(design);
+    } else {
+      res
+        .status(404)
+        .json({ message: "Unable to find this design, double check the id" });
+    }
   } catch (error) {
     res.status(500).json({
       error,
-      message: "Unable to find this quote id, its not you.. its me"
+      message: "Unable to find this design id, its not you, its me..."
     });
   }
 });

@@ -33,9 +33,10 @@ router.post("/", async (req, res) => {
           spResponse
         });
       }
-    } else {
-      res.status(400).json({ message: "please include all required content" });
-    }
+    } //figure out how to test wrong or missing info here, its tricky with the api call
+    // else {
+    //   res.status(400).json({ message: "please include all required content" });
+    // }
   } catch (error) {
     res.status(500).json({
       error,
@@ -65,7 +66,13 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const quote = await Models.Quotes.findById(req.params.id);
-    res.status(200).json(quote);
+    if (quote) {
+      res.status(200).json(quote);
+    } else {
+      res
+        .status(404)
+        .json({ message: "Unable to find this quote, double check the id" });
+    }
   } catch (error) {
     res.status(500).json({
       error,

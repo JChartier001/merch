@@ -14,3 +14,7 @@ const app = server.listen(
       .bold
   )
 );
+
+process.on("unhandledRejection", function(reason, promise) {
+  console.error("Unhandled rejection", { reason: reason, promise: promise });
+});
