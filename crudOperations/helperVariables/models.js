@@ -145,6 +145,7 @@ class Model {
   }
 }
 
+// this code is creating a new class object for each of the relevant tables to be exported and used in each of the router files
 const Users = new Model("users");
 const Stores = new Model("stores");
 const Designs = new Model("designs");
