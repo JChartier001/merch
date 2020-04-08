@@ -53,17 +53,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-//new post 2
-// router.post('/', (req, res) =>{
-//     const store = req.body
-//
-//     Models.Stores.insert(store)
-//     .then(story =>{
-//         res.status(201).json({message:"Success: store added"})
-//     })
-//     .catch(err =>{res.status(500).json(err)})
-// })
-
 // @desc     Get all stores
 // @route    GET /api/stores
 // @access   Private
