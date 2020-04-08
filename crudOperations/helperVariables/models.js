@@ -25,6 +25,13 @@ class Model {
       .first();
   }
 
+  findByEmail(email) {
+    return db(this.tableName)
+      .where("email", email)
+      .select("*")
+      .first();
+  }
+
   findBySPId(spOrderID) {
     return db(this.tableName)
       .where("spOrderID", spOrderID)

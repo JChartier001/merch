@@ -7,17 +7,43 @@ const Models = require("../helperVariables/models");
 // @desc     Post a Store
 // @route    POST /api/stores
 // @access   Private
+// router.post("/", async (req, res) => {
+//   try {
+//     let store = req.body;
+//
+//     if (!store.store_name || !store.userID) {
+//       res.status(400).json({ message: "please include all required content" });
+//     } else {
+//       Models.Stores.insert(store);
+//       res
+//         .status(201)
+//         .json({ message: "You have successfully added a Store!", store });
+//     }
+//   } catch (error) {
+//     res.status(500).json({
+//       error,
+//       message: "Unable to add this store, its not you.. its me"
+//     });
+//   }
+// });
+
+//new post
 router.post("/", async (req, res) => {
   try {
     let store = req.body;
+    const email = req.body.email;
 
-    if (!store.store_name || !store.userID) {
+    if (!store.store_name || !store.email) {
       res.status(400).json({ message: "please include all required content" });
     } else {
-      Models.Stores.insert(store);
-      res
-        .status(201)
-        .json({ message: "You have successfully added a Store!", store });
+      const user = await Models.Users.findByEmail(email);
+      console.log(user);
+      const storeWithEmail = { store_name: store.store_name, userID: user.id };
+      await Models.Stores.insert(storeWithEmail);
+      res.status(201).json({
+        message: "You have successfully added a Store!",
+        storeWithEmail
+      });
     }
   } catch (error) {
     res.status(500).json({
@@ -26,6 +52,17 @@ router.post("/", async (req, res) => {
     });
   }
 });
+
+//new post 2
+// router.post('/', (req, res) =>{
+//     const store = req.body
+//
+//     Models.Stores.insert(store)
+//     .then(story =>{
+//         res.status(201).json({message:"Success: store added"})
+//     })
+//     .catch(err =>{res.status(500).json(err)})
+// })
 
 // @desc     Get all stores
 // @route    GET /api/stores
