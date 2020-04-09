@@ -7,27 +7,8 @@ const Models = require("../helperVariables/models");
 // @desc     Post a Store
 // @route    POST /api/stores
 // @access   Private
-// router.post("/", async (req, res) => {
-//   try {
-//     let store = req.body;
-//
-//     if (!store.store_name || !store.userID) {
-//       res.status(400).json({ message: "please include all required content" });
-//     } else {
-//       Models.Stores.insert(store);
-//       res
-//         .status(201)
-//         .json({ message: "You have successfully added a Store!", store });
-//     }
-//   } catch (error) {
-//     res.status(500).json({
-//       error,
-//       message: "Unable to add this store, its not you.. its me"
-//     });
-//   }
-// });
 
-//new post
+//new POST that accepts an email, store_name, and domain_name
 router.post("/", async (req, res) => {
   try {
     let store = req.body;
@@ -56,6 +37,27 @@ router.post("/", async (req, res) => {
     });
   }
 });
+
+// old POST router -- not in use
+// router.post("/", async (req, res) => {
+//   try {
+//     let store = req.body;
+//
+//     if (!store.store_name || !store.userID) {
+//       res.status(400).json({ message: "please include all required content" });
+//     } else {
+//       Models.Stores.insert(store);
+//       res
+//         .status(201)
+//         .json({ message: "You have successfully added a Store!", store });
+//     }
+//   } catch (error) {
+//     res.status(500).json({
+//       error,
+//       message: "Unable to add this store, its not you.. its me"
+//     });
+//   }
+// });
 
 // @desc     Get all stores
 // @route    GET /api/stores
@@ -107,6 +109,31 @@ router.get("/storename/:store_name", async (req, res) => {
       res.status(404).json({
         message:
           "Please enter a valid store name, keep in mind that store names are case sensitive"
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      error,
+      message: "Unable to find this store, its not you.. its me"
+    });
+  }
+});
+
+// @desc     Get a store by domain_name
+// @route    GET /api/stores/domain/:domain_name
+// @access   Public
+router.get("/domain/:domain_name", async (req, res) => {
+  try {
+    const storeDomain = await Models.Stores.findByDomainName(
+      req.params.domain_name
+    );
+
+    if (storeDomain) {
+      res.status(200).json(storeDomain);
+    } else {
+      res.status(404).json({
+        message:
+          "Please enter a valid domain name, keep in mind that domain names are case sensitive"
       });
     }
   } catch (error) {

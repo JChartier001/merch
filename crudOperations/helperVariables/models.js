@@ -59,6 +59,13 @@ class Model {
       .select("*")
       .first();
   }
+
+  findByDomainName(domain_name) {
+    return db(this.tableName)
+      .where("domain_name", domain_name)
+      .select("*")
+      .first();
+  }
   //for finding entry associated with id passed
   // findById(tableName, id) {
   //   return db(tableName)
