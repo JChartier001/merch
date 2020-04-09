@@ -38,7 +38,11 @@ router.post("/", async (req, res) => {
     } else {
       const user = await Models.Users.findByEmail(email);
       console.log(user);
-      const storeWithEmail = { store_name: store.store_name, userID: user.id };
+      const storeWithEmail = {
+        store_name: store.store_name,
+        userID: user.id,
+        domain_name: store.domain_name
+      };
       await Models.Stores.insert(storeWithEmail);
       res.status(201).json({
         message: "You have successfully added a Store!",

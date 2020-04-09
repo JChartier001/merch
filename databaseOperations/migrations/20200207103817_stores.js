@@ -7,6 +7,10 @@ exports.up = function(knex) {
       .unique()
       .notNullable();
     stores
+      .string("domain_name", 255)
+      .unique()
+      .notNullable();
+    stores
       .string("hero_ImageURL", 255)
       .defaultTo(
         "https://www.dalesjewelers.com/wp-content/uploads/2018/10placeholder-silhouette-male.png"
