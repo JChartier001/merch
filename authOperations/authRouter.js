@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const Models = require("../crudOperations/helperVariables/models");
 
+// these endpoints might be useless because Auth0 handles sign-up/login
 router.post("/register", async (req, res) => {
   try {
     let newUser = req.body;
@@ -23,6 +24,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
+// the login endpoint
 router.post("/login", (req, res) => {
   let { username, password } = req.body;
 

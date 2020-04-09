@@ -25,6 +25,13 @@ class Model {
       .first();
   }
 
+  findByEmail(email) {
+    return db(this.tableName)
+      .where("email", email)
+      .select("*")
+      .first();
+  }
+
   findBySPId(spOrderID) {
     return db(this.tableName)
       .where("spOrderID", spOrderID)
@@ -49,6 +56,13 @@ class Model {
   findByStoreName(store_name) {
     return db(this.tableName)
       .where("store_name", store_name)
+      .select("*")
+      .first();
+  }
+
+  findByDomainName(domain_name) {
+    return db(this.tableName)
+      .where("domain_name", domain_name)
       .select("*")
       .first();
   }
@@ -145,6 +159,7 @@ class Model {
   }
 }
 
+// this code is creating a new class object for each of the relevant tables to be exported and used in each of the router files
 const Users = new Model("users");
 const Stores = new Model("stores");
 const Designs = new Model("designs");
