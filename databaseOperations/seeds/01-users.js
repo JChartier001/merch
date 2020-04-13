@@ -5,7 +5,7 @@ exports.seed = function(knex) {
       last_name: "Guest",
       username: "Guest",
       password: "Guest",
-      seller: false,
+      seller: true,
       stripe_account: "NA",
       address1: "123 Test Drive",
       city: "TheBest",
@@ -13,7 +13,7 @@ exports.seed = function(knex) {
       zip_code: 12345,
       country: "Merica",
       phone: 1234567890,
-      email: "NA",
+      email: "guestemail@gmail.com",
       support_pin: "12345"
     },
     {
@@ -61,7 +61,7 @@ exports.seed = function(knex) {
       zip_code: 30319,
       country: "USA",
       phone: 1234567890,
-      email: "dontknow@gmail.com",
+      email: "jeris@gmail.com",
       support_pin: "test"
     },
     {
@@ -77,7 +77,7 @@ exports.seed = function(knex) {
       zip_code: 30319,
       country: "USA",
       phone: 1234567890,
-      email: "dontknow@gmail.com",
+      email: "preston@gmail.com",
       support_pin: "test"
     },
     {
@@ -93,7 +93,7 @@ exports.seed = function(knex) {
       zip_code: 30319,
       country: "USA",
       phone: 1234567890,
-      email: "dontknow@gmail.com",
+      email: "alan@gmail.com",
       support_pin: "test"
     },
     {
@@ -109,7 +109,7 @@ exports.seed = function(knex) {
       zip_code: 30319,
       country: "USA",
       phone: 1234567890,
-      email: "dontknow@gmail.com",
+      email: "daniel@gmail.com",
       support_pin: "test"
     },
     {
@@ -125,7 +125,7 @@ exports.seed = function(knex) {
       zip_code: 30319,
       country: "USA",
       phone: 1234567890,
-      email: "dontknow@gmail.com",
+      email: "jennie@gmail.com",
       support_pin: "test"
     },
     {
@@ -141,7 +141,7 @@ exports.seed = function(knex) {
       zip_code: 30319,
       country: "USA",
       phone: 1234567890,
-      email: "dontknow@gmail.com",
+      email: "marcos@gmail.com",
       support_pin: "test"
     },
     {
@@ -157,7 +157,7 @@ exports.seed = function(knex) {
       zip_code: 30319,
       country: "USA",
       phone: 1234567890,
-      email: "dontknow@gmail.com",
+      email: "tristan@gmail.com",
       support_pin: "test"
     }
   ]);

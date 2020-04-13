@@ -277,12 +277,14 @@ describe("ROUTE TESTING", () => {
         await request(server)
           .post("/api/stores")
           .send({
-            active: 1,
-            store_name: "NewStore",
-            hero_ImageURL:
-              "https://www.dalesjewelers.com/wp-content/uploads/2018/10placeholder-silhouette-male.png",
-            logo_url: "https://uxmasters.org/images/ant_logo.svg",
-            userID: 1
+            // active: 1,
+            store_name: "NewStoreForTest",
+            domain_name: "NewStoreForTest",
+            email: "merchdropper20@gmail.com"
+            // hero_ImageURL:
+            //   "https://www.dalesjewelers.com/wp-content/uploads/2018/10placeholder-silhouette-male.png",
+            // logo_url: "https://uxmasters.org/images/ant_logo.svg",
+            // userID: 1
           })
           .then(res => {
             expect(res.status).toBe(201);
@@ -373,6 +375,39 @@ describe("ROUTE TESTING", () => {
             const expectedBody = {
               message:
                 "Please enter a valid store name, keep in mind that store names are case sensitive"
+            };
+            expect(response.body).toEqual(expectedBody);
+
+            done();
+          });
+      });
+    });
+
+    describe("Get store by domain_name", () => {
+      it("GET /api/stores/domain/:domain_name", done => {
+        request(server)
+          .get("/api/stores/domain/TheMerchMan")
+          .then(response => {
+            expect(response.status).toBe(200);
+            done();
+          });
+      });
+      it("Get a store domain_name that doesn't exist - status check", done => {
+        request(server)
+          .get("/api/stores/domain/ThisDomainDoesntExist")
+          .then(response => {
+            expect(response.status).toBe(404);
+
+            done();
+          });
+      });
+      it("Get a store domain_name that doesn't exist - message check", done => {
+        request(server)
+          .get("/api/stores/domain/ThisDomainDoesntExist")
+          .then(response => {
+            const expectedBody = {
+              message:
+                "Please enter a valid store domain_name, keep in mind that domain names are case sensitive"
             };
             expect(response.body).toEqual(expectedBody);
 
