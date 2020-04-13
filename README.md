@@ -10,22 +10,22 @@
 
 To get the server running locally:
 
-1. Clone this repo
-2. **yarn install** to install all required dependencies
-3. **yarn server** to start the local server
-4. **yarn test** to start server using testing environment
+1.  Clone this repo
+2.  **yarn install** to install all required dependencies
+3.  **yarn server** to start the local server
+4.  **yarn test** to start server using testing environment
 
 ### Backend framework goes here
 
-- NodeJS
-- Express,
-- Postgres
+-   NodeJS
+-   Express,
+-   Postgres
 
 #### Why did you choose this framework?
 
-- Ease of use
-- Familiarity
-- A true Relational Database best serves our purposes at this time
+-   Ease of use
+-   Familiarity
+-   A true Relational Database best serves our purposes at this time
 
 ## Endpoints
 
@@ -35,7 +35,7 @@ To get the server running locally:
 
 ### User Routes
 
-- project has JWT as a back up auth system(disabled), primary system is Auth0
+-   project has JWT as a back up auth system(disabled), primary system is Auth0
 
 | Method | Endpoint                        | Access Control | Description                                |
 | ------ | ------------------------------- | -------------- | ------------------------------------------ |
@@ -55,6 +55,7 @@ To get the server running locally:
 | GET    | `/api/stores`                       | logged in user | get all stores                              |
 | GET    | `/api/stores/:id`                   | logged in user | Get a Store by ID                           |
 | GET    | `/api/stores/storename/:store_name` | logged in user | Get a Store by store_name                   |
+| GET    | `/api/stores/domain/:domain_name`   | logged in user | Get a Store by domain_name                  |
 | PUT    | `/api/stores/:storeID`              | logged in user | Edit a store in system, Admin and self only |
 | DELETE | `/api/stores/:store_name`           | logged in user | Delete a store, admin and self only.        |
 
@@ -71,7 +72,7 @@ To get the server running locally:
 | DELETE | `/api/quotes/:quoteID`               | admin          | Delete a quote.                       |
 | DELETE | `/api/quotes/ordertoken/:orderToken` | admin          | Delete a quote.                       |
 
-### Store Routes
+### Order Routes
 
 | Method | Endpoint                             | Access Control | Description                                      |
 | ------ | ------------------------------------ | -------------- | ------------------------------------------------ |
@@ -101,11 +102,11 @@ To get the server running locally:
 
 # Data Models
 
-https://dbdesigner.page.link/TmhBUamZbHMiXanV8
+<https://dbdesigner.page.link/TmhBUamZbHMiXanV8>
 
 ### Users
 
----
+* * *
 
 ```{
     users.increments("userID").primary();
@@ -146,126 +147,122 @@ https://dbdesigner.page.link/TmhBUamZbHMiXanV8
 
 ### Stores
 
----
+* * *
 
-```
-{ stores.increments("storeID").primary();
-  stores.boolean("active").defaultTo(true);
-  stores.string("store_name", 255).unique().notNullable();
-  stores.string("hero_ImageURL", 255)
-    .defaultTo("https://www.dalesjewelers.com/wp-content/uploads/2018/10placeholder-silhouette-male.png")
-    .notNullable();
-  stores.string("logo_url", 255)
-    .defaultTo("https://uxmasters.org/images/ant_logo.svg")
-    .notNullable();
-  stores.timestamps(true, true);
-  stores.integer("userID")
-    .notNullable()
-    .references("userID")
-    .inTable("users")
-    .onUpdate("CASCADE")
-    .onDelete("CASCADE");
+    { stores.increments("storeID").primary();
+      stores.boolean("active").defaultTo(true);
+      stores.string("store_name", 255).unique().notNullable();
+      stores
+        .string("domain_name", 255)
+        .unique()
+        .notNullable();
+      stores.string("hero_ImageURL", 255)
+        .defaultTo("https://www.dalesjewelers.com/wp-content/uploads/2018/10placeholder-silhouette-male.png")
+        .notNullable();
+      stores.string("logo_url", 255)
+        .defaultTo("https://uxmasters.org/images/ant_logo.svg")
+        .notNullable();
+      stores.timestamps(true, true);
+      stores.integer("userID")
+        .notNullable()
+        .references("userID")
+        .inTable("users")
+        .onUpdate("CASCADE")
+        .onDelete("CASCADE");
 
-}
-```
+    }
 
 ### Quotes
 
----
+* * *
 
-```
-{
-  quotes.increments("quoteID").primary();
-  quotes.decimal("total", null).notNullable();
-  quotes.decimal("subtotal", null).notNullable();
-  quotes.decimal("tax", null).notNullable();
-  quotes.decimal("fees", null).notNullable();
-  quotes.decimal("shipping", null).notNullable();
-  quotes.string("orderToken", 255).unique().notNullable();
-  quotes.string("warnings", 255).defaultTo("-");
-  quotes.string("mode", 255).notNullable().defaultTo("-");
-  quotes.integer("storeID")
-    .notNullable()
-    .references("storeID")
-    .inTable("stores")
-    .onUpdate("CASCADE")
-    .onDelete("CASCADE");
-  quotes.integer("userID")
-    .notNullable()
-    .references("userID")
-    .inTable("users")
-    .onUpdate("CASCADE")
-    .onDelete("CASCADE");
+    {
+      quotes.increments("quoteID").primary();
+      quotes.decimal("total", null).notNullable();
+      quotes.decimal("subtotal", null).notNullable();
+      quotes.decimal("tax", null).notNullable();
+      quotes.decimal("fees", null).notNullable();
+      quotes.decimal("shipping", null).notNullable();
+      quotes.string("orderToken", 255).unique().notNullable();
+      quotes.string("warnings", 255).defaultTo("-");
+      quotes.string("mode", 255).notNullable().defaultTo("-");
+      quotes.integer("storeID")
+        .notNullable()
+        .references("storeID")
+        .inTable("stores")
+        .onUpdate("CASCADE")
+        .onDelete("CASCADE");
+      quotes.integer("userID")
+        .notNullable()
+        .references("userID")
+        .inTable("users")
+        .onUpdate("CASCADE")
+        .onDelete("CASCADE");
 
-}
-```
+    }
 
 ### Orders
 
----
+* * *
 
-```
-{
-  orders.increments("orderID").primary();
-  orders.string("status", 255).notNullable();
-  orders.decimal("total", null).notNullable();
-  orders.decimal("subtotal", null).notNullable();
-  orders.decimal("tax", null).notNullable();
-  orders.decimal("fees", null).notNullable();
-  orders.decimal("shipping", null).notNullable();
-  orders
-    .string("orderToken", 255)
-    .unique()
-    .notNullable();
-  orders
-    .string("spOrderID", 255)
-    .unique()
-    .notNullable();
-   orders.string("mode", 255).notNullable();
-  orders.timestamps(true, true);
-  orders
-    .integer("storeID")
-    .notNullable()
-    .references("storeID")
-    .inTable("stores")
-    .onUpdate("CASCADE")
-    .onDelete("CASCADE");
-  orders
-    .integer("userID")
-    .notNullable()
-    .references("userID")
-    .inTable("users")
-    .onUpdate("CASCADE")
-    .onDelete("CASCADE");
-}
-```
+    {
+      orders.increments("orderID").primary();
+      orders.string("status", 255).notNullable();
+      orders.decimal("total", null).notNullable();
+      orders.decimal("subtotal", null).notNullable();
+      orders.decimal("tax", null).notNullable();
+      orders.decimal("fees", null).notNullable();
+      orders.decimal("shipping", null).notNullable();
+      orders
+        .string("orderToken", 255)
+        .unique()
+        .notNullable();
+      orders
+        .string("spOrderID", 255)
+        .unique()
+        .notNullable();
+       orders.string("mode", 255).notNullable();
+      orders.timestamps(true, true);
+      orders
+        .integer("storeID")
+        .notNullable()
+        .references("storeID")
+        .inTable("stores")
+        .onUpdate("CASCADE")
+        .onDelete("CASCADE");
+      orders
+        .integer("userID")
+        .notNullable()
+        .references("userID")
+        .inTable("users")
+        .onUpdate("CASCADE")
+        .onDelete("CASCADE");
+    }
 
 ### Designs
 
----
+* * *
 
-```
-{
-  designs.increments("designID").primary();
-  designs.string("design_name", 255).notNullable();
-  designs.string("design_url", 255).notNullable();
-  designs
-    .integer("storeID")
-    .notNullable()
-    .references("storeID")
-    .inTable("stores")
-    .onUpdate("CASCADE")
-    .onDelete("CASCADE");
-  designs
-    .integer("userID")
-    .notNullable()
-    .references("userID")
-    .inTable("users")
-    .onUpdate("CASCADE")
-    .onDelete("CASCADE");
-  designs.timestamps(true, true);
-}
-```
+    {
+      designs.increments("designID").primary();
+      designs.string("design_name", 255).notNullable();
+      designs.string("design_url", 255).notNullable();
+      designs
+        .integer("storeID")
+        .notNullable()
+        .references("storeID")
+        .inTable("stores")
+        .onUpdate("CASCADE")
+        .onDelete("CASCADE");
+      designs
+        .integer("userID")
+        .notNullable()
+        .references("userID")
+        .inTable("users")
+        .onUpdate("CASCADE")
+        .onDelete("CASCADE");
+      designs.timestamps(true, true);
+    }
 
 ## Actions
 
@@ -280,6 +277,8 @@ https://dbdesigner.page.link/TmhBUamZbHMiXanV8
 `findById(id)` -> Returns the user that matched the userID passed in
 
 `findByUsername(username)` -> Returns the user that matches the username passed in
+
+`findByEmail(email)` -> Returns the user that matches the email passed in
 
 `update(username, changes)` -> Updates a user and Returns the newly updated user that matches the username passed in.
 
@@ -298,6 +297,8 @@ https://dbdesigner.page.link/TmhBUamZbHMiXanV8
 `findById(storeID)` -> Returns the store that matched the storeID passed in
 
 `findByStorename(store_name)` -> Returns the store that matches the store_name passed in
+
+`findByDomainName(domain_name)`  -> Returns the store that matches the domain_name passed in
 
 `update(storeID, changes)` -> Updates a store and Returns the newly updated store that matches the storeID passed in.
 
@@ -375,15 +376,15 @@ https://dbdesigner.page.link/TmhBUamZbHMiXanV8
 
 In order for the app to function correctly, the user must set up their own environment variables.
 
-- ### create a .env file that includes the following:
+-   ### create a .env file that includes the following:
 
-- PORT=5032 or pick your favorite ;) defaults to 4000 in Development
-- NODE_ENV=development --- set to "development" until ready for "production"
-- JWT_SECRET=[any randomly generated or complex string will work here]
+-   PORT=5032 or pick your favorite ;) defaults to 4000 in Development
+-   NODE_ENV=development --- set to "development" until ready for "production"
+-   JWT_SECRET=[any randomly generated or complex string will work here]
 
 ## Contributing
 
-- When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
+-   When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
 
 Please note we have a [code of conduct](./code_of_conduct.md). Please follow it in all your interactions with the project.
 
@@ -391,10 +392,10 @@ Please note we have a [code of conduct](./code_of_conduct.md). Please follow it 
 
 **If you are having an issue with the existing project code, please submit a bug report under the following guidelines:**
 
-- Check first to see if your issue has already been reported.
-- Check to see if the issue has recently been fixed by attempting to reproduce the issue using the latest master branch in the repository.
-- Create a live example of the problem.
-- Submit a detailed bug report including your environment & browser, steps to reproduce the issue, actual and expected outcomes, where you believe the issue is originating from, and any potential solutions you have considered.
+-   Check first to see if your issue has already been reported.
+-   Check to see if the issue has recently been fixed by attempting to reproduce the issue using the latest master branch in the repository.
+-   Create a live example of the problem.
+-   Submit a detailed bug report including your environment & browser, steps to reproduce the issue, actual and expected outcomes, where you believe the issue is originating from, and any potential solutions you have considered.
 
 ### Feature Requests
 
@@ -408,11 +409,11 @@ Remember that this project is licensed under the MIT license, and by submitting 
 
 #### Pull Request Guidelines
 
-- Ensure any install or build dependencies are removed before the end of the layer when doing a build.
-- Update the README.md with details of changes to the interface, including new plist variables, exposed ports, useful file locations and container parameters.
-- Ensure that your code conforms to our existing code conventions and test coverage.
-- Include the relevant issue number, if applicable.
-- You may merge the Pull Request in once you have the sign-off of two other developers, or if you do not have permission to do that, you may request the second reviewer to merge it for you.
+-   Ensure any install or build dependencies are removed before the end of the layer when doing a build.
+-   Update the README.md with details of changes to the interface, including new plist variables, exposed ports, useful file locations and container parameters.
+-   Ensure that your code conforms to our existing code conventions and test coverage.
+-   Include the relevant issue number, if applicable.
+-   You may merge the Pull Request in once you have the sign-off of two other developers, or if you do not have permission to do that, you may request the second reviewer to merge it for you.
 
 ### Attribution
 
@@ -420,5 +421,5 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 
 ## Documentation
 
-1. See [Frontend Documentation](https://github.com/Lambda-School-Labs/Merch-Dropper-fe/blob/master/README.md) for details on the frontend of our project.
-2. See [Postman Backend Documentation](https://documenter.getpostman.com/view/9427795/SWTHYuA5?version=latest) for more details on the backend of our project.
+1.  See [Frontend Documentation](https://github.com/Lambda-School-Labs/Merch-Dropper-fe/blob/master/README.md) for details on the frontend of our project.
+2.  See [Postman Backend Documentation](https://documenter.getpostman.com/view/9427795/SWTHYuA5?version=latest) for more details on the backend of our project.
