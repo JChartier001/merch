@@ -157,6 +157,19 @@ class Model {
       .where("spOrderID", spOrderID)
       .del();
   }
+
+  insertStripeAccount(id, accountNum) {
+ 
+      return db(this.tableName)
+        .where("id", id)
+        .insert({stripe_account: accountNum})
+        .then(ids => {
+          const [id] = ids;
+          return this.findById(id);
+        });
+  
+  }
+
 }
 
 // this code is creating a new class object for each of the relevant tables to be exported and used in each of the router files
