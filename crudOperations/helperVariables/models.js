@@ -53,6 +53,19 @@ class Model {
       .first();
   }
 
+  findByUserID(userID) {
+    return db(this.tableName)
+      .where("userID", userID)
+      .select("*")
+      .first();
+  }
+
+  findByStoreID(storeID) {
+    return db(this.tableName)
+      .where("storeID", storeID)
+      .select("*");
+  }
+
   findByStoreName(store_name) {
     return db(this.tableName)
       .where("store_name", store_name)
@@ -159,17 +172,14 @@ class Model {
   }
 
   insertStripeAccount(id, accountNum) {
- 
-      return db(this.tableName)
-        .where("id", id)
-        .insert({stripe_account: accountNum})
-        .then(ids => {
-          const [id] = ids;
-          return this.findById(id);
-        });
-  
+    return db(this.tableName)
+      .where("id", id)
+      .insert({ stripe_account: accountNum })
+      .then(ids => {
+        const [id] = ids;
+        return this.findById(id);
+      });
   }
-
 }
 
 // this code is creating a new class object for each of the relevant tables to be exported and used in each of the router files

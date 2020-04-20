@@ -57,6 +57,28 @@ router.get("/username/:username", async (req, res) => {
   }
 });
 
+// @desc     Get a user by email
+// @route    GET /api/users/username/:email
+// @access   Private
+router.get("/email/:email", async (req, res) => {
+  // console.log(req.params);
+  try {
+    const user = await Models.Users.findByEmail(req.params.email);
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res
+        .status(404)
+        .json({ message: "That user could not be found by email!" });
+    }
+  } catch (error) {
+    res.status(500).json({
+      error,
+      message: "Unable to find this user, its not you.. its me"
+    });
+  }
+});
+
 // @desc     Edit a User by username
 // @route    PUT /api/users/:username
 // @access   Private
