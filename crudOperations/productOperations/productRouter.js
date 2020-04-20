@@ -101,6 +101,27 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// @desc     Get all products by storeID
+// @route    GET /api/products/store/:storeID
+// @access   Private
+router.get("/store/:storeID", async (req, res) => {
+  try {
+    const product = await Models.Products.findByStoreID(req.params.storeID);
+    if (product) {
+      res.status(200).json(product);
+    } else {
+      res
+        .status(404)
+        .json({ message: "That store products could not be found!" });
+    }
+  } catch (error) {
+    res.status(500).json({
+      error,
+      message: "Unable to find this store id, its not you.. its me"
+    });
+  }
+});
+
 // @desc     Edit a product by id
 // @route    PUT /api/Products/:id
 // @access   Private

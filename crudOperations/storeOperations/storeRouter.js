@@ -119,6 +119,28 @@ router.get("/storename/:store_name", async (req, res) => {
   }
 });
 
+// @desc     Get a store by userID
+// @route    GET /api/stores/user/:userID
+// @access   Public
+router.get("/user/:userID", async (req, res) => {
+  try {
+    const store = await Models.Stores.findByUserID(req.params.userID);
+
+    if (store) {
+      res.status(200).json(store);
+    } else {
+      res.status(404).json({
+        message: "Please enter a valid userID"
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      error,
+      message: "Unable to find this store, its not you.. its me"
+    });
+  }
+});
+
 // @desc     Get a store by domain_name
 // @route    GET /api/stores/domain/:domain_name
 // @access   Public
