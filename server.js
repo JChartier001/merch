@@ -37,6 +37,7 @@ server.use(
   })
 );
 
+server.use(cors());
 //  pass this in cors if having bad cors issues
 
 /*const corsSettings = {
@@ -53,8 +54,8 @@ server.use(function(req, res, next) {
     next();
  });*/
 
- 
-server.use((req, res, next) => {    res.header('Access-Control-Allow-Origin', '*');    next();   });
+
+//server.use((req, res, next) => {    res.header('Access-Control-Allow-Origin', '*');    next();   });
 
 //////    Use routers    ///////
 server.use("/api/auth", authRouter);
