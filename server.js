@@ -39,12 +39,19 @@ server.use(
 
 //  pass this in cors if having bad cors issues
 
-const corsSettings = {
+/*const corsSettings = {
    origin: true,
    credentials: true
  }
 
- server.use(cors(corsSettings));
+ server.use(cors(corsSettings));*/
+
+server.use(cors({ credentials: true, origin: `http://localhost:3000/`}));
+server.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    next();
+ });
 
 //////    Use routers    ///////
 server.use("/api/auth", authRouter);
