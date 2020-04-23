@@ -46,12 +46,15 @@ server.use(
 
  server.use(cors(corsSettings));*/
 
-server.use(cors({ credentials: true, origin: `http://localhost:3000/`}));
+/*server.use(cors({ credentials: true, origin: `http://localhost:3000/`}));
 server.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     next();
- });
+ });*/
+
+ 
+server.use((req, res, next) => {    res.header('Access-Control-Allow-Origin', '*');    next();   });
 
 //////    Use routers    ///////
 server.use("/api/auth", authRouter);
