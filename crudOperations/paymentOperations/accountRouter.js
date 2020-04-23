@@ -5,20 +5,20 @@ if (process.env.NODE_ENV !== 'production') require('dotenv').config({ path: "./c
 
 const stripe = require('stripe')('sk_test_RRgLrJ77g7l5APlwZ9Tkna6g00NLWWukJR'); 
 
-router.get('/accounts/:email/:code', async (req, res) => {
+router.post('/accounts', async (req, res) => {
     
-    const {code} = req.params;
-    const {email} = req.params;
+    const userCode = req.body.user_code;
+    const email = req.body.email;
 
     const response = await stripe.oauth.token({
         grant_type: 'authorization_code',
-        code: code,
+        code: userCode,
         });
 
     let user = await Models.Users.findByEmail(email)
     user.stripe_account = response.stripe_user_id;
     console.log(user)
-
+    
     const updatedUser = await Models.Users.updateByUsername(user.username, user);
     console.log(updatedUser)
     
