@@ -18,7 +18,7 @@ const stripeAccountRouter = require("./crudOperations/paymentOperations/accountR
 const server = express();
 
 server.use(helmet());
-server.use(cors());
+
 server.use(express.json());
 
 // morgan(format, options) - The format function will be called with three arguments tokens, req, and res, where tokens is an object with all defined tokens, req is the HTTP request and res is the HTTP response. The function is expected to return a string that will be the log line, or undefined / null to skip logging.
@@ -39,10 +39,12 @@ server.use(
 
 //  pass this in cors if having bad cors issues
 
-// {
-//   origin: true,
-//   credentials: true
-// }
+const corsSettings = {
+   origin: true,
+   credentials: true
+ }
+
+ server.use(cors(corsSettings));
 
 //////    Use routers    ///////
 server.use("/api/auth", authRouter);

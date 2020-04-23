@@ -9,20 +9,16 @@ router.post('/accounts', async (req, res) => {
     
     const userCode = req.body.user_code;
     const email = req.body.email;
-    
-    console.log(userCode)
 
     const response = await stripe.oauth.token({
         grant_type: 'authorization_code',
         code: userCode,
         });
-    console.log(response)
-    console.log(response.stripe_user_id)
-    console.log(email)
+
     let user = await Models.Users.findByEmail(email)
     user.stripe_account = response.stripe_user_id;
     console.log(user)
-    console.log(user.username)
+    
     const updatedUser = await Models.Users.updateByUsername(user.username, user);
     console.log(updatedUser)
     
