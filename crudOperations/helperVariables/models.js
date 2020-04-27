@@ -53,6 +53,7 @@ class Model {
       .first();
   }
 
+  //find store by userID
   findByUserID(userID) {
     return db(this.tableName)
       .where("userID", userID)

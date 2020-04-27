@@ -37,15 +37,16 @@ To get the server running locally:
 
 -   project has JWT as a back up auth system(disabled), primary system is Auth0
 
-| Method | Endpoint                        | Access Control | Description                                |
-| ------ | ------------------------------- | -------------- | ------------------------------------------ |
-| POST   | `/api/auth/register`            | all users      | Registers a new user.                      |
-| POST   | `/api/auth/login`               | all users      | Logs a registered user in                  |
-| GET    | `/api/users`                    | admin          | get all users                              |
-| GET    | `/api/users/:id`                | admin          | get a user by ID                           |
-| GET    | `/api/users/:username`          | admin          | get a user by username                     |
-| PUT    | `/api/users/username/:username` | mixed          | Edit a user in system, Admin and self only |
-| DELETE | `/api/users/:username`          | owners         | Delete a user, admin and self only.        |
+| Method | Endpoint                  | Access Control | Description                                |
+| ------ | ------------------------- | -------------- | ------------------------------------------ |
+| POST   | `/api/auth/register`      | all users      | Registers a new user.                      |
+| POST   | `/api/auth/login`         | all users      | Logs a registered user in                  |
+| GET    | `/api/users`              | admin          | get all users                              |
+| GET    | `/api/users/:id`          | admin          | get a user by ID                           |
+| GET    | `/api/users/:username`    | admin          | get a user by username                     |
+| GET    | `/api/users/email/:email` | admin          | get a user by email                        |
+| PUT    | `/api/users/:username`    | mixed          | Edit a user in system, Admin and self only |
+| DELETE | `/api/users/:username`    | owners         | Delete a user, admin and self only.        |
 
 ### Store Routes
 
@@ -56,6 +57,7 @@ To get the server running locally:
 | GET    | `/api/stores/:id`                   | logged in user | Get a Store by ID                           |
 | GET    | `/api/stores/storename/:store_name` | logged in user | Get a Store by store_name                   |
 | GET    | `/api/stores/domain/:domain_name`   | logged in user | Get a Store by domain_name                  |
+| GET    | `/api/stores/user/:userID`          | logged in user | Get a Store by userID                       |
 | PUT    | `/api/stores/:storeID`              | logged in user | Edit a store in system, Admin and self only |
 | DELETE | `/api/stores/:store_name`           | logged in user | Delete a store, admin and self only.        |
 
@@ -298,7 +300,9 @@ To get the server running locally:
 
 `findByStorename(store_name)` -> Returns the store that matches the store_name passed in
 
-`findByDomainName(domain_name)`  -> Returns the store that matches the domain_name passed in
+`findByDomainName(domain_name)` -> Returns the store that matches the domain_name passed in
+
+`findByUserID(userID)` -> Returns the store that matches the userID passed in
 
 `update(storeID, changes)` -> Updates a store and Returns the newly updated store that matches the storeID passed in.
 
