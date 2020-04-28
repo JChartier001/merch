@@ -61,6 +61,18 @@ To get the server running locally:
 | PUT    | `/api/stores/:storeID`              | logged in user | Edit a store in system, Admin and self only |
 | DELETE | `/api/stores/:store_name`           | logged in user | Delete a store, admin and self only.        |
 
+### Product Routes
+
+| Method | Endpoint                       | Access Control | Description                          |
+| ------ | ------------------------------ | -------------- | ------------------------------------ |
+| POST   | `/api/products`                | logged in user | Adds a new product to user logged.   |
+| POST   | `/api/products/mockup`         | logged in user | Product added to ScalablePress       |
+| GET    | `/api/products`                | logged in user | Get all products                     |
+| GET    | `/api/products/:id`            | logged in user | Get a product by ID                  |
+| GET    | `/api/products/store/:storeID` | logged in user | Get products associated with storeID |
+| PUT    | `/api/products/:id`            | logged in user | Edit a product by ID                 |
+| DELETE | `/api/products/:id`            | logged in user | Delete a product by ID.              |
+
 ### Quote Routes
 
 | Method | Endpoint                             | Access Control | Description                           |
