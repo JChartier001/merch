@@ -69,7 +69,7 @@ router.post("/mockup", async (req, res) => {
 });
 
 // @desc     Get all Products
-// @route    GET /api/Products
+// @route    GET /api/products
 // @access   Private
 router.get("/", async (req, res) => {
   try {
@@ -123,7 +123,7 @@ router.get("/store/:storeID", async (req, res) => {
 });
 
 // @desc     Edit a product by id
-// @route    PUT /api/Products/:id
+// @route    PUT /api/products/:id
 // @access   Private
 router.put("/:id", async (req, res) => {
   try {
