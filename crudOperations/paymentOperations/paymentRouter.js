@@ -8,14 +8,14 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_TEST_KEY); //Change S
 router.post('/', (req, res) => {
     const Data = {
         source: req.body.token.id,
-        amount: req.body.amount,
+        amount: Number(req.body.amount),
         currency: 'usd'
     };
 
     stripe.charges.create(Data, (stripeErr, stripeRes) => {
         if (stripeErr) {
             res.status(500).json({ error: stripeErr });
-            console.log(stripeErr)
+            console.log('Stripe Error',stripeErr)
         } else {
             res.status(200).json({ success: stripeRes })
         }
