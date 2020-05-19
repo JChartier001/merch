@@ -6,10 +6,23 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_TEST_KEY); //Change S
 
 
 router.post('/', (req, res) => {
+    console.log('body sent to be', req.body)
     const Data = {
         source: req.body.token.id,
         amount: Number(req.body.amount),
-        currency: 'usd'
+        currency: 'usd',
+        receipt_email: req.body.email,
+        shipping: {
+            address: {
+                line1: req.body.card.address_line1,
+                city: req.body.card.address_city,
+                country: req.body.country,
+                line2: req.body.address_line2,
+                postal_code: req.body.address_zip,
+                state: req.body.address_state
+            },
+            name: req.body.card.name
+        }
     };
 
     stripe.charges.create(Data, (stripeErr, stripeRes) => {
