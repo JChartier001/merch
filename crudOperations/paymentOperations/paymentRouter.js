@@ -6,7 +6,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_TEST_KEY); //Change S
 
 
 router.post('/', (req, res) => {
-    console.log('body sent to be', req.body)
+    // console.log('body sent to endpoint', req.body)
     const Data = {
         source: req.body.token.id,
         amount: Number(req.body.amount),
