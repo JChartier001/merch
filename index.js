@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 4000;
 const app = server.listen(
   PORT,
   console.log(
-    `Server is running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow
+    `Server is running in ${process.env.NODE_ENV} mode on port ${PORT}`
       .bold
   )
 );

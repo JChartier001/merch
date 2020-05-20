@@ -43,6 +43,33 @@ router.post('/', async (req, res) => {
 
 })
 
+router.post('/create-payment-intent', async (req, res) => {
+  
+    const data = req.body;
+    console.log(data)
+    const amount = data.amount
+
+    await stripe.paymentIntents.create({
+      amount: amount,
+      currency: data.currency,
+      application_fee_amount: 100,
+      transfer_data: {
+        destination: data.account,
+      },
+    }).then(function(paymentIntent) {
+      try {
+        return res.send({
+          publishableKey: process.env.STRIPE_PUBLISHABLE_KEY_TEST,
+          clientSecret: paymentIntent.client_secret
+        });
+      } catch (err) {
+        return res.status(500).send({
+          error: err.message
+        });
+      }
+    }); 
+});
+
 
 
 
