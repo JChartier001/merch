@@ -70,9 +70,9 @@ router.post("/mockup", async (req, res) => {
 });
 
 //@desc Get product priuce from scalablepress
-//@route GET /api/products/products
+//@route GET /api/products/price
 //@access Private
-router.get('/products', async (req, res) => {
+router.get('/price', async (req, res) => {
   const productId = req.body.productId;
   let config = await {
     headers: {
@@ -87,6 +87,7 @@ router.get('/products', async (req, res) => {
   })
   .catch(err => {
     console.log(err, "err")
+    res.json(err)
   })
 })
 
