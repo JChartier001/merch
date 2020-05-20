@@ -70,7 +70,7 @@ To get the server running locally:
 | GET    | `/api/products`                | logged in user | Get all products                     |
 | GET    | `/api/products/:id`            | logged in user | Get a product by ID                  |
 | GET    | `/api/products/store/:storeID` | logged in user | Get products associated with storeID |
-| GET    | `/api/products/price           | logged in user | Get product price from ScalablePress |
+| POST   | `/api/products/price           | logged in user | Get product price from ScalablePress |
 | PUT    | `/api/products/:id`            | logged in user | Edit a product by ID                 |
 | DELETE | `/api/products/:id`            | logged in user | Delete a product by ID.              |
 

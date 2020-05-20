@@ -69,24 +69,25 @@ router.post("/mockup", async (req, res) => {
   }
 });
 
-//@desc Get product priuce from scalablepress
+//@desc Get product price from scalablepress
 //@route GET /api/products/price
 //@access Private
-router.get('/price', async (req, res) => {
-  const productId = req.body.productId;
+router.post('/price', async (req, res) => {
   let config = await {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Basic ${process.env.TEST}`
     }
   }
+  const productId = req.body.productId;
+  console.log(productId)
   axios.get(`https://api.scalablepress.com/v2/products/${productId}/items`,
   config)
   .then(response => {
     res.json(response.data)
   })
   .catch(err => {
-    console.log(err, "err")
+    // console.log(err, "err")
     res.json(err)
   })
 })
