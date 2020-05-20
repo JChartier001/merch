@@ -46,12 +46,12 @@ router.post('/', async (req, res) => {
 router.post('/create-payment-intent', async (req, res) => {
   
     const data = req.body;
-    console.log(data)
+    console.log('payment intent data',data)
     const amount = data.amount
 
     await stripe.paymentIntents.create({
       amount: amount,
-      currency: data.currency,
+      currency: 'usd', // currency doesn't exist in obj from front end
       application_fee_amount: 100,
       transfer_data: {
         destination: data.account,
