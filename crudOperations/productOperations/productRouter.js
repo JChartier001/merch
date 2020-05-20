@@ -73,13 +73,14 @@ router.post("/mockup", async (req, res) => {
 //@route GET /api/products/products
 //@access Private
 router.get('/products', async (req, res) => {
+  const productId = req.body.productId;
   let config = await {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Basic ${process.env.TEST}`
     }
   }
-  axios.get("https://api.scalablepress.com/v2/products/gildan-sweatshirt-crew/items",
+  axios.get(`https://api.scalablepress.com/v2/products/${productId}/items`,
   config)
   .then(response => {
     res.json(response.data)
