@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Products = require("./productModel");
 const Models = require("../helperVariables/models");
+const axios = require("axios")
 
 // const restricted = require("../../globalMiddleware/restrictedMiddleware");
 
@@ -67,6 +68,27 @@ router.post("/mockup", async (req, res) => {
     });
   }
 });
+
+//@desc Get product priuce from scalablepress
+//@route GET /api/products/products
+//@access Private
+router.get('/products', async (req, res) => {
+  let config = await {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Basic ${process.env.TEST}`
+    }
+  }
+  axios.get("https://api.scalablepress.com/v2/products/gildan-sweatshirt-crew/items",
+  config)
+  .then(response => {
+    res.json(response.data)
+  })
+  .catch(err => {
+    console.log(err, "err")
+  })
+})
+
 
 // @desc     Get all Products
 // @route    GET /api/products
