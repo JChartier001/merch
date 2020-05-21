@@ -48,8 +48,7 @@ router.post('/create-payment-intent', async (req, res) => {
     const data = req.body;
     console.log('payment intent data',data)
     const amount = data.amount
-    const acctStripe = req.body.acct || process.env.CONNECTED_STRIPE_ACCOUNT_ID_TEST
-    //scalable press cost should be app fee (shipping?)
+    const acctStripe = req.body.acct || process.env.CONNECTED_STRIPE_ACCOUNT_ID_TEST 
     const calculateOrderAmount = (items) => {
         // Replace this constant with a calculation of the order's amount
         // Calculate the order total on the server to prevent
@@ -62,15 +61,10 @@ router.post('/create-payment-intent', async (req, res) => {
       amount: amount,
       currency: 'usd', // currency is passed to obj on feature/buyer-address branch
       application_fee_amount: 100, // fee will be what scalable press needs to print given product and come to us
-    // commented out the below code because transfer appears to be for collect and payout. not direct charges
-    //   transfer_data: {
-    //     destination: `{{${CONNECTED_STRIPE_ACCOUNT_ID_TEST}}}` // MerchDropper's stripe I think
-    //   },
     }, {
-        // sellers connected stripe account
         stripeAccount: acctStripe
-        // sellers stripe account found from helpers in BE. FE should send storename with the body
     }).then(function(paymentIntent) {
+      console.log('Stripe account info', acctStripe)
       try {
         return res.send({
           publishableKey: process.env.STRIPE_PUBLISHABLE_KEY_TEST,
