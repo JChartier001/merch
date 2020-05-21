@@ -58,12 +58,16 @@ router.post('/create-payment-intent', async (req, res) => {
    
 
     await stripe.paymentIntents.create({
+      payment_method_types: ['card'],
       amount: amount,
       currency: 'usd', // currency doesn't exist in obj from front end
-      application_fee_amount: 100,
+      application_fee_amount: 100, // fee will be what scalable press needs to print given product
       transfer_data: {
-        destination: `{{${CONNECTED_STRIPE_ACCOUNT_ID_TEST}}}`
+        destination: `{{${CONNECTED_STRIPE_ACCOUNT_ID_TEST}}}` // MerchDropper's stripe I think
       },
+    }, {
+        // sellers connected stripe account
+        // stripeAccount: // sellers stripe account found from helpers in BE. FE should send storename with the body
     }).then(function(paymentIntent) {
       try {
         return res.send({
