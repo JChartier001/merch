@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const Models = require('../helperVariables/models')
 
 if (process.env.NODE_ENV !== 'production') require('dotenv').config({ path: "./config/config.env" });
 
@@ -46,15 +47,29 @@ router.post('/', async (req, res) => {
 router.post('/create-payment-intent', async (req, res) => {
     
     const data = req.body;
-    console.log('payment intent data',data)
-    const amount = data.amount
+    console.log('payment intent data', data)
+    const amount = data.amount;
+    console.log('store name', data.token.store_name)
+    // The helpers below grab the sellers stripe account to assign to acctStripe
+    let sellerAcct;
+    Models.Stores.findByStoreName(data.token.store_name)
+    .then(store => {
+        console.log('store in find store promise', store)
+        const seller = store.userID;
+        Models.Users.findByUserID(seller)
+        .then(seller=> {
+            return sellerAcct = seller.stripe_account;
+        })
+    })
     const acctStripe = req.body.acct || process.env.CONNECTED_STRIPE_ACCOUNT_ID_TEST 
     const calculateOrderAmount = (items) => {
         // Replace this constant with a calculation of the order's amount
         // Calculate the order total on the server to prevent
         // people from directly manipulating the amount on the client
     }
-   
+
+    // const store = Models.Stores.findByStoreName(data.store_name)
+    // const seller = Models.Users.findByUserID(store.userID)
 
     await stripe.paymentIntents.create({
       payment_method_types: ['card'],
