@@ -49,12 +49,20 @@ router.post('/create-payment-intent', async (req, res) => {
     console.log('payment intent data',data)
     const amount = data.amount
 
+    //scalable press cost should be app fee (shipping?)
+    const calculateOrderAmount = (items) => {
+        // Replace this constant with a calculation of the order's amount
+        // Calculate the order total on the server to prevent
+        // people from directly manipulating the amount on the client
+    }
+   
+
     await stripe.paymentIntents.create({
       amount: amount,
       currency: 'usd', // currency doesn't exist in obj from front end
       application_fee_amount: 100,
       transfer_data: {
-        destination: data.account,
+        destination: `{{${CONNECTED_STRIPE_ACCOUNT_ID_TEST}}}`
       },
     }).then(function(paymentIntent) {
       try {
