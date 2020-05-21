@@ -49,10 +49,11 @@ router.post('/create-payment-intent', async (req, res) => {
     const data = req.body;
     console.log('payment intent data', data)
     const amount = data.amount;
-    console.log('store name', data.token.store_name)
+    const { domain_name } = data.token
+   
     // The helpers below grab the sellers stripe account to assign to acctStripe
     let sellerAcct;
-    Models.Stores.findByStoreName(data.token.store_name)
+    await Models.Stores.findByDomainName(domain_name)
     .then(store => {
         console.log('store in find store promise', store)
         const seller = store.userID;
@@ -68,8 +69,7 @@ router.post('/create-payment-intent', async (req, res) => {
         // people from directly manipulating the amount on the client
     }
 
-    // const store = Models.Stores.findByStoreName(data.store_name)
-    // const seller = Models.Users.findByUserID(store.userID)
+
 
     await stripe.paymentIntents.create({
       payment_method_types: ['card'],
