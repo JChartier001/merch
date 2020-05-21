@@ -45,7 +45,6 @@ router.post('/', async (req, res) => {
 })
 
 router.post('/create-payment-intent', async (req, res) => {
-    
     const data = req.body;
     console.log('payment intent data', data)
     const amount = data.amount;
@@ -53,44 +52,42 @@ router.post('/create-payment-intent', async (req, res) => {
    
     // The helpers below grab the sellers stripe account to assign to acctStripe
     let sellerAcct;
-    await Models.Stores.findByDomainName(domain_name)
+    Models.Stores.findByDomainName(domain_name)
     .then(store => {
         console.log('store in find store promise', store)
-        const seller = store.userID;
-        Models.Users.findByUserID(seller)
-        .then(seller=> {
-            return sellerAcct = seller.stripe_account;
+        const { userID } = store;
+        Models.Users.findById(userID)
+        .then( async seller => {
+            const { stripe_account } = seller;
+            console.log('seller acct', stripe_account)
+            const acctStripe = stripe_account || process.env.CONNECTED_STRIPE_ACCOUNT_ID_TEST 
+            const calculateOrderAmount = (items) => {
+                // Replace this constant with a calculation of the order's amount
+                // Calculate the order total on the server to prevent
+                // people from directly manipulating the amount on the client
+            };
+            await stripe.paymentIntents.create({
+                payment_method_types: ['card'],
+                amount: amount,
+                currency: 'usd', // currency is passed to obj on feature/buyer-address branch
+                application_fee_amount: 100, // fee will be what scalable press needs to print given product and come to us
+              }, {
+                  stripeAccount: acctStripe
+              }).then(function(paymentIntent) {
+                console.log('Stripe account info', acctStripe)
+                try {
+                  return res.send({
+                    publishableKey: process.env.STRIPE_PUBLISHABLE_KEY_TEST,
+                    clientSecret: paymentIntent.client_secret
+                  });
+                } catch (err) {
+                  return res.status(500).send({
+                    error: err.message
+                  });
+                }
+              }); 
         })
-    })
-    const acctStripe = req.body.acct || process.env.CONNECTED_STRIPE_ACCOUNT_ID_TEST 
-    const calculateOrderAmount = (items) => {
-        // Replace this constant with a calculation of the order's amount
-        // Calculate the order total on the server to prevent
-        // people from directly manipulating the amount on the client
-    }
-
-
-
-    await stripe.paymentIntents.create({
-      payment_method_types: ['card'],
-      amount: amount,
-      currency: 'usd', // currency is passed to obj on feature/buyer-address branch
-      application_fee_amount: 100, // fee will be what scalable press needs to print given product and come to us
-    }, {
-        stripeAccount: acctStripe
-    }).then(function(paymentIntent) {
-      console.log('Stripe account info', acctStripe)
-      try {
-        return res.send({
-          publishableKey: process.env.STRIPE_PUBLISHABLE_KEY_TEST,
-          clientSecret: paymentIntent.client_secret
-        });
-      } catch (err) {
-        return res.status(500).send({
-          error: err.message
-        });
-      }
-    }); 
+    });
 });
 
 
