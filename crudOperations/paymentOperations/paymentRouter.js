@@ -7,7 +7,6 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_TEST_KEY); //Change S
 
 
 router.post('/', async (req, res) => {
-    // console.log('body sent to endpoint', req.body)
     const Data = {
         source: req.body.token.id,
         amount: Number(req.body.amount),
@@ -46,7 +45,6 @@ router.post('/', async (req, res) => {
 
 router.post('/create-payment-intent', async (req, res) => {
     const data = req.body;
-    console.log('payment intent data', data)
     const amount = data.amount;
     const { domain_name } = data.token
    
@@ -54,17 +52,16 @@ router.post('/create-payment-intent', async (req, res) => {
     let sellerAcct;
     Models.Stores.findByDomainName(domain_name)
     .then(store => {
-        console.log('store in find store promise', store)
         const { userID } = store;
         Models.Users.findById(userID)
         .then( async seller => {
             const { stripe_account } = seller;
-            console.log('seller acct', stripe_account)
             const acctStripe = stripe_account || process.env.CONNECTED_STRIPE_ACCOUNT_ID_TEST 
             const calculateOrderAmount = (items) => {
                 // Replace this constant with a calculation of the order's amount
                 // Calculate the order total on the server to prevent
                 // people from directly manipulating the amount on the client
+                // Determine application fee here
             };
             await stripe.paymentIntents.create({
                 payment_method_types: ['card'],
@@ -74,7 +71,6 @@ router.post('/create-payment-intent', async (req, res) => {
               }, {
                   stripeAccount: acctStripe
               }).then(function(paymentIntent) {
-                console.log('Stripe account info', acctStripe)
                 try {
                   return res.send({
                     publishableKey: process.env.STRIPE_PUBLISHABLE_KEY_TEST,
