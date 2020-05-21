@@ -60,7 +60,7 @@ router.post('/create-payment-intent', async (req, res) => {
     await stripe.paymentIntents.create({
       payment_method_types: ['card'],
       amount: amount,
-      currency: 'usd', // currency doesn't exist in obj from front end
+      currency: 'usd', // currency is passed to obj on feature/buyer-address branch
       application_fee_amount: 100, // fee will be what scalable press needs to print given product
       transfer_data: {
         destination: `{{${CONNECTED_STRIPE_ACCOUNT_ID_TEST}}}` // MerchDropper's stripe I think
