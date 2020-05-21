@@ -86,8 +86,9 @@ router.get("/", async (req, res) => {
 // @route    GET /api/products/:id
 // @access   Private
 router.get("/:id", async (req, res) => {
+  const {id} = req.params
   try {
-    const product = await Models.Products.findById(req.params.id);
+    const product = await Models.Products.findById(id);
     if (product) {
       res.status(200).json(product);
     } else {
@@ -105,8 +106,9 @@ router.get("/:id", async (req, res) => {
 // @route    GET /api/products/store/:storeID
 // @access   Private
 router.get("/store/:storeID", async (req, res) => {
+  const {storeID} = req.params
   try {
-    const product = await Models.Products.findByStoreID(req.params.storeID);
+    const product = await Models.Products.findByStoreID(storeID);
     if (product) {
       res.status(200).json(product);
     } else {
@@ -126,8 +128,9 @@ router.get("/store/:storeID", async (req, res) => {
 // @route    PUT /api/products/:id
 // @access   Private
 router.put("/:id", async (req, res) => {
+  const {id} = req.params
   try {
-    const product = await Models.Products.updateById(req.params.id, req.body);
+    const product = await Models.Products.updateById(id, req.body);
     console.log(product);
     if (product) {
       res
@@ -148,8 +151,9 @@ router.put("/:id", async (req, res) => {
 // @route    DELETE /api/Products/:id
 // @access   Private
 router.delete("/:id", async (req, res) => {
+  const {id} = req.params
   try {
-    const count = await Models.Products.removeById(req.params.id);
+    const count = await Models.Products.removeById(id);
     if (count > 0) {
       res.status(200).json({ message: "this product has been deleted!" });
     } else {
