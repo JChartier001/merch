@@ -49,6 +49,25 @@ router.post('/accounts', async (req, res) => {
 
     });
 
+    router.get('/accounts', async (req,res) => {
+
+        try{
+            const user = await Models.Users.find();
+            console.log(user)
+            if(user){
+                res.status(201).json({ user });
+            }
+        }
+        catch(error){
+    
+            res.status(500).json({
+                error,
+                message: "Unable to retrieve stripe info"
+              });
+        }
+    
+    })
+
 router.get('/:email', async (req,res) => {
 
     const {email} = req.params;
