@@ -22,18 +22,18 @@ router.post("/", async (req, res) => {
       const storeWithEmail = {
         store_name: store.store_name,
         userID: user.id,
-        domain_name: store.domain_name
+        domain_name: store.domain_name,
       };
       Models.Stores.insert(storeWithEmail);
       res.status(201).json({
         message: "You have successfully added a Store!",
-        storeWithEmail
+        storeWithEmail,
       });
     }
   } catch (error) {
     res.status(500).json({
       error,
-      message: "Unable to add this store, its not you.. its me"
+      message: "Unable to add this store, its not you.. its me",
     });
   }
 });
@@ -80,8 +80,9 @@ router.get("/", async (req, res) => {
 // @route    GET /api/stores/:id
 // @access   Private
 router.get("/:id", async (req, res) => {
+  const { id } = req.params;
   try {
-    const store = await Models.Stores.findById(req.params.id);
+    const store = await Models.Stores.findById(id);
 
     if (store) {
       res.status(200).json(store);
@@ -91,7 +92,7 @@ router.get("/:id", async (req, res) => {
   } catch (error) {
     res.status(500).json({
       error,
-      message: "Unable to find this store id, its not you.. its me"
+      message: "Unable to find this store id, its not you.. its me",
     });
   }
 });
@@ -100,21 +101,22 @@ router.get("/:id", async (req, res) => {
 // @route    GET /api/stores/storename/:store_name
 // @access   Public
 router.get("/storename/:store_name", async (req, res) => {
+  const { store_name } = req.params;
   try {
-    const store = await Models.Stores.findByStoreName(req.params.store_name);
+    const store = await Models.Stores.findByStoreName(store_name);
 
     if (store) {
       res.status(200).json(store);
     } else {
       res.status(404).json({
         message:
-          "Please enter a valid store name, keep in mind that store names are case sensitive"
+          "Please enter a valid store name, keep in mind that store names are case sensitive",
       });
     }
   } catch (error) {
     res.status(500).json({
       error,
-      message: "Unable to find this store, its not you.. its me"
+      message: "Unable to find this store, its not you.. its me",
     });
   }
 });
@@ -123,20 +125,21 @@ router.get("/storename/:store_name", async (req, res) => {
 // @route    GET /api/stores/user/:userID
 // @access   Public
 router.get("/user/:userID", async (req, res) => {
+  const { userID } = req.params;
   try {
-    const store = await Models.Stores.findByUserID(req.params.userID);
+    const store = await Models.Stores.findByUserID(userID);
 
     if (store) {
       res.status(200).json(store);
     } else {
       res.status(404).json({
-        message: "Please enter a valid userID"
+        message: "Please enter a valid userID",
       });
     }
   } catch (error) {
     res.status(500).json({
       error,
-      message: "Unable to find this store, its not you.. its me"
+      message: "Unable to find this store, its not you.. its me",
     });
   }
 });
@@ -145,23 +148,22 @@ router.get("/user/:userID", async (req, res) => {
 // @route    GET /api/stores/domain/:domain_name
 // @access   Public
 router.get("/domain/:domain_name", async (req, res) => {
+  const { domain_name } = req.params;
   try {
-    const storeDomain = await Models.Stores.findByDomainName(
-      req.params.domain_name
-    );
+    const storeDomain = await Models.Stores.findByDomainName(domain_name);
 
     if (storeDomain) {
       res.status(200).json(storeDomain);
     } else {
       res.status(404).json({
         message:
-          "Please enter a valid domain name, keep in mind that domain names are case sensitive"
+          "Please enter a valid domain name, keep in mind that domain names are case sensitive",
       });
     }
   } catch (error) {
     res.status(500).json({
       error,
-      message: "Unable to find this store, its not you.. its me"
+      message: "Unable to find this store, its not you.. its me",
     });
   }
 });
@@ -170,8 +172,9 @@ router.get("/domain/:domain_name", async (req, res) => {
 // @route    PUT /api/stores/:id
 // @access   Private
 router.put("/:id", async (req, res) => {
+  const { id } = req.params;
   try {
-    const store = await Models.Stores.updateById(req.params.id, req.body);
+    const store = await Models.Stores.updateById(id, req.body);
     if (store) {
       res.status(200).json({ store, message: "Store info updated!" });
     } else {
@@ -180,7 +183,7 @@ router.put("/:id", async (req, res) => {
   } catch (error) {
     res.status(500).json({
       error,
-      message: "Could not edit this store, its not you.. its me"
+      message: "Could not edit this store, its not you.. its me",
     });
   }
 });
@@ -189,20 +192,21 @@ router.put("/:id", async (req, res) => {
 // @route    DELETE /api/stores/storename:store_name
 // @access   Private
 router.delete("/:store_name", async (req, res) => {
+  const { store_name } = req.params;
   try {
-    const count = await Models.Stores.removeByStoreName(req.params.store_name);
+    const count = await Models.Stores.removeByStoreName(store_name);
     if (count > 0) {
       res.status(200).json({ message: "this Store has been deleted!" });
     } else {
       res.status(404).json({
         message:
-          "Please enter a valid store name, keep in mind that store names are case sensitive"
+          "Please enter a valid store name, keep in mind that store names are case sensitive",
       });
     }
   } catch (error) {
     res.status(500).json({
       error,
-      message: "Error while deleting Store, its not you.. its me"
+      message: "Error while deleting Store, its not you.. its me",
     });
   }
 });
