@@ -13,6 +13,7 @@ router.post("/", async (req, res) => {
     let product = req.body;
     let returnTables = [
       "id",
+      "designId",
       "productName",
       "fullSizeURL",
       "thumbnailURL",
