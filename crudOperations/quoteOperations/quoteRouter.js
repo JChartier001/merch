@@ -10,11 +10,12 @@ const Models = require("../helperVariables/models");
 router.post("/", async (req, res) => {
   try {
     let data = req.body;
+    console.log('quote data', data)
     if (data) {
       const spResponse = await Quotes.quoteMaker(data.spInfo);
       if (spResponse) {
         let quote = {
-          userID: data.quoteInfo.userID,
+          userID: data.quoteInfo.userID, // not relevant until/if there are buyer users
           storeID: data.quoteInfo.storeID,
           total: spResponse.total,
           subtotal: spResponse.subtotal,
