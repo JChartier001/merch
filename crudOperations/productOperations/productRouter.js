@@ -11,8 +11,12 @@ const axios = require("axios")
 router.post("/", async (req, res) => {
   try {
     let product = req.body;
+    console.log(product, "product")
     let returnTables = [
       "id",
+      "product_id",
+      "color",
+      "type",
       "designId",
       "productName",
       "fullSizeURL",
@@ -23,7 +27,7 @@ router.post("/", async (req, res) => {
     ];
     if (product) {
       let addedProduct = await Models.addEntry(
-        "products",
+        "newproducts",
         product,
         returnTables
       );
@@ -35,6 +39,7 @@ router.post("/", async (req, res) => {
     //   res.status(400).json({ message: "please include all required content" });
     // }
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       error,
       message: "Unable to add this product, its not you.. its me"

@@ -8,11 +8,14 @@ const Models = require("../helperVariables/models");
 // @route    POST /api/quotes
 // @access   Private
 router.post("/", async (req, res) => {
+  console.log('made it')
   try {
     let data = req.body;
     if (data) {
+      console.log(data, "data")
       const spResponse = await Quotes.quoteMaker(data.spInfo);
       if (spResponse) {
+        console.log(spResponse, "spres")
         let quote = {
           userID: data.quoteInfo.userID,
           storeID: data.quoteInfo.storeID,
