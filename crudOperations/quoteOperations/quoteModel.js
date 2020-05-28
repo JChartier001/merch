@@ -21,7 +21,8 @@ async function quoteMaker(data) {
       config
     )
     .then(response => {
-      console.log("response", response)
+      console.log("response", response, response.data.issues)
+      
       Models.Quotes.insert({
         total: response.data.total,
         subtotal: response.data.subtotal,
@@ -34,7 +35,8 @@ async function quoteMaker(data) {
       })
     })
     .catch(err => {
-      console.log(err)
+      console.log(err.response.data.issues)
+      res.status(400) 
     })
     
     return quote;

@@ -29,12 +29,7 @@ router.post("/", async (req, res) => {
       //     mode: spResponse.data.mode
         // };
         // Models.Quotes.insert(quote);
-        res.status(201).json({
-          message:
-            "You have successfully added this Quote to our DB, spResponse is from SP!"
-          // quote,
-          // spResponse
-        });
+        res.status(201).json(spResponse);
       }
     // } //figure out how to test wrong or missing info here, its tricky with the api call
     // else {
@@ -42,8 +37,7 @@ router.post("/", async (req, res) => {
     // }
   }catch (error) {
     res.status(500).json({
-      error,
-      message: "Unable to add this quote, its not you.. its me"
+      error
     });
   }
 });
