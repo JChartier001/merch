@@ -49,6 +49,7 @@ router.post('/create-payment-intent', async (req, res) => {
     const amount = data.amount;
     const { domain_name } = data.token
     const { spInfo } = data.token // this will need to be the order token to send the order
+    let application_fee = 0;
    
     // The helpers below grab the sellers stripe account to assign to acctStripe
     let sellerAcct;
@@ -61,6 +62,7 @@ router.post('/create-payment-intent', async (req, res) => {
             const acctStripe = stripe_account || process.env.CONNECTED_STRIPE_ACCOUNT_ID_TEST ;
             try {
               let data = spInfo;
+              console.log('data in the seller try', data)
               if (data) {
                 const spResponse = await Orders.orderMaker(data.spInfo);
                 if (spResponse) {
@@ -78,13 +80,21 @@ router.post('/create-payment-intent', async (req, res) => {
                     mode: spResponse.mode,
                     orderedAt: spResponse.orderedAt
                   };
+                  let items = [
+                    order.total, 
+                    order.subtotal, 
+                    order.tax, 
+                    order.fees, 
+                    order.shipping
+                  ]
                   Models.Orders.insert(order);
                   res.status(201).json({
                     message:
-                      "You have successfully added this Quote to our DB, spResponse is from SP!",
+                      "You have successfully added this Order to our DB, spResponse is from SP!",
                     order,
                     spResponse
                   });
+                  calculateOrder(items) // run to assign all costs to application_fee
                 }
               }
               //figure out to verify duplicate or missing data
@@ -94,22 +104,25 @@ router.post('/create-payment-intent', async (req, res) => {
             } catch (error) {
               res.status(500).json({
                 error,
-                message: "Unable to add this quote, its not you.. its me"
+                message: "Unable to add this order, its not you.. its me"
               });
             }
             const calculateOrder = (items) => {
-                // Determine application fee here
-              return null;
+              // Determine application fee here
+              // passing array of expenses
+              const expenses = (accumulator, current) => accumulator + current
+              let application_fee = items.reduce(expenses);
+              return application_fee;
             };
 
-            const appFee = await calculateOrder(); // hopefully
-            console.log('the application fee details', appFee)
+            // const appFee = await calculateOrder(); // hopefully
+            // console.log('the application fee details', appFee)
 
             await stripe.paymentIntents.create({
                 payment_method_types: ['card'],
                 amount: amount,
                 currency: 'usd', // currency is passed to obj on feature/buyer-address branch
-                application_fee_amount: 100, // fee will be what scalable press needs to print given product and come to us
+                application_fee_amount: application_fee, // fee will be what scalable press needs to print given product and come to us
               }, {
                   stripeAccount: acctStripe
               }).then(function(paymentIntent) {
