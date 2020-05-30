@@ -18,8 +18,8 @@ router.post("/", async (req, res) => {
       res.status(400).json({ message: "please include all required content" });
     } else {
       Models.Users.findByEmail(email)
-        .then((res) => {
-          console.log(res)
+        .then((user) => {
+          console.log(user)
           const storeWithEmail = {
             store_name: store.store_name,
             userID: user.id,
