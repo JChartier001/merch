@@ -11,30 +11,35 @@ router.post("/", async (req, res) => {
   console.log('made it')
   try {
     let data = req.body;
+    console.log('quote data', data)
     if (data) {
       console.log(data, "data")
       const spResponse = await Quotes.quoteMaker(data.spInfo);
-      // if (spResponse) {
-      //   console.log(spResponse, "spres")
-      //   let quote = {
-      //     userID: data.quoteInfo.userID,
-      //     storeID: data.quoteInfo.storeID,
-      //     total: spResponse.data.total,
-      //     subtotal: spResponse.data.subtotal,
-      //     tax: spResponse.data.tax,
-      //     fees: spResponse.data.fees,
-      //     shipping: spResponse.data.shipping,
-      //     orderToken: spResponse.data.orderToken,
-      //     warnings: spResponse.data.warnings,
-      //     mode: spResponse.data.mode
-        // };
-        // Models.Quotes.insert(quote);
-        res.status(201).json(spResponse);
+      if (spResponse) {
+        let quote = {
+          userID: data.quoteInfo.userID, // not relevant until/if there are buyer users
+          storeID: data.quoteInfo.storeID,
+          total: spResponse.total,
+          subtotal: spResponse.subtotal,
+          tax: spResponse.tax,
+          fees: spResponse.fees,
+          shipping: spResponse.shipping,
+          orderToken: spResponse.orderToken,
+          warnings: spResponse.warnings,
+          mode: spResponse.mode
+        };
+        Models.Quotes.insert(quote);
+        res.status(201).json({
+          message:
+            "You have successfully added this Quote to our DB, spResponse is from SP!",
+          quote,
+          spResponse
+        });
       }
     // } //figure out how to test wrong or missing info here, its tricky with the api call
     // else {
     //   res.status(400).json({ message: "please include all required content" });
-    // }
+    }
   }catch (error) {
     res.status(500).json({
       error
