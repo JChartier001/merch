@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
     ];
     if (product) {
       let addedProduct = await Models.addEntry(
-        "newproducts",
+        "products",
         product,
         returnTables
       );
